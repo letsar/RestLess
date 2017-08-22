@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>DoLess.Rest</RootNamespace>
+    <AssemblyName>DoLess.Rest</AssemblyName>
+  </PropertyGroup>
+
+  <Import Project="..\DoLess.Rest.Shared\DoLess.Rest.Shared.projitems" Label="Shared" />
+
+</Project>

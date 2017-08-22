@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>5e06f235-0562-40a8-b7e2-e08060c95326</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>DoLess.Rest</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HeaderAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\PatchAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\TraceAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\PutAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\PostAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\OptionsAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\HeadAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\GetAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\DeleteAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\HttpMethodAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\ParameterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\QueryAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\PathAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringBuilderExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\Url.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRestClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ISerializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RequestUriBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestSettings.cs" />
+  </ItemGroup>
+</Project>
