@@ -1,9 +1,9 @@
 ﻿namespace DoLess.Rest
 {
     /// <summary>
-    /// Represents a generic serializer.
+    /// Represents a generic string converter.
     /// </summary>
-    public interface ISerializer
+    public interface IStringConverter
     {
         /// <summary>
         /// Serializes the value.

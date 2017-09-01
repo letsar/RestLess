@@ -5,14 +5,21 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using DoLess.Rest;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.CSharp;
+using System.Runtime.Serialization;
+using DoLess.Rest.Tasks;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace DoLess.Rest
 {
     /// <summary>
     /// 
     /// </summary>
-    public static class RoslynExtensions
+    internal static partial class RoslynExtensions
     {
+        private static readonly string DoLessRestNamespace = typeof(RestClient).Namespace;
+
         /// <summary>
         /// Indicates wether the specified symbol inherits from the type parameter.
         /// </summary>
@@ -34,5 +41,82 @@ namespace DoLess.Rest
                 return InheritsFrom<T>(self.BaseType);
             }
         }
+
+        public static string ToParsedString(this SyntaxList<TypeParameterConstraintClauseSyntax> self)
+        {
+            if (self.Count == 0)
+            {
+                return string.Empty;
+            }
+            else
+            {
+                return Environment.NewLine + "\t" + self.ToString();
+            }
+        }
+
+        public static ParameterListSyntax ToParameterList(this IEnumerable<ParameterSyntax> self)
+        {
+            return SyntaxFactory.ParameterList(SyntaxFactory.SeparatedList<ParameterSyntax>(self));
+        }
+
+        public static ParameterListSyntax WithoutAttributes(this ParameterListSyntax self)
+        {
+            if (self?.Parameters == null)
+            {
+                return self;
+            }
+
+            return SyntaxFactory.ParameterList(
+                   SyntaxFactory.SeparatedList<ParameterSyntax>(self.Parameters
+                                                                    .Select(x => x.WithoutAttributes())));
+        }
+
+        public static TypeParameterListSyntax WithoutAttributes(this TypeParameterListSyntax self)
+        {
+            if (self?.Parameters == null)
+            {
+                return self;
+            }
+
+            return SyntaxFactory.TypeParameterList(
+                   SyntaxFactory.SeparatedList<TypeParameterSyntax>(self.Parameters
+                                                                        .Select(x => x.WithoutAttributes())));
+        }
+
+        public static MethodDeclarationSyntax WithoutAttributes(this MethodDeclarationSyntax self)
+        {
+            return self.WithAttributeLists(default(SyntaxList<AttributeListSyntax>));
+        }
+
+        public static ParameterSyntax WithoutAttributes(this ParameterSyntax self)
+        {
+            return self.WithAttributeLists(default(SyntaxList<AttributeListSyntax>));
+        }
+
+        public static TypeParameterSyntax WithoutAttributes(this TypeParameterSyntax self)
+        {
+            return self.WithAttributeLists(default(SyntaxList<AttributeListSyntax>));
+        }
+
+        public static bool HasReferenceToDoLessRest(this IEnumerable<SyntaxNode> self)
+        {
+            return self.OfType<UsingDirectiveSyntax>()
+                       .Any(x => x.Name.ToFullString() == DoLessRestNamespace) ||
+                   self.OfType<NamespaceDeclarationSyntax>()
+                       .Any(x => x.Name.ToFullString().StartsWith(DoLessRestNamespace));
+        }
+
+
+        public static TypeSyntax GetTypeSyntax(this TypeDeclarationSyntax self)
+        {
+            var typeName = self.Identifier.Text;
+            return self.TypeParameterList?.Parameters != null ?
+                   GenericName(
+                       Identifier(typeName),
+                       TypeArgumentList(SeparatedList(self.TypeParameterList.Parameters.Select(x => ParseTypeName(x.Identifier.Text))))) :
+                   ParseTypeName(typeName);
+        }
+
+
     }
 }

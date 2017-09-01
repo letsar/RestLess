@@ -14,7 +14,7 @@ namespace DoLess.Rest
         /// <summary>
         /// Gets or sets the serializer used in requests and responses.
         /// </summary>
-        public ISerializer Serializer { get; set; }
+        public IStringConverter Serializer { get; set; }
 
         /// <summary>
         /// Gets or sets the method used to transform query with multiple values.

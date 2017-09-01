@@ -1,13 +1,10 @@
 ﻿using System;
 
-namespace DoLess.Rest.Attributes
+namespace DoLess.Rest
 {
-    [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property)]
-    public sealed class QueryAttribute : ParameterAttribute
+    [AttributeUsage(AttributeTargets.Parameter)]
+    public sealed class QueryAttribute : Attribute
     {
-        public QueryAttribute(string name) : 
-            base(name)
-        {
-        }
+        public QueryAttribute(string name = null) { }
     }
 }

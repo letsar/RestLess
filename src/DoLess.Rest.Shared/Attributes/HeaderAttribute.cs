@@ -1,16 +1,14 @@
 ﻿using System;
 
-namespace DoLess.Rest.Attributes
+namespace DoLess.Rest
 {
-    [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property, AllowMultiple = true)]
-    public sealed class HeaderAttribute : ParameterAttribute
+    [AttributeUsage(
+        AttributeTargets.Interface | 
+        AttributeTargets.Method | 
+        AttributeTargets.Parameter,
+        AllowMultiple = true)]
+    public sealed class HeaderAttribute : Attribute
     {
-        public HeaderAttribute(string name, string value = null) :
-            base(name)
-        {
-            this.Value = value;
-        }
-
-        public string Value { get; }
+        public HeaderAttribute(string name, string value = null) { }
     }
 }

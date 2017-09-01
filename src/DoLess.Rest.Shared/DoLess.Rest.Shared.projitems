@@ -9,6 +9,9 @@
     <Import_RootNamespace>DoLess.Rest</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Assembly.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\BaseUrlAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\BodyAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\HeaderAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\PatchAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\TraceAttribute.cs" />
@@ -18,17 +21,20 @@
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\HeadAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\GetAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\DeleteAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\HttpMethodAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\ParameterAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\QueryAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\PathAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringBuilderExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Url.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRestClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ISerializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IStringConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RequestUriBuilder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestClientFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestRequest\RestRequest.Url.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestRequest\RestRequest.Send.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestRequest\RestRequest.HttpMethods.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestRequest\RestRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestSettings.cs" />
   </ItemGroup>
 </Project>

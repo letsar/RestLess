@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.Http;
 
 namespace DoLess.Rest
 {
@@ -7,12 +6,12 @@ namespace DoLess.Rest
     /// Identifies a request that will use the HTTP GET method.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
-    public sealed class GetAttribute : HttpMethodAttribute
+    public sealed class GetAttribute : Attribute
     {
         /// <summary>
         /// Creates a new <see cref="GetAttribute"/>.
         /// </summary>
         /// <param name="path">The relative path to the resource.</param>
-        public GetAttribute(string path) : base(HttpMethod.Get, path) { }
+        public GetAttribute(string path) { }
     }
 }

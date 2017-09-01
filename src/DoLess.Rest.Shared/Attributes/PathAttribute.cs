@@ -1,13 +1,10 @@
 ﻿using System;
 
-namespace DoLess.Rest.Attributes
+namespace DoLess.Rest
 {
-    [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property)]
-    public sealed class PathAttribute : ParameterAttribute
+    [AttributeUsage(AttributeTargets.Parameter)]
+    public sealed class PathAttribute : Attribute
     {
-        public PathAttribute(string name) :
-            base(name)
-        {
-        }
+        public PathAttribute(string name = null) { }
     }
 }

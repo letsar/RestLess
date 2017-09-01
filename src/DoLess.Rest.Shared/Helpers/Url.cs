@@ -5,19 +5,19 @@ using System.Text;
 
 namespace DoLess.Rest.Helpers
 {
-    public class Url
+    internal class Url
     {
-        private const string SegmentStart = "/";
-        private const string QueryStart = "?";
-        private const string FragmentStart = "#";
-        private const string QuerySeparator = "&";
+        public const string SegmentStart = "/";
+        public const string QueryStart = "?";
+        public const string FragmentStart = "#";
+        public const string QuerySeparator = "&";
 
         private readonly RestSettings settings;
         private List<string> segments;
         private Dictionary<string, HashSet<string>> queries;
         private string fragment;
 
-        private Url(RestSettings settings)
+        public Url(RestSettings settings)
         {
             this.segments = new List<string>();
             this.queries = new Dictionary<string, HashSet<string>>();
