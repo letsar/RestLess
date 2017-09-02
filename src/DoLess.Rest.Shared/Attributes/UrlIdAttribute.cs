@@ -3,8 +3,8 @@
 namespace DoLess.Rest
 {
     [AttributeUsage(AttributeTargets.Parameter)]
-    public sealed class QueryAttribute : Attribute
+    public sealed class UrlIdAttribute : Attribute
     {
-        public QueryAttribute(string name = null) { }
+        public UrlIdAttribute(string id) { }
     }
 }

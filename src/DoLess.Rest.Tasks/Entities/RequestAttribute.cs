@@ -14,7 +14,8 @@ namespace DoLess.Rest.Tasks
             this.ClassName = attributeSyntax.GetClassName();
             this.Arguments = attributeSyntax.ArgumentList?
                                             .Arguments
-                                            .Select(x => x.ToString())
+                                            .Select(x => (x.Expression as LiteralExpressionSyntax)?.Token.ValueText)
+                                            .Where(x => x != null)
                                             .ToList();
             this.ArgumentCount = (this.Arguments?.Count).GetValueOrDefault();
             this.AttachedParameterName = attributeSyntax.GetParameterName();

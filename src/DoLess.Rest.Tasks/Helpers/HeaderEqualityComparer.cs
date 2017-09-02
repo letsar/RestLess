@@ -8,7 +8,7 @@ namespace DoLess.Rest.Tasks.Helpers
     {
         public bool Equals(Header x, Header y)
         {
-            return string.Equals(x?.Name?.Text, y?.Name?.Text, StringComparison.InvariantCultureIgnoreCase);
+            return string.Equals(x?.Name?.Text, y?.Name?.Text, StringComparison.OrdinalIgnoreCase);
         }
 
         public int GetHashCode(Header x)

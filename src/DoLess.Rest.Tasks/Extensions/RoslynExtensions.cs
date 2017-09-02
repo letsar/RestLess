@@ -117,6 +117,37 @@ namespace DoLess.Rest
                    ParseTypeName(typeName);
         }
 
+        public static IEnumerable<UsingDirectiveSyntax> GetUsings(this SyntaxNode self)
+        {
+            switch (self)
+            {
+                case CompilationUnitSyntax node:
+                    return node.Usings;
+                case NamespaceDeclarationSyntax node:
+                    return node.Usings;
+                default:
+                    return Enumerable.Empty<UsingDirectiveSyntax>();
+            }
+        }
 
+        public static bool HasUsingDirective(this SyntaxNode self, string usingName)
+        {
+            return self.AncestorsAndSelf()
+                       .SelectMany(x => x.GetUsings())
+                       .Any(x => x.Name.ToString() == usingName);
+        }
+
+        public static string GetTypeName(this TypeSyntax self)
+        {
+            switch (self)
+            {
+                case SimpleNameSyntax node:
+                    return node.Identifier.Text;
+                case QualifiedNameSyntax node:
+                    return node.Right.Identifier.Text;
+                default:
+                    return null;
+            }
+        }
     }
 }

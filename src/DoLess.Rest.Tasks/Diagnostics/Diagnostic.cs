@@ -58,7 +58,7 @@ namespace DoLess.Rest.Tasks.Diagnostics
 
             builder.Append($"{this.Type} {this.Code}");
 
-            if (string.IsNullOrWhiteSpace(this.Message))
+            if (!string.IsNullOrWhiteSpace(this.Message))
             {
                 builder.Append($": {this.Message}");
             }

@@ -45,5 +45,40 @@ namespace DoLess.Rest
                 }
             }
         }
+
+        public static TSource ZeroOrSingle<TSource, TException>(this IEnumerable<TSource> self, Func<TException> getException)
+            where TException : Exception
+        {
+            if (self == null)
+            {
+                return default(TSource);
+            }
+
+            if (self is IList<TSource> list)
+            {
+                switch (list.Count)
+                {
+                    case 0: return default(TSource);
+                    case 1: return list[0];
+                }
+            }
+            else
+            {
+                using (IEnumerator<TSource> e = self.GetEnumerator())
+                {
+                    if (!e.MoveNext())
+                    {
+                        return default(TSource);
+                    }
+                    TSource result = e.Current;
+                    if (!e.MoveNext())
+                    {
+                        return result;
+                    }
+                }
+            }
+
+            throw getException();
+        }
     }
 }

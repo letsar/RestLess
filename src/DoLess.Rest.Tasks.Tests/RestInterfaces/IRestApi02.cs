@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using DoLess.Rest.Tasks.Tests.Constants;
 
 namespace DoLess.Rest.RestInterfaces
 {
@@ -15,9 +14,9 @@ namespace DoLess.Rest.RestInterfaces
         void CreateBook(string book);
 
         [Put("v1/app/books/{id}")]
-        void UpdateBook([Path] List<string> id, string name);
+        void UpdateBook(List<string> id, [UrlId("queries")] string name);
 
         [Delete("v1/app/books/{id}")]
-        void DeleteBook([Path] List<string> id, string name);
+        void DeleteBook(List<string> id, [Header("X-test")] string name);
     }
 }

@@ -173,6 +173,29 @@ namespace DoLess.Rest.Tasks.Tests.UrlTemplating
 
         }
 
+        [Test]
+        public void ShouldHaveThreeSegments()
+        {
+            string template = "/v1/app/{id}";
+
+            var urlTemplate = UrlTemplate.Parse(template);
+
+            urlTemplate.Segments
+                       .ShouldBeEquivalentTo("v1", "app", "id");
+
+            urlTemplate.QueryKeys
+                       .Should()
+                       .HaveCount(0);
+
+            urlTemplate.QueryValues
+                       .Should()
+                       .HaveCount(0);
+
+            urlTemplate.ParameterNames
+                       .Should()
+                       .BeEquivalentTo("id");
+        }
+
         [TestCase("/v1/app/}")]
         [TestCase("{/v1/app/")]
         [TestCase("/v1/{name{/id")]

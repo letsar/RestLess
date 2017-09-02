@@ -22,19 +22,12 @@ namespace DoLess.Rest
                 nameof(PutAttribute),
                 nameof(TraceAttribute)
             }
-            .ToAttributeNamesHashSet();
-
-        private static readonly HashSet<string> UrlParameterAttributeNames =
-            new[]
-            {
-                nameof(PathAttribute),
-                nameof(QueryAttribute)
-            }
-            .ToAttributeNamesHashSet();
+            .ToAttributeNamesHashSet();        
 
         private static readonly HashSet<string> OtherRestAttributeNames =
             new[]
             {
+                nameof(UrlIdAttribute),
                 nameof(BaseUrlAttribute),
                 nameof(HeaderAttribute),
                 nameof(BodyAttribute)
@@ -74,7 +67,6 @@ namespace DoLess.Rest
 
             string className = self.GetClassName();
             return HttpMethodAttributeNames.Contains(className) ||
-                   UrlParameterAttributeNames.Contains(className) ||
                    OtherRestAttributeNames.Contains(className);
         }
 
@@ -128,15 +120,13 @@ namespace DoLess.Rest
             {
                 return RequestAttributeType.HttpMethod;
             }
-            else if (self.IsInAttributeSet(UrlParameterAttributeNames))
-            {
-                return RequestAttributeType.UrlParameter;
-            }
             else
             {
                 string fullClassName = className + (nameof(Attribute));
                 switch (fullClassName)
                 {
+                    case nameof(UrlIdAttribute):
+                        return RequestAttributeType.UrlId;
                     case nameof(BaseUrlAttribute):
                         return RequestAttributeType.BaseUrl;
                     case nameof(HeaderAttribute):

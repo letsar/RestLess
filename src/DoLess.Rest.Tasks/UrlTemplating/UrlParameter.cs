@@ -11,6 +11,7 @@ namespace DoLess.Rest.Tasks.UrlTemplating
         {
             this.value = value;
             this.IsMutable = isMutable;
+            this.HasBeenSet = !isMutable;
         }
 
         public string Value
@@ -21,10 +22,13 @@ namespace DoLess.Rest.Tasks.UrlTemplating
                 if (this.IsMutable)
                 {
                     this.value = value;
+                    this.HasBeenSet = true;
                 }
             }
         }
 
         public bool IsMutable { get; }
+
+        public bool HasBeenSet { get; private set; }
     }
 }

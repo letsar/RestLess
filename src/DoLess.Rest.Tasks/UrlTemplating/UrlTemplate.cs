@@ -49,6 +49,14 @@ namespace DoLess.Rest.Tasks.UrlTemplating
 
         public IReadOnlyCollection<string> ParameterNames => this.parameters.Keys;
 
+        public IReadOnlyCollection<UrlParameter> Parameters => this.parameters.Values;
+
+        public UrlParameter GetParameter(string name)
+        {
+            this.parameters.TryGetValue(name, out UrlParameter result);
+            return result;
+        }
+
         public static UrlTemplate Parse(string template)
         {
             var urlTemplate = new UrlTemplate(template);
@@ -102,7 +110,7 @@ namespace DoLess.Rest.Tasks.UrlTemplating
             this.ThrowIfIsInParameter();
 
             // When the last character is the '}'. We must not duplicate the last entry.
-            if (this.parameterNameBuilder.Length == 0)
+            if (this.parameterNameBuilder.Length == 0 && this.parameterList.Count > 1)
             {
                 this.parameterList = new List<UrlParameter>();
             }

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DoLess.Rest.Tasks
+﻿namespace DoLess.Rest.Tasks
 {
     internal enum RequestAttributeType
     {
         HttpMethod,
-        UrlParameter,
+        UrlId,
         Body,
         Header,
         BaseUrl

@@ -21,8 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\HeadAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\GetAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\DeleteAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\QueryAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\PathAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\UrlIdAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringBuilderExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Url.cs" />

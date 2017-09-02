@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DoLess.Rest.Tasks.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -11,6 +12,8 @@ namespace DoLess.Rest.Tasks
 {
     internal class RestClientGenerator : CSharpSyntaxRewriter
     {
+        private RequestInfo requestInfo;
+
         private RestClientGenerator()
         {
         }
@@ -31,14 +34,14 @@ namespace DoLess.Rest.Tasks
         {
             if (node.IsRestInterface())
             {
-                var requestInfo = new RequestInfo(node);
+                this.requestInfo = new RequestInfo(node);
 
-                var className = $"RestClientFor{node.Identifier.ValueText}";
+                var className = $"{Constants.RestClientPrefix}{node.Identifier.ValueText}";
                 var classDeclaration = ClassDeclaration(className)
                                       .WithModifiers(node.Modifiers)
                                       .WithTypeParameterList(node.TypeParameterList)
                                       .WithConstraintClauses(node.ConstraintClauses)
-                                      .WithMembers(ImplementMethods(node.Members, requestInfo))
+                                      .WithMembers(ImplementMethods(node.Members))
                                       .WithBaseList(BaseList(SeparatedList<BaseTypeSyntax>(new[] { SimpleBaseType(node.GetTypeSyntax()) })));
 
                 return classDeclaration;
@@ -69,18 +72,18 @@ namespace DoLess.Rest.Tasks
             return null;
         }
 
-        private SyntaxList<MemberDeclarationSyntax> ImplementMethods(SyntaxList<MemberDeclarationSyntax> syntaxList, RequestInfo requestInfo)
+        private SyntaxList<MemberDeclarationSyntax> ImplementMethods(SyntaxList<MemberDeclarationSyntax> syntaxList)
         {
-            return List<MemberDeclarationSyntax>(syntaxList.OfType<MethodDeclarationSyntax>().Select(x => this.ImplementMethod(x, requestInfo)));
+            return List<MemberDeclarationSyntax>(syntaxList.OfType<MethodDeclarationSyntax>().Select(x => this.ImplementMethod(x)));
         }
 
-        private MethodDeclarationSyntax ImplementMethod(MethodDeclarationSyntax node, RequestInfo requestInfo)
+        private MethodDeclarationSyntax ImplementMethod(MethodDeclarationSyntax node)
         {
             var methodDeclaration = node.WithoutAttributes()
                                         .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword)))
                                         .WithTypeParameterList(node.TypeParameterList.WithoutAttributes())
                                         .WithParameterList(node.ParameterList.WithoutAttributes())
-                                        .WithBody(this.ImplementMethodBody(node, requestInfo))
+                                        .WithBody(this.ImplementMethodBody(node))
                                         .WithSemicolonToken(MissingToken(SyntaxKind.SemicolonToken));
 
             return methodDeclaration;
@@ -88,9 +91,9 @@ namespace DoLess.Rest.Tasks
 
 
 
-        private BlockSyntax ImplementMethodBody(MethodDeclarationSyntax node, RequestInfo requestInfo)
+        private BlockSyntax ImplementMethodBody(MethodDeclarationSyntax node)
         {
-            var newRequestInfo = requestInfo.WithMethod(node);
+            var newRequestInfo = this.requestInfo.WithMethod(node);
 
 
 
