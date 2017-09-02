@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DoLess.Rest.RestInterfaces
 {
@@ -8,15 +9,15 @@ namespace DoLess.Rest.RestInterfaces
     public interface IRestApi02<T, U>
     {
         [Get("v1/app/books/{id}")]
-        string GetBook(string id);
+        Task<string> GetBook(string id);
 
         [Post("v1/app/books")]
-        void CreateBook(string book);
+        Task CreateBook(string book);
 
         [Put("v1/app/books/{id}")]
-        void UpdateBook(List<string> id, [UrlId("queries")] string name);
+        Task UpdateBook(List<string> id, [UrlId("queries")] string name);
 
         [Delete("v1/app/books/{id}")]
-        void DeleteBook(List<string> id, [Header("X-test")] string name);
+        Task DeleteBook(List<string> id, [Header("X-test")] string name);
     }
 }

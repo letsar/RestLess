@@ -1,13 +1,13 @@
 ﻿using System.Diagnostics;
 
-namespace DoLess.Rest.Tasks.UrlTemplating
+namespace DoLess.Rest.Tasks
 {
     [DebuggerDisplay("{Value}, IsMutable={IsMutable}")]
-    internal class UrlParameter
+    internal class Parameter
     {
         private string value;
 
-        public UrlParameter(string value, bool isMutable)
+        public Parameter(string value, bool isMutable)
         {
             this.value = value;
             this.IsMutable = isMutable;

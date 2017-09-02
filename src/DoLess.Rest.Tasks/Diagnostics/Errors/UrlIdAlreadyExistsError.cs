@@ -5,7 +5,7 @@ namespace DoLess.Rest.Tasks.Diagnostics
     internal class UrlIdAlreadyExistsError : ParameterError
     {
         public UrlIdAlreadyExistsError(string id, ParameterSyntax parameter) :
-            base(parameter, Codes.UrlParameterAlreadySetErrorCode)
+            base(parameter, Codes.UrlIdAlreadyExistsErrorCode)
         {
             this.UrlId = id;
             this.Message = $"There is another parameter in the method '{this.InterfaceName}.{this.MethodName}' with the same id ({id}).";

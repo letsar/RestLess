@@ -6,6 +6,8 @@ namespace DoLess.Rest.RestInterfaces
 {
     using System;
 
+    [BaseUrl("/api")]
+    [Header("X-Scope", "Interface")]
     public interface IRestApi00
     {
         [Get("v1/app/books/{id}")]
@@ -109,5 +111,46 @@ namespace DoLess.Rest.RestInterfaces
 
         [Get("/v1/app")]
         List<string> ReturnType02();
+
+        [Get("/v1/app/{id}")]
+        Task<string> GetSomeStuffWithHeader01(string id);
+
+        [Get("/v1/app/{id}")]
+        [Header("X-Scope", "Method")]
+        Task<string> GetSomeStuffWithHeader02(string id);
+
+        [Get("/v1/app/{id}")]
+        [Header("X-Scope", "Method")]
+        Task<string> GetSomeStuffWithHeader03(string id, [Header("X-Scope")] string scope);
+
+        [Post("/v1/app/{id}")]
+        Task<string> PostSomeStuffWithoutBody(string id);
+
+        [Post("/v1/app/{id}")]
+        Task<string> PostSomeStuffWithBody(string id, [Body] string body);
+
+        [Delete("/v1/app/{id}")]
+        Task<string> DeleteSomeStuff(string id);
+
+        [Get("/v1/app/{id}")]
+        Task<string> GetSomeStuff(string id);
+
+        [Head("/v1/app/{id}")]
+        Task<string> HeadSomeStuff(string id);
+
+        [Options("/v1/app/{id}")]
+        Task<string> OptionsSomeStuff(string id);
+
+        [Patch("/v1/app/{id}")]
+        Task<string> PatchSomeStuff(string id);
+
+        [Post("/v1/app/{id}")]
+        Task<string> PostSomeStuff(string id);
+
+        [Put("/v1/app/{id}")]
+        Task<string> PutSomeStuff(string id);
+
+        [Trace("/v1/app/{id}")]
+        Task<string> TraceSomeStuff(string id);
     }
 }

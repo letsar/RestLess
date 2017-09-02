@@ -13,6 +13,7 @@ namespace DoLess.Rest.Tasks
     internal class RestClientGenerator : CSharpSyntaxRewriter
     {
         private RequestInfo requestInfo;
+        private string className;
 
         private RestClientGenerator()
         {
@@ -36,13 +37,19 @@ namespace DoLess.Rest.Tasks
             {
                 this.requestInfo = new RequestInfo(node);
 
-                var className = $"{Constants.RestClientPrefix}{node.Identifier.ValueText}";
+                this.className = $"{Constants.RestClientPrefix}{node.Identifier.ValueText}";
                 var classDeclaration = ClassDeclaration(className)
-                                      .WithModifiers(node.Modifiers)
+                                      .AddModifiers(Token(SyntaxKind.InternalKeyword))
+                                      .AddModifiers(Token(SyntaxKind.SealedKeyword))
                                       .WithTypeParameterList(node.TypeParameterList)
                                       .WithConstraintClauses(node.ConstraintClauses)
-                                      .WithMembers(ImplementMethods(node.Members))
-                                      .WithBaseList(BaseList(SeparatedList<BaseTypeSyntax>(new[] { SimpleBaseType(node.GetTypeSyntax()) })));
+                                      .AddMembers(ImplementConstructor())
+                                      .AddMembers(ImplementMethods(node.Members))
+                                      .WithBaseList(BaseList(SeparatedList<BaseTypeSyntax>(new[]
+                                      {
+                                          SimpleBaseType(IdentifierName(nameof(RestClient))),
+                                          SimpleBaseType(node.GetTypeSyntax())
+                                      })));
 
                 return classDeclaration;
             }
@@ -72,9 +79,20 @@ namespace DoLess.Rest.Tasks
             return null;
         }
 
-        private SyntaxList<MemberDeclarationSyntax> ImplementMethods(SyntaxList<MemberDeclarationSyntax> syntaxList)
+        private MemberDeclarationSyntax ImplementConstructor()
         {
-            return List<MemberDeclarationSyntax>(syntaxList.OfType<MethodDeclarationSyntax>().Select(x => this.ImplementMethod(x)));
+            return ConstructorDeclaration(this.className)
+                  .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword)))
+                  .WithParameterList(NewParameterList(NewParameter("HttpClient", "httpClient"), NewParameter("RestSettings", "settings")))
+                  .WithInitializer(ConstructorInitializer(SyntaxKind.BaseConstructorInitializer, NewArgumentList("httpClient", "settings")))
+                  .WithBody(Block());
+        }
+
+        private MemberDeclarationSyntax[] ImplementMethods(SyntaxList<MemberDeclarationSyntax> syntaxList)
+        {
+            return syntaxList.OfType<MethodDeclarationSyntax>()
+                             .Select(x => this.ImplementMethod(x))
+                             .ToArray();
         }
 
         private MethodDeclarationSyntax ImplementMethod(MethodDeclarationSyntax node)
@@ -101,6 +119,25 @@ namespace DoLess.Rest.Tasks
             return Block();
         }
 
+        private static ParameterSyntax NewParameter(string type, string identifier)
+        {
+            return Parameter(Identifier(identifier)).WithType(IdentifierName(type));
+        }
+
+        private static ParameterListSyntax NewParameterList(params ParameterSyntax[] parameters)
+        {
+            return ParameterList(SeparatedList(parameters));
+        }
+
+        private static ArgumentListSyntax NewArgumentList(params string[] identifiers)
+        {
+            return ArgumentList(SeparatedList(identifiers.Select(x => NewArgument(x))));
+        }
+
+        private static ArgumentSyntax NewArgument(string identifier)
+        {
+            return Argument(IdentifierName(identifier));
+        }
 
     }
 }

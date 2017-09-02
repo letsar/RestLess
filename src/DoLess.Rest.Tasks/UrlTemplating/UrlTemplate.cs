@@ -14,14 +14,14 @@ namespace DoLess.Rest.Tasks.UrlTemplating
         private const char QueryEnd = '&';
         private const char QueryValueStart = '=';
 
-        private readonly Dictionary<string, UrlParameter> parameters;
-        private readonly List<IReadOnlyList<UrlParameter>> segments;
-        private readonly List<IReadOnlyList<UrlParameter>> queryKeys;
-        private readonly List<IReadOnlyList<UrlParameter>> queryValues;
+        private readonly Dictionary<string, Parameter> parameters;
+        private readonly List<IReadOnlyList<Parameter>> segments;
+        private readonly List<IReadOnlyList<Parameter>> queryKeys;
+        private readonly List<IReadOnlyList<Parameter>> queryValues;
         private readonly StringBuilder parameterNameBuilder;
 
-        private List<UrlParameter> parameterList;
-        private List<IReadOnlyList<UrlParameter>> urlPart;
+        private List<Parameter> parameterList;
+        private List<IReadOnlyList<Parameter>> urlPart;
         private bool isInParameter;
         private char ch;
         private int position;
@@ -29,31 +29,31 @@ namespace DoLess.Rest.Tasks.UrlTemplating
         private UrlTemplate(string template)
         {
             this.Template = template;
-            this.parameters = new Dictionary<string, UrlParameter>(StringComparer.OrdinalIgnoreCase);
-            this.segments = new List<IReadOnlyList<UrlParameter>>();
-            this.queryKeys = new List<IReadOnlyList<UrlParameter>>();
-            this.queryValues = new List<IReadOnlyList<UrlParameter>>();
+            this.parameters = new Dictionary<string, Parameter>(StringComparer.OrdinalIgnoreCase);
+            this.segments = new List<IReadOnlyList<Parameter>>();
+            this.queryKeys = new List<IReadOnlyList<Parameter>>();
+            this.queryValues = new List<IReadOnlyList<Parameter>>();
             this.parameterNameBuilder = new StringBuilder();
-            this.parameterList = new List<UrlParameter>();
+            this.parameterList = new List<Parameter>();
             this.urlPart = this.segments;
             this.isInParameter = false;
         }
 
         public string Template { get; }
 
-        public IReadOnlyList<IReadOnlyList<UrlParameter>> Segments => this.segments;
+        public IReadOnlyList<IReadOnlyList<Parameter>> Segments => this.segments;
 
-        public IReadOnlyList<IReadOnlyList<UrlParameter>> QueryKeys => this.queryKeys;
+        public IReadOnlyList<IReadOnlyList<Parameter>> QueryKeys => this.queryKeys;
 
-        public IReadOnlyList<IReadOnlyList<UrlParameter>> QueryValues => this.queryValues;
+        public IReadOnlyList<IReadOnlyList<Parameter>> QueryValues => this.queryValues;
 
         public IReadOnlyCollection<string> ParameterNames => this.parameters.Keys;
 
-        public IReadOnlyCollection<UrlParameter> Parameters => this.parameters.Values;
+        public IReadOnlyCollection<Parameter> Parameters => this.parameters.Values;
 
-        public UrlParameter GetParameter(string name)
+        public Parameter GetParameter(string name)
         {
-            this.parameters.TryGetValue(name, out UrlParameter result);
+            this.parameters.TryGetValue(name, out Parameter result);
             return result;
         }
 
@@ -89,7 +89,7 @@ namespace DoLess.Rest.Tasks.UrlTemplating
                     case ParameterEnd:
                         this.ThrowIfIsNotInParameter();
                         this.isInParameter = false;
-                        this.AddUrlParameter(true);
+                        this.AddParameter(true);
                         break;
 
                     case ParameterStart:
@@ -112,17 +112,17 @@ namespace DoLess.Rest.Tasks.UrlTemplating
             // When the last character is the '}'. We must not duplicate the last entry.
             if (this.parameterNameBuilder.Length == 0 && this.parameterList.Count > 1)
             {
-                this.parameterList = new List<UrlParameter>();
+                this.parameterList = new List<Parameter>();
             }
 
             this.AddParameterList();
         }
 
 
-        private void AddParameterList(List<IReadOnlyList<UrlParameter>> newList = null, bool resetParameterList = true)
+        private void AddParameterList(List<IReadOnlyList<Parameter>> newList = null, bool resetParameterList = true)
         {
             this.ThrowIfUnauthorizedCharacterInParameter();
-            this.AddUrlParameter(false);
+            this.AddParameter(false);
 
             if (this.parameterList.Count > 0)
             {
@@ -130,7 +130,7 @@ namespace DoLess.Rest.Tasks.UrlTemplating
 
                 if (resetParameterList)
                 {
-                    this.parameterList = new List<UrlParameter>();
+                    this.parameterList = new List<Parameter>();
                 }
             }
 
@@ -140,7 +140,7 @@ namespace DoLess.Rest.Tasks.UrlTemplating
             }
         }
 
-        private void AddUrlParameter(bool isMutable)
+        private void AddParameter(bool isMutable)
         {
             if (this.parameterNameBuilder.Length > 0)
             {
@@ -148,9 +148,9 @@ namespace DoLess.Rest.Tasks.UrlTemplating
                 this.parameterNameBuilder.Clear();
 
                 bool isParameterAlreadyExists = false;
-                if (!isMutable || !(isParameterAlreadyExists = this.parameters.TryGetValue(parameterName, out UrlParameter parameter)))
+                if (!isMutable || !(isParameterAlreadyExists = this.parameters.TryGetValue(parameterName, out Parameter parameter)))
                 {
-                    parameter = new UrlParameter(parameterName, isMutable);
+                    parameter = new Parameter(parameterName, isMutable);
 
                     if (isMutable && !isParameterAlreadyExists)
                     {

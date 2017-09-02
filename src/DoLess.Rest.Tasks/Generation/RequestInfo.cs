@@ -16,10 +16,7 @@ namespace DoLess.Rest.Tasks
         private const string TaskNamespace = "System.Threading.Tasks";
         private const string TaskName = "Task";
 
-        private static readonly IEqualityComparer<Header> HeaderEqualityComparer = new HeaderEqualityComparer();
-
-        private readonly HashSet<Header> commonHeaders;
-        private readonly HashSet<Header> methodHeaders;
+        private readonly Dictionary<string, Parameter> headers;
         private readonly HashSet<string> additionalQueryParameters;
 
         private MethodDeclarationSyntax methodDeclaration;
@@ -29,16 +26,14 @@ namespace DoLess.Rest.Tasks
 
         public RequestInfo(InterfaceDeclarationSyntax interfaceDeclaration)
         {
-            this.commonHeaders = new HashSet<Header>(HeaderEqualityComparer);
-            this.methodHeaders = new HashSet<Header>(HeaderEqualityComparer);
+            this.headers = new Dictionary<string, Parameter>();
 
             this.ParseInterfaceDeclaration(interfaceDeclaration);
         }
 
         private RequestInfo(RequestInfo requestInfo)
         {
-            this.commonHeaders = requestInfo.commonHeaders;
-            this.methodHeaders = new HashSet<Header>(this.commonHeaders, HeaderEqualityComparer);
+            this.headers = new Dictionary<string, Parameter>(requestInfo.headers);
             this.BaseUrl = requestInfo.BaseUrl;
             this.additionalQueryParameters = new HashSet<string>();
             this.hasTaskUsingNamespace = requestInfo.hasTaskUsingNamespace;
@@ -50,9 +45,9 @@ namespace DoLess.Rest.Tasks
 
         public UrlTemplate UrlTemplate { get; private set; }
 
-        public IReadOnlyCollection<Header> Headers => this.methodHeaders;
+        public IReadOnlyDictionary<string, Parameter> Headers => this.headers;
 
-        public Arg Body { get; private set; }
+        public string BodyIdentifier { get; private set; }
 
         public IReadOnlyCollection<string> AdditionalQueryParameters => this.additionalQueryParameters;
 
@@ -67,7 +62,6 @@ namespace DoLess.Rest.Tasks
         {
             this.hasTaskUsingNamespace = interfaceDeclaration.HasUsingDirective(TaskNamespace);
             this.ParseAttributeLists(interfaceDeclaration.AttributeLists);
-            this.methodHeaders.ForEach(x => this.commonHeaders.Add(x));
         }
 
         private void ParseMethodDeclaration(MethodDeclarationSyntax methodDeclaration)
@@ -101,13 +95,13 @@ namespace DoLess.Rest.Tasks
                         this.ParseRequestAttribute(firstRequestAttribute);
                         if (this.urlId != null)
                         {
-                            this.SetUrlParameterValue(this.urlId, parameterName);
+                            this.SetParameterValue(this.urlId, parameterName);
                             this.urlId = null;
                         }
                     }
                     else
                     {
-                        this.SetUrlParameterValue(parameterName, parameterName);
+                        this.SetParameterValue(parameterName, parameterName);
                     }
                 }
 
@@ -115,14 +109,14 @@ namespace DoLess.Rest.Tasks
             }
         }
 
-        private void SetUrlParameterValue(string urlId, string value)
+        private void SetParameterValue(string urlId, string value)
         {
-            UrlParameter urlParameter = this.UrlTemplate.GetParameter(urlId);
-            if (urlParameter != null)
+            Parameter parameter = this.UrlTemplate.GetParameter(urlId);
+            if (parameter != null)
             {
                 // Ensure the parameter has not already been set.
-                this.ThrowIfUrlIdAlreadyExists(urlParameter, urlId);
-                urlParameter.Value = value;
+                this.ThrowIfUrlIdAlreadyExists(parameter, urlId);
+                parameter.Value = value;
             }
             else
             {
@@ -162,7 +156,11 @@ namespace DoLess.Rest.Tasks
 
         private void ParseHeaderAttribute(RequestAttribute attribute)
         {
-            this.methodHeaders.Add(new Header(attribute));
+            string name = attribute.GetArgument(0);
+            Parameter value = attribute.AttachedParameterName?.ToMutable() ??
+                              attribute.GetArgument(1)?.ToImmutable();
+
+            this.headers[name] = value;
         }
 
         private void ParseBaseUrlAttribute(RequestAttribute attribute)
@@ -172,7 +170,7 @@ namespace DoLess.Rest.Tasks
 
         private void ParseBodyAttribute(RequestAttribute attribute)
         {
-            this.Body = Arg.Identifier(attribute.AttachedParameterName);
+            this.BodyIdentifier = attribute.AttachedParameterName;
         }
 
         private void ParseUrlIdAttribute(RequestAttribute attribute)
@@ -194,9 +192,9 @@ namespace DoLess.Rest.Tasks
             }
         }
 
-        private void ThrowIfUrlIdAlreadyExists(UrlParameter urlParameter, string urlId)
+        private void ThrowIfUrlIdAlreadyExists(Parameter parameter, string urlId)
         {
-            if (urlParameter.HasBeenSet)
+            if (parameter.HasBeenSet)
             {
                 throw new UrlIdAlreadyExistsError(urlId, this.parameter).ToException();
             }

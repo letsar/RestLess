@@ -6,7 +6,7 @@ namespace DoLess.Rest.Tasks.Diagnostics
     internal class UrlIdNotFoundError : MethodError
     {
         public UrlIdNotFoundError(IReadOnlyList<string> urlIds, MethodDeclarationSyntax methodDeclaration) :
-            base(methodDeclaration, Codes.UrlParameterNotFoundErrorCode)
+            base(methodDeclaration, Codes.UrlIdNotFoundErrorCode)
         {
             this.UrlIds = urlIds;
 

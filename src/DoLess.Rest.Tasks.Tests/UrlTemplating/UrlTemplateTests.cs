@@ -212,7 +212,7 @@ namespace DoLess.Rest.Tasks.Tests.UrlTemplating
     }
     static partial class Extensions
     {
-        public static AndConstraint<StringCollectionAssertions> ShouldBeEquivalentTo(this IReadOnlyList<IReadOnlyList<UrlParameter>> self, params string[] values)
+        public static AndConstraint<StringCollectionAssertions> ShouldBeEquivalentTo(this IReadOnlyList<IReadOnlyList<Parameter>> self, params string[] values)
         {
             return self.SelectMany(x => x)
                        .Select(x => x.Value)

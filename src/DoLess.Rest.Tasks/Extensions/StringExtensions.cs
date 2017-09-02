@@ -31,5 +31,15 @@ namespace DoLess.Rest
 
             return Arg.Literal(self);
         }
+
+        public static Parameter ToMutable(this string self)
+        {
+            return self != null ? new Parameter(self, true) : null;
+        }
+
+        public static Parameter ToImmutable(this string self)
+        {
+            return self != null ? new Parameter(self, false) : null;
+        }
     }
 }

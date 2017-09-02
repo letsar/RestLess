@@ -16,7 +16,6 @@ namespace DoLess.Rest.Tasks.Tests.Generation
     [TestFixture]
     public class RequestInfoTests
     {
-        private const string InterfacesFolder = "../../../RestInterfaces";
 
         [TestCase(nameof(IRestApi00.UrlIdNotFound01), "id")]
         [TestCase(nameof(IRestApi00.UrlIdNotFound02), "id")]
@@ -35,7 +34,7 @@ namespace DoLess.Rest.Tasks.Tests.Generation
                .UrlIds
                .Should()
                .BeEquivalentTo(notFoundIds);
-        }        
+        }
 
         [TestCase(nameof(IRestApi00.UrlIdAlreadyExists01), "name")]
         [TestCase(nameof(IRestApi00.UrlIdAlreadyExists02), "name")]
@@ -128,10 +127,125 @@ namespace DoLess.Rest.Tasks.Tests.Generation
                .BeOfType<ReturnTypeError>();
         }
 
+        [Test]
+        public void GetSomeStuffWithHeaderTest01()
+        {
+            RequestInfo requestInfo = GetRequestInfo<IRestApi00>(nameof(IRestApi00.GetSomeStuffWithHeader01));
+
+            requestInfo.UrlTemplate
+                       .ParameterNames
+                       .Should()
+                       .BeEquivalentTo("id");
+            requestInfo.Headers
+                       .Should()
+                       .HaveCount(1);
+            requestInfo.Headers
+                       .First()
+                       .Value
+                       .Value
+                       .Should()
+                       .Be("Interface");                       
+        }
+
+        [Test]
+        public void GetSomeStuffWithHeaderTest02()
+        {
+            RequestInfo requestInfo = GetRequestInfo<IRestApi00>(nameof(IRestApi00.GetSomeStuffWithHeader02));
+
+            requestInfo.UrlTemplate
+                       .ParameterNames
+                       .Should()
+                       .BeEquivalentTo("id");
+            requestInfo.Headers
+                       .Should()
+                       .HaveCount(1);
+            requestInfo.Headers
+                       .First()
+                       .Value
+                       .Value
+                       .Should()
+                       .Be("Method");
+        }
+
+        [Test]
+        public void GetSomeStuffWithHeaderTest03()
+        {
+            RequestInfo requestInfo = GetRequestInfo<IRestApi00>(nameof(IRestApi00.GetSomeStuffWithHeader03));
+
+            requestInfo.UrlTemplate
+                       .ParameterNames
+                       .Should()
+                       .BeEquivalentTo("id");
+            requestInfo.Headers
+                       .Should()
+                       .HaveCount(1);
+            requestInfo.Headers
+                       .First()
+                       .Value
+                       .Value
+                       .Should()
+                       .Be("scope");
+        }
+
+        [Test]
+        public void PostSomeStuffWithoutBodyTest()
+        {
+            RequestInfo requestInfo = GetRequestInfo<IRestApi00>(nameof(IRestApi00.PostSomeStuffWithoutBody));
+
+            requestInfo.BodyIdentifier
+                       .Should()
+                       .BeNull();                       
+        }
+
+        [Test]
+        public void PostSomeStuffWithBodyTest()
+        {
+            RequestInfo requestInfo = GetRequestInfo<IRestApi00>(nameof(IRestApi00.PostSomeStuffWithBody));
+
+            requestInfo.BodyIdentifier
+                       .Should()
+                       .Be("body");
+        }
+
+
+        [TestCase(nameof(IRestApi00.DeleteSomeStuff),"Delete")]
+        [TestCase(nameof(IRestApi00.GetSomeStuff), "Get")]
+        [TestCase(nameof(IRestApi00.HeadSomeStuff), "Head")]
+        [TestCase(nameof(IRestApi00.OptionsSomeStuff), "Options")]
+        [TestCase(nameof(IRestApi00.PatchSomeStuff), "Patch")]
+        [TestCase(nameof(IRestApi00.PostSomeStuff), "Post")]
+        [TestCase(nameof(IRestApi00.PutSomeStuff), "Put")]
+        [TestCase(nameof(IRestApi00.TraceSomeStuff), "Trace")]
+        public void ShouldBeRightHttpMethod(string method, string httpMethod)
+        {
+            RequestInfo requestInfo = GetRequestInfo<IRestApi00>(method);
+
+            requestInfo.HttpMethod
+                       .Should()
+                       .Be(httpMethod);
+        }
+
+        [TestCase(nameof(IRestApi00.DeleteSomeStuff), "/api")]
+        [TestCase(nameof(IRestApi00.GetSomeStuff), "/api")]
+        [TestCase(nameof(IRestApi00.HeadSomeStuff), "/api")]
+        [TestCase(nameof(IRestApi00.OptionsSomeStuff), "/api")]
+        [TestCase(nameof(IRestApi00.PatchSomeStuff), "/api")]
+        [TestCase(nameof(IRestApi00.PostSomeStuff), "/api")]
+        [TestCase(nameof(IRestApi00.PutSomeStuff), "/api")]
+        [TestCase(nameof(IRestApi00.TraceSomeStuff), "/api")]
+        public void ShouldHaveBaseUrl(string method, string baseUrl)
+        {
+            RequestInfo requestInfo = GetRequestInfo<IRestApi00>(method);
+
+            requestInfo.BaseUrl
+                       .Should()
+                       .Be(baseUrl);
+        }
+
         private static RequestInfo GetRequestInfo<IRestApi>(string methodName)
         {
             var interfaceFileName = $"{typeof(IRestApi).Name}.cs";
-            var filePath = Path.Combine(InterfacesFolder, interfaceFileName);
+            var filePath = Path.Combine(Constants.InterfacesFolder, interfaceFileName);
             var fileContent = File.ReadAllText(filePath, Encoding.UTF8);
             var interfaceDeclaration = CSharpSyntaxTree.ParseText(fileContent)
                                                        .GetRoot()
