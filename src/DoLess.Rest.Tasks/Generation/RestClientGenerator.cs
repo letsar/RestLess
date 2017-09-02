@@ -13,6 +13,7 @@ namespace DoLess.Rest.Tasks
     internal class RestClientGenerator : CSharpSyntaxRewriter
     {
         private RequestInfo requestInfo;
+        private RequestInfo methodRequestInfo;
         private string className;
 
         private RestClientGenerator()
@@ -111,12 +112,18 @@ namespace DoLess.Rest.Tasks
 
         private BlockSyntax ImplementMethodBody(MethodDeclarationSyntax node)
         {
-            var newRequestInfo = this.requestInfo.WithMethod(node);
+            this.methodRequestInfo = this.requestInfo.WithMethod(node);
 
+            return
+                Block(
+                    ReturnStatement(
+                        ImplementHttpMethod()));
+        }
 
-
-            // TODO.
-            return Block();
+        private ExpressionSyntax ImplementHttpMethod()
+        {
+            return NewMethodInvocation(nameof(RestRequest), this.methodRequestInfo.HttpMethod)
+                  .WithArgumentList("settings".ToArgumentWithThis());
         }
 
         private static ParameterSyntax NewParameter(string type, string identifier)
@@ -131,12 +138,17 @@ namespace DoLess.Rest.Tasks
 
         private static ArgumentListSyntax NewArgumentList(params string[] identifiers)
         {
-            return ArgumentList(SeparatedList(identifiers.Select(x => NewArgument(x))));
-        }
+            return ArgumentList(SeparatedList(identifiers.Select(x => x.ToArgument())));
+        } 
 
-        private static ArgumentSyntax NewArgument(string identifier)
+        private static InvocationExpressionSyntax NewMethodInvocation(string identifier, string method)
         {
-            return Argument(IdentifierName(identifier));
+            return
+                InvocationExpression(
+                    MemberAccessExpression(
+                        SyntaxKind.SimpleMemberAccessExpression,
+                        IdentifierName(identifier),
+                        IdentifierName(method)));
         }
 
     }

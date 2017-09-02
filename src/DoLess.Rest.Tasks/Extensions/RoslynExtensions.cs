@@ -149,5 +149,25 @@ namespace DoLess.Rest
                     return null;
             }
         }
+
+        public static InvocationExpressionSyntax WithArgumentList(this InvocationExpressionSyntax self, params string[] arguments)
+        {
+            return self.WithArgumentList(arguments.Select(x => x.ToArgument()).ToArray());
+        }
+
+        public static InvocationExpressionSyntax WithArgumentList(this InvocationExpressionSyntax self, params ArgumentSyntax[] arguments)
+        {
+            return self.WithArgumentList(ArgumentList(SeparatedList(arguments)));
+        }
+
+        public static ArgumentSyntax ToArgumentWithThis(this string self)
+        {
+            return Argument(MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, ThisExpression(), IdentifierName(self)));
+        }
+
+        public static ArgumentSyntax ToArgument(this string self)
+        {
+            return Argument(IdentifierName(self));
+        }
     }
 }
