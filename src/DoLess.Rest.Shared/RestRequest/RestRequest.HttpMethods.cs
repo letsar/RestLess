@@ -6,44 +6,44 @@ namespace DoLess.Rest
     {
         private static readonly HttpMethod HttpMethodPatch = new HttpMethod("PATCH");
 
-        public static RestRequest Delete(RestSettings settings)
+        public static RestRequest Delete(RestClient client)
         {
-            return new RestRequest(HttpMethod.Delete, settings);
+            return new RestRequest(HttpMethod.Delete, client);
         }
 
-        public static RestRequest Get(RestSettings settings)
+        public static RestRequest Get(RestClient client)
         {
-            return new RestRequest(HttpMethod.Get, settings);
+            return new RestRequest(HttpMethod.Get, client);
         }
 
-        public static RestRequest Head(RestSettings settings)
+        public static RestRequest Head(RestClient client)
         {
-            return new RestRequest(HttpMethod.Head, settings);
+            return new RestRequest(HttpMethod.Head, client);
         }
 
-        public static RestRequest Options(RestSettings settings)
+        public static RestRequest Options(RestClient client)
         {
-            return new RestRequest(HttpMethod.Options, settings);
+            return new RestRequest(HttpMethod.Options, client);
         }
 
-        public static RestRequest Patch(RestSettings settings)
+        public static RestRequest Patch(RestClient client)
         {
-            return new RestRequest(HttpMethodPatch, settings);
+            return new RestRequest(HttpMethodPatch, client);
         }
 
-        public static RestRequest Post(RestSettings settings)
+        public static RestRequest Post(RestClient client)
         {
-            return new RestRequest(HttpMethod.Post, settings);
+            return new RestRequest(HttpMethod.Post, client);
         }
 
-        public static RestRequest Put(RestSettings settings)
+        public static RestRequest Put(RestClient client)
         {
-            return new RestRequest(HttpMethod.Put, settings);
+            return new RestRequest(HttpMethod.Put, client);
         }
 
-        public static RestRequest Trace(RestSettings settings)
+        public static RestRequest Trace(RestClient client)
         {
-            return new RestRequest(HttpMethod.Trace, settings);
+            return new RestRequest(HttpMethod.Trace, client);
         }
     }
 }

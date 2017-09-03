@@ -7,13 +7,14 @@ namespace DoLess.Rest
 {
     public abstract class RestClient
     {
-        protected readonly HttpClient httpClient;
-        protected readonly RestSettings settings;
-
         public RestClient(HttpClient httpClient, RestSettings settings)
         {
-            this.httpClient = httpClient;
-            this.settings = settings ?? new RestSettings();
+            this.HttpClient = httpClient;
+            this.Settings = settings ?? new RestSettings();
         }
+
+        internal HttpClient HttpClient { get; }
+
+        internal RestSettings Settings { get; }
     }
 }

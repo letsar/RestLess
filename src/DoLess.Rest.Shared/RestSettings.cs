@@ -10,8 +10,13 @@ namespace DoLess.Rest
     public sealed class RestSettings
     {
         /// <summary>
-        /// Gets or sets the serializer used in requests and responses.
+        /// Gets or sets the object that is used to write into the body of a request.
         /// </summary>
-        public IStringConverter Serializer { get; set; }
+        public IContentWriter ContentWriter { get; set; }
+
+        /// <summary>
+        /// Gets or sets the objet that is used to read from the body of a response.
+        /// </summary>
+        public IContentReader ContentReader { get; set; }
     }
 }

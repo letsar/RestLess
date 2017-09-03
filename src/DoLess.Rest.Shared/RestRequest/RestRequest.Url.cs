@@ -78,5 +78,13 @@ namespace DoLess.Rest
 
             return new Uri(uriBuilder.Uri.GetComponents(UriComponents.PathAndQuery, UriFormat.UriEscaped), UriKind.Relative);
         }
+
+        private void EnsureRequestUriIsSet()
+        {
+            if (this.httpRequestMessage.RequestUri == null)
+            {
+                this.httpRequestMessage.RequestUri = this.BuildUri();
+            }
+        }
     }
 }

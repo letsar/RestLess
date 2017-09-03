@@ -120,9 +120,11 @@ namespace DoLess.Rest.Tasks
         private ExpressionSyntax ImplementRequest()
         {
             InvocationExpressionSyntax result = NewMethodInvocation(nameof(RestRequest), this.methodRequestInfo.HttpMethod)
-                                               .WithArgs("settings".ToArgWithThis());
+                                               .WithArgs(Argument(ThisExpression()));
 
             result = this.ChainWithRequestUrlBuilding(result);
+            result = this.ChainWithHeaders(result);
+            result = this.ChainWithSendMethod(result);
 
             return result;
         }
@@ -160,6 +162,26 @@ namespace DoLess.Rest.Tasks
             }
 
 
+            return invocationExpression;
+        }
+
+        private InvocationExpressionSyntax ChainWithHeaders(InvocationExpressionSyntax invocationExpression)
+        {
+            var headers = this.methodRequestInfo.Headers;
+            if (headers.Count > 0)
+            {
+                headers.ForEach(x =>
+                       {
+                           invocationExpression = invocationExpression.ChainWith(nameof(RestRequest.WithHeader))
+                                                                      .WithArgs(x.Key.ToArgLiteral(), x.Value.ToArg());
+                       });
+            }
+
+            return invocationExpression;
+        }
+
+        private InvocationExpressionSyntax ChainWithSendMethod(InvocationExpressionSyntax invocationExpression)
+        {
             return invocationExpression;
         }
 

@@ -28,6 +28,7 @@ namespace DoLess.Rest
 
         public RestRequest WithBody(object body)
         {
+            
             // TODO.
             this.httpRequestMessage.Content = null;
             return this;
