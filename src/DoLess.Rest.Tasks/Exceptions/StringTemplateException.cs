@@ -2,9 +2,9 @@
 
 namespace DoLess.Rest.Tasks.Exceptions
 {
-    internal class StringTemplateException : Exception
+    internal class UrlTemplateException : Exception
     {
-        public StringTemplateException(string message) :
+        public UrlTemplateException(string message) :
             base(message)
         {
         }

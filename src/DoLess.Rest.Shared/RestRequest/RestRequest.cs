@@ -1,20 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Net.Http;
 using System.Text;
-using DoLess.Rest.Helpers;
 
 namespace DoLess.Rest
 {
     public sealed partial class RestRequest
     {
-        private readonly Url url;
-        private readonly HttpMethod httpMethod;
+        public const string SegmentStart = "/";
+
+        private readonly HttpRequestMessage httpRequestMessage;
+        private readonly StringBuilder uriStringBuilder;
+        private readonly NameValueCollection queries;
 
         private RestRequest(HttpMethod httpMethod, RestSettings settings)
         {
-            this.httpMethod = httpMethod;
-            this.url = new Url(settings);
+            this.httpRequestMessage = new HttpRequestMessage();
+            this.httpRequestMessage.Method = httpMethod;
+            this.uriStringBuilder = new StringBuilder(SegmentStart);
+            this.queries = new NameValueCollection();
+            
         }
     }
 }

@@ -114,16 +114,53 @@ namespace DoLess.Rest.Tasks
         {
             this.methodRequestInfo = this.requestInfo.WithMethod(node);
 
-            return
-                Block(
-                    ReturnStatement(
-                        ImplementHttpMethod()));
+            return Block(ReturnStatement(ImplementRequest()));
         }
 
-        private ExpressionSyntax ImplementHttpMethod()
+        private ExpressionSyntax ImplementRequest()
         {
-            return NewMethodInvocation(nameof(RestRequest), this.methodRequestInfo.HttpMethod)
-                  .WithArgumentList("settings".ToArgumentWithThis());
+            InvocationExpressionSyntax result = NewMethodInvocation(nameof(RestRequest), this.methodRequestInfo.HttpMethod)
+                                               .WithArgs("settings".ToArgWithThis());
+
+            result = this.ChainWithRequestUrlBuilding(result);
+
+            return result;
+        }
+
+        private InvocationExpressionSyntax ChainWithRequestUrlBuilding(InvocationExpressionSyntax invocationExpression)
+        {
+            //Add the BaseUrl if any.
+            if (!string.IsNullOrEmpty(this.methodRequestInfo.BaseUrl))
+            {
+                invocationExpression = invocationExpression.ChainWith(nameof(RestRequest.AppendUrl))
+                                                           .WithArgs(this.methodRequestInfo.BaseUrl.ToArgLiteral());
+            }
+
+            var stringTemplate = this.methodRequestInfo.StringTemplate;
+            stringTemplate.Parts
+                          .ForEach(x =>
+                          {
+                              invocationExpression = invocationExpression.ChainWith(nameof(RestRequest.AppendUrl))
+                                                                         .WithArgs(x.ToArg());
+
+                              if (x.IsMutable)
+                              {
+                                  invocationExpression = invocationExpression.AddArgumentListArguments(NewTrueArgument());
+                              }
+                          });
+
+            var queries = this.methodRequestInfo.Queries;
+            if (queries.Count > 0)
+            {
+                queries.ForEach(x =>
+                       {
+                           invocationExpression = invocationExpression.ChainWith(nameof(RestRequest.AddQuery))
+                                                                      .AddArgumentListArguments(x.Key.ToArgLiteral(), x.Value.ToArg());
+                       });
+            }
+
+
+            return invocationExpression;
         }
 
         private static ParameterSyntax NewParameter(string type, string identifier)
@@ -138,8 +175,8 @@ namespace DoLess.Rest.Tasks
 
         private static ArgumentListSyntax NewArgumentList(params string[] identifiers)
         {
-            return ArgumentList(SeparatedList(identifiers.Select(x => x.ToArgument())));
-        } 
+            return ArgumentList(SeparatedList(identifiers.Select(x => x.ToArg())));
+        }
 
         private static InvocationExpressionSyntax NewMethodInvocation(string identifier, string method)
         {
@@ -149,6 +186,16 @@ namespace DoLess.Rest.Tasks
                         SyntaxKind.SimpleMemberAccessExpression,
                         IdentifierName(identifier),
                         IdentifierName(method)));
+        }
+
+        private static ArgumentSyntax NewFalseArgument()
+        {
+            return Argument(LiteralExpression(SyntaxKind.FalseLiteralExpression));
+        }
+
+        private static ArgumentSyntax NewTrueArgument()
+        {
+            return Argument(LiteralExpression(SyntaxKind.TrueLiteralExpression));
         }
 
     }

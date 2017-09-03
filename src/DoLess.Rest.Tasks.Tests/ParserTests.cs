@@ -22,7 +22,7 @@ namespace DoLess.Rest.Tasks.Tests
         public void ShouldHaveExpectedNumberOfInterfaces()
         {
             var files = Directory.EnumerateFiles(InterfacesFolder)
-                                 .Where(x => !x.EndsWith("00.cs"))
+                                 .Where(x => !x.EndsWith("00.cs") && !x.EndsWith("04.cs"))
                                  .ToArray();
 
             CodeParser analyzer = new CodeParser();
@@ -46,15 +46,6 @@ namespace DoLess.Rest.Tasks.Tests
             var syntaxTree = CSharpSyntaxTree.ParseText(code);
             var walker = new Walker();
             walker.Visit(syntaxTree.GetRoot());
-            var tree = walker.ToString();
-        }
-
-        [Test]
-        public void Test02()
-        {
-            var root = GetRootNode(nameof(RestClientTestXXXX));
-            var walker = new Walker();
-            walker.Visit(root);
             var tree = walker.ToString();
         }
 

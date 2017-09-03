@@ -17,7 +17,7 @@ namespace DoLess.Rest.Tasks
         private const string TaskName = "Task";
 
         private readonly Dictionary<string, Parameter> headers;
-        private readonly HashSet<string> additionalQueryParameters;
+        private readonly Dictionary<string, string> queries;
 
         private MethodDeclarationSyntax methodDeclaration;
         private ParameterSyntax parameter;
@@ -35,7 +35,7 @@ namespace DoLess.Rest.Tasks
         {
             this.headers = new Dictionary<string, Parameter>(requestInfo.headers);
             this.BaseUrl = requestInfo.BaseUrl;
-            this.additionalQueryParameters = new HashSet<string>();
+            this.queries = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             this.hasTaskUsingNamespace = requestInfo.hasTaskUsingNamespace;
         }
 
@@ -43,13 +43,13 @@ namespace DoLess.Rest.Tasks
 
         public string HttpMethod { get; private set; }
 
-        public UrlTemplate UrlTemplate { get; private set; }
+        public StringTemplate StringTemplate { get; private set; }
 
         public IReadOnlyDictionary<string, Parameter> Headers => this.headers;
 
         public string BodyIdentifier { get; private set; }
 
-        public IReadOnlyCollection<string> AdditionalQueryParameters => this.additionalQueryParameters;
+        public IReadOnlyDictionary<string, string> Queries => this.queries;
 
         public RequestInfo WithMethod(MethodDeclarationSyntax methodDeclaration)
         {
@@ -62,6 +62,7 @@ namespace DoLess.Rest.Tasks
         {
             this.hasTaskUsingNamespace = interfaceDeclaration.HasUsingDirective(TaskNamespace);
             this.ParseAttributeLists(interfaceDeclaration.AttributeLists);
+            this.ThrowIfInvalidBaseUrl(interfaceDeclaration);
         }
 
         private void ParseMethodDeclaration(MethodDeclarationSyntax methodDeclaration)
@@ -111,7 +112,7 @@ namespace DoLess.Rest.Tasks
 
         private void SetParameterValue(string urlId, string value)
         {
-            Parameter parameter = this.UrlTemplate.GetParameter(urlId);
+            Parameter parameter = this.StringTemplate.GetParameter(urlId);
             if (parameter != null)
             {
                 // Ensure the parameter has not already been set.
@@ -120,7 +121,11 @@ namespace DoLess.Rest.Tasks
             }
             else
             {
-                this.additionalQueryParameters.Add(urlId);
+                if (this.queries.ContainsKey(urlId))
+                {
+                    this.ThrowUrlIdAlreadyExists(urlId);
+                }
+                this.queries[urlId] = value;
             }
         }
 
@@ -184,11 +189,11 @@ namespace DoLess.Rest.Tasks
 
             try
             {
-                this.UrlTemplate = UrlTemplate.Parse(attribute.GetArgument(0));
+                this.StringTemplate = StringTemplate.Parse(attribute.GetArgument(0));
             }
             catch (Exception ex)
             {
-                throw new MalformedUrlTemplateError(this.methodDeclaration).ToException(ex);
+                throw new InvalidUrlTemplateError(this.methodDeclaration).ToException(ex);
             }
         }
 
@@ -200,9 +205,14 @@ namespace DoLess.Rest.Tasks
             }
         }
 
+        private void ThrowUrlIdAlreadyExists(string urlId)
+        {
+            throw new UrlIdAlreadyExistsError(urlId, this.parameter).ToException();
+        }
+
         private void ThrowIfUrlIdNotFound()
         {
-            var notFoundIds = this.UrlTemplate
+            var notFoundIds = this.StringTemplate
                                   .Parameters
                                   .Where(x => x.IsMutable && !x.HasBeenSet)
                                   .Select(x => x.Value)
@@ -249,6 +259,22 @@ namespace DoLess.Rest.Tasks
             if (!isTask)
             {
                 throw new ReturnTypeError(this.methodDeclaration).ToException();
+            }
+        }
+
+        private void ThrowIfInvalidBaseUrl(InterfaceDeclarationSyntax interfaceDeclaration)
+        {
+            if (this.BaseUrl != null)
+            {
+                var baseUrl = this.BaseUrl;
+
+                // The Uri.IsWellFormedUriString does not check if there is query string in a relative uri.
+                bool isWellFormed = !baseUrl.Contains('?') && Uri.IsWellFormedUriString(baseUrl, UriKind.Relative);
+
+                if (!isWellFormed)
+                {
+                    throw new InvalidBaseUrlError(interfaceDeclaration).ToException();
+                }
             }
         }
     }

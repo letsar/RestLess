@@ -80,31 +80,19 @@ namespace DoLess.Rest.RestInterfaces
         Task<string> MultipleHttpAttribute08();
 
         [Get("/v1/app/}")]
-        Task<string> MalformedUrlTemplate01();
+        Task<string> InvalidUrlTemplate01();
 
         [Get("{/v1/app/")]
-        Task<string> MalformedUrlTemplate02();
+        Task<string> InvalidUrlTemplate02();
 
         [Get("/v1/{name{/id")]
-        Task<string> MalformedUrlTemplate03();
+        Task<string> InvalidUrlTemplate03();
 
         [Get("/v1/app{id")]
-        Task<string> MalformedUrlTemplate04();
+        Task<string> InvalidUrlTemplate04();
 
         [Get("}/v1/app/")]
-        Task<string> MalformedUrlTemplate05();
-
-        [Get("/v1/app/{me?thod}")]
-        Task<string> MalformedUrlTemplate06();
-
-        [Get("/v1/app/{me/thod}")]
-        Task<string> MalformedUrlTemplate07();
-
-        [Get("/v1/app/{me&thod}")]
-        Task<string> MalformedUrlTemplate08();
-
-        [Get("/v1/app/{me=thod}")]
-        Task<string> MalformedUrlTemplate09();
+        Task<string> InvalidUrlTemplate05();
 
         [Get("/v1/app")]
         string ReturnType01();

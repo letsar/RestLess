@@ -10,6 +10,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using System.Runtime.Serialization;
 using DoLess.Rest.Tasks;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using DoLess.Rest.Tasks.Helpers;
 
 namespace DoLess.Rest
 {
@@ -150,24 +151,45 @@ namespace DoLess.Rest
             }
         }
 
-        public static InvocationExpressionSyntax WithArgumentList(this InvocationExpressionSyntax self, params string[] arguments)
+        public static InvocationExpressionSyntax WithArgs(this InvocationExpressionSyntax self, params string[] arguments)
         {
-            return self.WithArgumentList(arguments.Select(x => x.ToArgument()).ToArray());
+            return self.WithArgs(arguments.Select(x => x.ToArg()).ToArray());
         }
 
-        public static InvocationExpressionSyntax WithArgumentList(this InvocationExpressionSyntax self, params ArgumentSyntax[] arguments)
+        public static InvocationExpressionSyntax WithArgs(this InvocationExpressionSyntax self, params ArgumentSyntax[] arguments)
         {
             return self.WithArgumentList(ArgumentList(SeparatedList(arguments)));
         }
 
-        public static ArgumentSyntax ToArgumentWithThis(this string self)
+        public static ArgumentSyntax ToArgWithThis(this string self)
         {
             return Argument(MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, ThisExpression(), IdentifierName(self)));
         }
 
-        public static ArgumentSyntax ToArgument(this string self)
+        public static ArgumentSyntax ToArg(this string self)
         {
             return Argument(IdentifierName(self));
+        }
+
+        public static ArgumentSyntax ToArgLiteral(this string self)
+        {
+            return Argument(LiteralExpression(SyntaxKind.StringLiteralExpression, SyntaxFactory.Literal(self)));
+        }
+
+        public static ArgumentSyntax ToArg(this Parameter self)
+        {
+            return self.IsMutable ? self.Value.ToArg() : self.Value.ToArgLiteral();
+        }
+
+        public static InvocationExpressionSyntax ChainWith(this InvocationExpressionSyntax self, string methodName)
+        {
+            return InvocationExpression(MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, self, IdentifierName(methodName)));
+        }
+
+        public static SyntaxNode Normalize(this SyntaxNode self)
+        {
+            var normalizer = new SyntaxNormalizer();
+            return normalizer.Visit(self);
         }
     }
 }

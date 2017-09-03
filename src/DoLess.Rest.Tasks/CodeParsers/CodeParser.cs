@@ -19,6 +19,7 @@ namespace DoLess.Rest.Tasks.CodeParsers
                                    .Where(x => x.DescendantNodes().HasReferenceToDoLessRest())
                                    .Select(x => RestClientGenerator.Generate(x))
                                    .Select(x => x.NormalizeWhitespace())
+                                   .Select(x => x.Normalize())
                                    .Select(x => x.ToFullString())
                                    .ToList();
 

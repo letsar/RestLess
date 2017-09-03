@@ -173,6 +173,51 @@ namespace DoLess.Rest.Tasks.Tests.UrlTemplating
 
         }
 
+        [TestCase("/v1/app?sort&key=value")]
+        [TestCase("/v1/app?sort=&key=value")]
+        public void ShouldHaveSameNumberOfQueryKeysAndQueryValues01(string template)
+        {
+            var urlTemplate = UrlTemplate.Parse(template);
+
+            urlTemplate.QueryKeys
+                       .ShouldBeEquivalentTo("sort", "key");
+
+            urlTemplate.QueryValues
+                       .ShouldBeEquivalentTo(string.Empty, "value");
+
+        }
+
+        [TestCase("/v1/app?sort=value&key")]
+        [TestCase("/v1/app?sort=value&key=")]
+        public void ShouldHaveSameNumberOfQueryKeysAndQueryValues02(string template)
+        {
+            var urlTemplate = UrlTemplate.Parse(template);
+
+            urlTemplate.QueryKeys
+                       .ShouldBeEquivalentTo("sort", "key");
+
+            urlTemplate.QueryValues
+                       .ShouldBeEquivalentTo("value", string.Empty);
+
+        }
+
+        [TestCase("/v1/app?sort{parameter}by&key=value")]
+        public void ShouldHaveSameNumberOfQueryKeysAndQueryValues03(string template)
+        {
+            var urlTemplate = UrlTemplate.Parse(template);
+
+            urlTemplate.QueryKeys
+                       .Should()
+                       .HaveCount(2);
+
+            urlTemplate.QueryKeys
+                       .ShouldBeEquivalentTo("sort", "parameter", "by", "key");
+
+            urlTemplate.QueryValues
+                       .ShouldBeEquivalentTo(string.Empty, "value");
+
+        }
+
         [Test]
         public void ShouldHaveThreeSegments()
         {

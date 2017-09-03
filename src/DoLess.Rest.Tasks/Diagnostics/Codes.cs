@@ -13,5 +13,6 @@ namespace DoLess.Rest.Tasks.Diagnostics
         public const string UrlIdNotFoundErrorCode = "DLR005";
         public const string MultipleHttpAttributesErrorCode = "DLR006";        
         public const string ReturnTypeErrorCode = "DLR007";
+        public const string InvalidBaseUrlErrorCode = "DLR008";
     }
 }

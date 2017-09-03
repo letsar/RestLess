@@ -82,8 +82,12 @@ namespace DoLess.Rest.Tasks.UrlTemplating
                         break;
 
                     case QueryStringStart:
+                        this.AddParameterList(this.queryKeys);
+                        break;
+
                     case QueryEnd:
                         this.AddParameterList(this.queryKeys);
+                        this.AddEmptyQueryValueIfNeeded();
                         break;
 
                     case ParameterEnd:
@@ -107,7 +111,7 @@ namespace DoLess.Rest.Tasks.UrlTemplating
                 }
             }
 
-            this.ThrowIfIsInParameter();
+            this.ThrowIfIsInParameter();            
 
             // When the last character is the '}'. We must not duplicate the last entry.
             if (this.parameterNameBuilder.Length == 0 && this.parameterList.Count > 1)
@@ -116,22 +120,25 @@ namespace DoLess.Rest.Tasks.UrlTemplating
             }
 
             this.AddParameterList();
+            this.AddEmptyQueryValueIfNeeded();
         }
 
+        private void AddEmptyQueryValueIfNeeded()
+        {
+            if (this.queryKeys.Count > this.queryValues.Count)
+            {
+                this.queryValues.Add(new List<Parameter>() { new Parameter(string.Empty, false) });
+            }
+        }
 
         private void AddParameterList(List<IReadOnlyList<Parameter>> newList = null, bool resetParameterList = true)
         {
             this.ThrowIfUnauthorizedCharacterInParameter();
             this.AddParameter(false);
 
-            if (this.parameterList.Count > 0)
+            if (resetParameterList && this.parameterList.Count > 0)
             {
-                this.urlPart.Add(this.parameterList);
-
-                if (resetParameterList)
-                {
-                    this.parameterList = new List<Parameter>();
-                }
+                this.parameterList = new List<Parameter>();
             }
 
             if (newList != null)
@@ -159,6 +166,11 @@ namespace DoLess.Rest.Tasks.UrlTemplating
                 }
 
                 this.parameterList.Add(parameter);
+
+                if (this.parameterList.Count == 1)
+                {
+                    this.urlPart.Add(this.parameterList);
+                }
             }
             else if (isMutable)
             {

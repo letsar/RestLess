@@ -96,23 +96,19 @@ namespace DoLess.Rest.Tasks.Tests.Generation
                .BeOfType<MultipleHttpAttributesError>();
         }
 
-        [TestCase(nameof(IRestApi00.MalformedUrlTemplate01))]
-        [TestCase(nameof(IRestApi00.MalformedUrlTemplate02))]
-        [TestCase(nameof(IRestApi00.MalformedUrlTemplate03))]
-        [TestCase(nameof(IRestApi00.MalformedUrlTemplate04))]
-        [TestCase(nameof(IRestApi00.MalformedUrlTemplate05))]
-        [TestCase(nameof(IRestApi00.MalformedUrlTemplate06))]
-        [TestCase(nameof(IRestApi00.MalformedUrlTemplate07))]
-        [TestCase(nameof(IRestApi00.MalformedUrlTemplate08))]
-        [TestCase(nameof(IRestApi00.MalformedUrlTemplate09))]
-        public void ShouldThrowMalformedUrlTemplate(string methodName)
+        [TestCase(nameof(IRestApi00.InvalidUrlTemplate01))]
+        [TestCase(nameof(IRestApi00.InvalidUrlTemplate02))]
+        [TestCase(nameof(IRestApi00.InvalidUrlTemplate03))]
+        [TestCase(nameof(IRestApi00.InvalidUrlTemplate04))]
+        [TestCase(nameof(IRestApi00.InvalidUrlTemplate05))]
+        public void ShouldThrowInvalidUrlTemplate(string methodName)
         {
             Action job = () => GetRequestInfo<IRestApi00>(methodName);
             job.ShouldThrowExactly<ErrorDiagnosticException>()
                .And
                .Error
                .Should()
-               .BeOfType<MalformedUrlTemplateError>();
+               .BeOfType<InvalidUrlTemplateError>();
         }
 
         [TestCase(nameof(IRestApi00.ReturnType01))]
@@ -132,7 +128,7 @@ namespace DoLess.Rest.Tasks.Tests.Generation
         {
             RequestInfo requestInfo = GetRequestInfo<IRestApi00>(nameof(IRestApi00.GetSomeStuffWithHeader01));
 
-            requestInfo.UrlTemplate
+            requestInfo.StringTemplate
                        .ParameterNames
                        .Should()
                        .BeEquivalentTo("id");
@@ -144,7 +140,7 @@ namespace DoLess.Rest.Tasks.Tests.Generation
                        .Value
                        .Value
                        .Should()
-                       .Be("Interface");                       
+                       .Be("Interface");
         }
 
         [Test]
@@ -152,7 +148,7 @@ namespace DoLess.Rest.Tasks.Tests.Generation
         {
             RequestInfo requestInfo = GetRequestInfo<IRestApi00>(nameof(IRestApi00.GetSomeStuffWithHeader02));
 
-            requestInfo.UrlTemplate
+            requestInfo.StringTemplate
                        .ParameterNames
                        .Should()
                        .BeEquivalentTo("id");
@@ -172,7 +168,7 @@ namespace DoLess.Rest.Tasks.Tests.Generation
         {
             RequestInfo requestInfo = GetRequestInfo<IRestApi00>(nameof(IRestApi00.GetSomeStuffWithHeader03));
 
-            requestInfo.UrlTemplate
+            requestInfo.StringTemplate
                        .ParameterNames
                        .Should()
                        .BeEquivalentTo("id");
@@ -194,7 +190,7 @@ namespace DoLess.Rest.Tasks.Tests.Generation
 
             requestInfo.BodyIdentifier
                        .Should()
-                       .BeNull();                       
+                       .BeNull();
         }
 
         [Test]
@@ -208,7 +204,7 @@ namespace DoLess.Rest.Tasks.Tests.Generation
         }
 
 
-        [TestCase(nameof(IRestApi00.DeleteSomeStuff),"Delete")]
+        [TestCase(nameof(IRestApi00.DeleteSomeStuff), "Delete")]
         [TestCase(nameof(IRestApi00.GetSomeStuff), "Get")]
         [TestCase(nameof(IRestApi00.HeadSomeStuff), "Head")]
         [TestCase(nameof(IRestApi00.OptionsSomeStuff), "Options")]
@@ -242,16 +238,32 @@ namespace DoLess.Rest.Tasks.Tests.Generation
                        .Be(baseUrl);
         }
 
-        private static RequestInfo GetRequestInfo<IRestApi>(string methodName)
+        [TestCase(nameof(IRestApiForTestingBaseUrl02))]
+        [TestCase(nameof(IRestApiForTestingBaseUrl03))]
+        public void ShouldThrowInvalidBaseUrl(string interfaceName)
         {
-            var interfaceFileName = $"{typeof(IRestApi).Name}.cs";
-            var filePath = Path.Combine(Constants.InterfacesFolder, interfaceFileName);
-            var fileContent = File.ReadAllText(filePath, Encoding.UTF8);
-            var interfaceDeclaration = CSharpSyntaxTree.ParseText(fileContent)
-                                                       .GetRoot()
-                                                       .DescendantNodes()
-                                                       .OfType<InterfaceDeclarationSyntax>()
-                                                       .FirstOrDefault();
+            Action job = () => new RequestInfo(GetInterfaceDeclaration(interfaceName, "IRestApi04.cs"));
+
+            job.ShouldThrowExactly<ErrorDiagnosticException>()
+                      .And
+                      .Error
+                      .Should()
+                      .BeOfType<InvalidBaseUrlError>();
+        }
+
+        [TestCase(nameof(IRestApiForTestingBaseUrl01))]
+        [TestCase(nameof(IRestApiForTestingBaseUrl04))]
+        [TestCase(nameof(IRestApiForTestingBaseUrl05))]
+        public void ShouldNotThrowInvalidBaseUrl(string interfaceName)
+        {
+            Action job = () => new RequestInfo(GetInterfaceDeclaration(interfaceName, "IRestApi04.cs"));
+
+            job.ShouldNotThrow<ErrorDiagnosticException>();
+        }
+
+        private static RequestInfo GetRequestInfo<IRestApi>(string methodName, string fileName = null)
+        {
+            var interfaceDeclaration = GetInterfaceDeclaration(typeof(IRestApi).Name, fileName);
 
             if (interfaceDeclaration != null)
             {
@@ -266,6 +278,23 @@ namespace DoLess.Rest.Tasks.Tests.Generation
             }
 
             return null;
+        }
+
+        private static InterfaceDeclarationSyntax GetInterfaceDeclaration(string interfaceName, string fileName = null)
+        {
+            if (fileName == null)
+            {
+                fileName = $"{interfaceName}.cs";
+            }
+            var filePath = Path.Combine(Constants.InterfacesFolder, fileName);
+            var fileContent = File.ReadAllText(filePath, Encoding.UTF8);
+            var interfaceDeclaration = CSharpSyntaxTree.ParseText(fileContent)
+                                                       .GetRoot()
+                                                       .DescendantNodes()
+                                                       .OfType<InterfaceDeclarationSyntax>()
+                                                       .FirstOrDefault(x => x.Identifier.Text == interfaceName);
+
+            return interfaceDeclaration;
         }
     }
 }

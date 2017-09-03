@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DoLess.Rest
+namespace DoLess.Rest.Tasks
 {
     internal static class IEnumerableExtensions
     {
@@ -27,25 +27,7 @@ namespace DoLess.Rest
             return self.Select(x => x.Replace(nameof(Attribute), string.Empty))
                        .ToHashSet();
         }
-
-        public static void ForEach<T>(this IEnumerable<T> self, Action<T> action)
-        {
-            if (self is IReadOnlyList<T> list)
-            {
-                for (int i = 0; i < list.Count; i++)
-                {
-                    action(list[i]);
-                }
-            }
-            else
-            {
-                foreach (var item in self)
-                {
-                    action(item);
-                }
-            }
-        }
-
+        
         public static TSource ZeroOrSingle<TSource, TException>(this IEnumerable<TSource> self, Func<TException> getException)
             where TException : Exception
         {
