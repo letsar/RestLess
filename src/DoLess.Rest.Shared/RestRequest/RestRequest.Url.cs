@@ -44,7 +44,8 @@ namespace DoLess.Rest
 
         public RestRequest AddQuery(string name, object value)
         {
-            return this.AddQuery(name, value?.ToString());
+            this.EnsureUrlParameterFormatter();
+            return this.AddQuery(name, this.client.Settings.UrlParameterFormatter.Format(value));
         }
 
         private static string UrlEncode(string value, bool encode = true)
@@ -77,14 +78,6 @@ namespace DoLess.Rest
             }
 
             return new Uri(uriBuilder.Uri.GetComponents(UriComponents.PathAndQuery, UriFormat.UriEscaped), UriKind.Relative);
-        }
-
-        private void EnsureRequestUriIsSet()
-        {
-            if (this.httpRequestMessage.RequestUri == null)
-            {
-                this.httpRequestMessage.RequestUri = this.BuildUri();
-            }
-        }
+        }        
     }
 }

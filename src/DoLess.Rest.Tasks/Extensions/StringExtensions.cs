@@ -6,7 +6,8 @@ using DoLess.Rest.Tasks;
 namespace DoLess.Rest
 {
     internal static class StringExtensions
-    {
+    {       
+
         public static string[] SplitOnFirstOccurrence(this string self, char[] separators)
         {
             return self?.Split(separators, 2, StringSplitOptions.RemoveEmptyEntries);

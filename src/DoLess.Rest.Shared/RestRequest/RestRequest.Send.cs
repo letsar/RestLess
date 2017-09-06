@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using DoLess.Rest.Exceptions;
 
 namespace DoLess.Rest
 {
@@ -52,11 +53,11 @@ namespace DoLess.Rest
         }
 
         /// <summary>
-        /// Reads the content as <see cref="bool"/>.
+        /// Sends a request and indicates whether the response is successful or not.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        public Task<bool> ReadAsBoolAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task<bool> SendAndGetSuccessAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return this.ReadAsHttpResponseMessageWithoutContent(cancellationToken)
                        .ContinueWith(x =>
@@ -64,6 +65,23 @@ namespace DoLess.Rest
                            // TODO: Create an attribute to manage the Success status codes.
                            return x.IsCompleted && x.Result.IsSuccessStatusCode;
                        });
+        }
+
+        /// <summary>
+        /// Reads the content as <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the object in the content.</typeparam>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        public async Task<T> ReadAsObject<T>(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            this.EnsureMediaTypeFormatter();
+
+            using (Stream stream = await this.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false))
+            using (StreamReader streamReader = new StreamReader(stream))
+            {
+                return await this.client.Settings.MediaTypeFormatter.ReadAsync<T>(streamReader);
+            }
         }
 
         /// <summary>
@@ -95,11 +113,6 @@ namespace DoLess.Rest
             {
                 return default(T);
             }
-        }
-
-        private void EnsureAllIsSetBeforeSendingTheRequest()
-        {
-            this.EnsureRequestUriIsSet();
         }
     }
 }

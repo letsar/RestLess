@@ -4,11 +4,11 @@ using System.Text;
 
 namespace DoLess.Rest
 {
-    public static class StringExtensions
+    internal static class StringExtensions
     {
         private const char RelativePathStart = '/';
 
-        internal static string EnsureRelativePath(this string self)
+        public static string EnsureRelativePath(this string self)
         {
             string result = self?.Trim();
             if (string.IsNullOrEmpty(result) || result[0] != RelativePathStart)
@@ -16,6 +16,21 @@ namespace DoLess.Rest
                 result = RelativePathStart + result;
             }
             return result;
+        }
+
+        public static bool HasContent(this string self)
+        {
+            return !string.IsNullOrEmpty(self);
+        }
+
+        public static bool IsNullOrEmpty(this string self)
+        {
+            return string.IsNullOrEmpty(self);
+        }
+
+        public static bool IsNullOrWhiteSpace(this string self)
+        {
+            return string.IsNullOrWhiteSpace(self);
         }
     }
 }

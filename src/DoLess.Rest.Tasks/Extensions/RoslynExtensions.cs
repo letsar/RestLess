@@ -124,7 +124,7 @@ namespace DoLess.Rest
             {
                 case CompilationUnitSyntax node:
                     return node.Usings;
-                case NamespaceDeclarationSyntax node:
+                case NamespaceDeclarationSyntax node:                    
                     return node.Usings;
                 default:
                     return Enumerable.Empty<UsingDirectiveSyntax>();
@@ -184,6 +184,11 @@ namespace DoLess.Rest
         public static InvocationExpressionSyntax ChainWith(this InvocationExpressionSyntax self, string methodName)
         {
             return InvocationExpression(MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, self, IdentifierName(methodName)));
+        }
+
+        public static InvocationExpressionSyntax ChainWith(this InvocationExpressionSyntax self, string methodName, TypeSyntax genericType)
+        {
+            return InvocationExpression(MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, self, GenericName(methodName).AddTypeArgumentListArguments(genericType)));
         }
 
         public static SyntaxNode Normalize(this SyntaxNode self)

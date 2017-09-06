@@ -29,5 +29,10 @@ namespace DoLess.Rest
                 }
             }
         }
+
+        public static TReturn Do<T, TReturn>(this IEnumerable<T> self, Func<IEnumerable<T>, TReturn> func)
+        {
+            return func(self);
+        }
     }
 }

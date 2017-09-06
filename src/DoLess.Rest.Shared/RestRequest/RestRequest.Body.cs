@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Text;
+using DoLess.Rest.Http;
 
 namespace DoLess.Rest
 {
@@ -26,11 +27,16 @@ namespace DoLess.Rest
             return this;
         }
 
-        public RestRequest WithBody(object body)
+        public RestRequest WithBody(byte[] body)
         {
-            
-            // TODO.
-            this.httpRequestMessage.Content = null;
+            this.httpRequestMessage.Content = new ByteArrayContent(body);
+            return this;
+        }
+
+        public RestRequest WithBody<T>(T body)
+        {
+            this.EnsureMediaTypeFormatter();
+            this.httpRequestMessage.Content = new ObjectContent<T>(body, this.client.Settings.MediaTypeFormatter);
             return this;
         }
     }

@@ -7,6 +7,10 @@ namespace DoLess.Rest.Tasks.Helpers
 {
     internal class StringTemplate
     {
+        // CONSIDER: to implement the RFC 6570.
+        // https://tools.ietf.org/html/rfc6570
+        // See implementation: https://github.com/tavis-software/Tavis.UriTemplates.
+
         private const char ParameterStart = '{';
         private const char ParameterEnd = '}';
 

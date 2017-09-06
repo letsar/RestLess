@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
+using System.Threading;
 using DoLess.Rest.Tasks.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -124,6 +127,7 @@ namespace DoLess.Rest.Tasks
 
             result = this.ChainWithRequestUrlBuilding(result);
             result = this.ChainWithHeaders(result);
+            result = this.ChainWithBody(result);
             result = this.ChainWithSendMethod(result);
 
             return result;
@@ -180,9 +184,77 @@ namespace DoLess.Rest.Tasks
             return invocationExpression;
         }
 
+        private InvocationExpressionSyntax ChainWithBody(InvocationExpressionSyntax invocationExpression)
+        {
+            var bodyIdentifier = this.methodRequestInfo.BodyIdentifier;
+            if (bodyIdentifier.HasContent())
+            {
+                invocationExpression = invocationExpression.ChainWith(nameof(RestRequest.WithBody))
+                                                           .WithArgs(bodyIdentifier.ToArg());
+            }
+
+            return invocationExpression;
+        }
+
         private InvocationExpressionSyntax ChainWithSendMethod(InvocationExpressionSyntax invocationExpression)
         {
+            TypeSyntax returnType = this.methodRequestInfo.MethodDeclaration.ReturnType;
+            TypeSyntax genericType = (returnType as GenericNameSyntax)?.TypeArgumentList?.Arguments.FirstOrDefault();
+
+            invocationExpression = this.ChainWithSendMethod(invocationExpression, genericType);
+
+            string cancellationTokenParameterName = this.methodRequestInfo
+                                                        .MethodDeclaration
+                                                        .ParameterList?
+                                                        .Parameters
+                                                        .FirstOrDefault(x => x.Type.GetTypeName() == nameof(CancellationToken))?
+                                                        .Identifier
+                                                        .ValueText;
+
+            if (cancellationTokenParameterName.HasContent())
+            {
+                return invocationExpression.WithArgs(cancellationTokenParameterName.ToArg());
+            }
+
             return invocationExpression;
+        }
+
+        private InvocationExpressionSyntax ChainWithSendMethod(InvocationExpressionSyntax invocationExpression, TypeSyntax returnType)
+        {
+            switch (returnType)
+            {
+                case null:
+                    // Task.
+                    return invocationExpression.ChainWith(nameof(RestRequest.SendAsync));
+
+                case ArrayTypeSyntax type01 when type01.ElementType.GetTypeName() == nameof(Byte):
+                case ArrayTypeSyntax type02 when type02.ElementType is PredefinedTypeSyntax elementType && 
+                                                 elementType.Keyword.IsKind(SyntaxKind.ByteKeyword):
+                    // Task<byte[]>.
+                    return invocationExpression.ChainWith(nameof(RestRequest.ReadAsByteArrayAsync));
+
+                case PredefinedTypeSyntax predefinedType when predefinedType.Keyword.IsKind(SyntaxKind.StringKeyword):
+                case var simpleType when simpleType.GetTypeName() == nameof(String):
+                    // Task<string>.
+                    return invocationExpression.ChainWith(nameof(RestRequest.ReadAsStringAsync));
+
+                case var type when type.GetTypeName() == nameof(Stream):
+                    // Task<Stream>.
+                    return invocationExpression.ChainWith(nameof(RestRequest.ReadAsStreamAsync));
+
+                case PredefinedTypeSyntax predefinedType when predefinedType.Keyword.IsKind(SyntaxKind.BoolKeyword):
+                case var simpleType when simpleType.GetTypeName() == nameof(Boolean):
+                    // Task<bool>.
+                    return invocationExpression.ChainWith(nameof(RestRequest.SendAndGetSuccessAsync));
+
+                case var simpleType when simpleType.GetTypeName() == nameof(HttpResponseMessage):
+                    // Task<HttpResponseMessage>.
+                    return invocationExpression.ChainWith(nameof(RestRequest.ReadAsHttpResponseMessageAsync));
+
+                default:
+                    // Task<T>.
+                    return invocationExpression.ChainWith(nameof(RestRequest.ReadAsObject), returnType);
+            }
         }
 
         private static ParameterSyntax NewParameter(string type, string identifier)

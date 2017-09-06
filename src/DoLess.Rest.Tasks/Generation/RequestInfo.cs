@@ -36,7 +36,7 @@ namespace DoLess.Rest.Tasks
             this.headers = new Dictionary<string, Parameter>(requestInfo.headers);
             this.BaseUrl = requestInfo.BaseUrl;
             this.queries = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            this.hasTaskUsingNamespace = requestInfo.hasTaskUsingNamespace;
+            this.hasTaskUsingNamespace = requestInfo.hasTaskUsingNamespace;            
         }
 
         public string BaseUrl { get; private set; }
@@ -50,6 +50,8 @@ namespace DoLess.Rest.Tasks
         public string BodyIdentifier { get; private set; }
 
         public IReadOnlyDictionary<string, string> Queries => this.queries;
+        
+        public MethodDeclarationSyntax MethodDeclaration => this.methodDeclaration;
 
         public RequestInfo WithMethod(MethodDeclarationSyntax methodDeclaration)
         {
@@ -242,6 +244,8 @@ namespace DoLess.Rest.Tasks
 
         private void ThrowIfReturnTypeIsNotAccepted()
         {
+            // Very simple type check.
+            // TODO: test with semantic model and see if it is time expansive.
             bool isTask = false;
             switch (this.methodDeclaration.ReturnType)
             {
