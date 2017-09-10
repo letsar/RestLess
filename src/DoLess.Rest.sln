@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DoLess.Rest.Shared", "DoLess.Rest.Shared\DoLess.Rest.Shared.shproj", "{5E06F235-0562-40A8-B7E2-E08060C95326}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoLess.Rest.Standard.20", "DoLess.Rest.Standard\DoLess.Rest.Standard.20.csproj", "{EA352625-5EF9-4E61-83BD-32D43841E8A6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{32AB77C6-9380-482D-A0DD-2D20D2D72037}"
@@ -25,12 +23,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoLess.Rest.Sample", "DoLes
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extras", "Extras", "{51BEE58C-F060-40B8-81BD-87B8AAFEDBE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoLess.Rest.Json", "DoLess.Rest.Json\DoLess.Rest.Json.csproj", "{F7922F54-F61E-44BB-A7B7-A881BD0A8775}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoLess.Rest.Json", "DoLess.Rest.Json\DoLess.Rest.Json.csproj", "{F7922F54-F61E-44BB-A7B7-A881BD0A8775}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoLess.UriTemplates", "DoLess.UriTemplates\DoLess.UriTemplates.csproj", "{74EE3F9A-916C-42B7-948F-FC1C0766CA47}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UriTemplates", "UriTemplates", "{12CE8E8B-5F94-44AA-9415-C5907011F2A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoLess.UriTemplates.Tests", "DoLess.UriTemplates.Tests\DoLess.UriTemplates.Tests.csproj", "{BF7F0B2D-6DFF-4DF4-A1CE-9840D0B06E86}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		DoLess.Rest.Shared\DoLess.Rest.Shared.projitems*{5e06f235-0562-40a8-b7e2-e08060c95326}*SharedItemsImports = 13
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -60,18 +61,27 @@ Global
 		{F7922F54-F61E-44BB-A7B7-A881BD0A8775}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7922F54-F61E-44BB-A7B7-A881BD0A8775}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7922F54-F61E-44BB-A7B7-A881BD0A8775}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74EE3F9A-916C-42B7-948F-FC1C0766CA47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74EE3F9A-916C-42B7-948F-FC1C0766CA47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74EE3F9A-916C-42B7-948F-FC1C0766CA47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74EE3F9A-916C-42B7-948F-FC1C0766CA47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF7F0B2D-6DFF-4DF4-A1CE-9840D0B06E86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF7F0B2D-6DFF-4DF4-A1CE-9840D0B06E86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF7F0B2D-6DFF-4DF4-A1CE-9840D0B06E86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF7F0B2D-6DFF-4DF4-A1CE-9840D0B06E86}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{5E06F235-0562-40A8-B7E2-E08060C95326} = {777BE9FD-BD20-4D5A-8081-7BBCD78256A8}
 		{EA352625-5EF9-4E61-83BD-32D43841E8A6} = {777BE9FD-BD20-4D5A-8081-7BBCD78256A8}
 		{89A99855-1B93-46C8-80EC-E92D47D90C9B} = {64046417-C60F-4CBA-A41E-A6360401E082}
 		{ADFEEDE2-0684-400D-B2A4-219DB8050DBE} = {32AB77C6-9380-482D-A0DD-2D20D2D72037}
 		{DAD05DA7-2637-44A1-83C3-0C5DF30958C1} = {32AB77C6-9380-482D-A0DD-2D20D2D72037}
 		{55601750-6D0F-4927-9995-A1585F697BE7} = {C1577B55-7553-4809-9515-03BF9016BFF5}
 		{F7922F54-F61E-44BB-A7B7-A881BD0A8775} = {51BEE58C-F060-40B8-81BD-87B8AAFEDBE8}
+		{74EE3F9A-916C-42B7-948F-FC1C0766CA47} = {12CE8E8B-5F94-44AA-9415-C5907011F2A4}
+		{BF7F0B2D-6DFF-4DF4-A1CE-9840D0B06E86} = {12CE8E8B-5F94-44AA-9415-C5907011F2A4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {75844D60-9147-49E7-B88F-238EB392FBB1}

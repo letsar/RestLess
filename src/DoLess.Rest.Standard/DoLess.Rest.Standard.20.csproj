@@ -6,6 +6,10 @@
     <AssemblyName>DoLess.Rest</AssemblyName>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="UriTemplates\" />
+  </ItemGroup>
+
   <Import Project="..\DoLess.Rest.Shared\DoLess.Rest.Shared.projitems" Label="Shared" />
 
 </Project>

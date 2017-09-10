@@ -8,40 +8,4 @@
   <PropertyGroup Label="Configuration">
     <Import_RootNamespace>DoLess.Rest</Import_RootNamespace>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Assembly.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\BaseUrlAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\BodyAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HeaderAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\PatchAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\TraceAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\PutAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\PostAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\OptionsAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\HeadAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\GetAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\DeleteAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\UrlIdAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DefaultUrlParameterFormatter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\RestClientException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\IEnumerableExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringBuilderExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\Check.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Http\ObjectContent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IMediaTypeFormatter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRestClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IUrlParameterFormatter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RequestUriBuilder.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RestClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RestClientFactory.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RestRequest\RestRequest.Validation.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RestRequest\RestRequest.Headers.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RestRequest\RestRequest.Body.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RestRequest\RestRequest.Url.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RestRequest\RestRequest.Send.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RestRequest\RestRequest.HttpMethods.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RestRequest\RestRequest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RestSettings.cs" />
-  </ItemGroup>
 </Project>
