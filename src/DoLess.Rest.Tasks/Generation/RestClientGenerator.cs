@@ -87,7 +87,7 @@ namespace DoLess.Rest.Tasks
         {
             return ConstructorDeclaration(this.className)
                   .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword)))
-                  .WithParameterList(NewParameterList(NewParameter("HttpClient", "httpClient"), NewParameter("RestSettings", "settings")))
+                  .WithParameterList(NewParameterList(NewParameter(nameof(HttpClient), "httpClient"), NewParameter(nameof(RestSettings), "settings")))
                   .WithInitializer(ConstructorInitializer(SyntaxKind.BaseConstructorInitializer, NewArgumentList("httpClient", "settings")))
                   .WithBody(Block());
         }
@@ -138,50 +138,40 @@ namespace DoLess.Rest.Tasks
             //Add the BaseUrl if any.
             if (!string.IsNullOrEmpty(this.methodRequestInfo.BaseUrl))
             {
-                invocationExpression = invocationExpression.ChainWith(nameof(RestRequest.AppendUrl))
+                invocationExpression = invocationExpression.ChainWith(nameof(RestRequest.WithBaseUrl))
                                                            .WithArgs(this.methodRequestInfo.BaseUrl.ToArgLiteral());
             }
+            invocationExpression = invocationExpression.ChainWith(nameof(RestRequest.WithUriTemplate))
+                                                       .WithArgs(this.methodRequestInfo.UriTemplate.ToArgLiteral());
 
-            var stringTemplate = this.methodRequestInfo.StringTemplate;
-            stringTemplate.Parts
-                          .ForEach(x =>
-                          {
-                              invocationExpression = invocationExpression.ChainWith(nameof(RestRequest.AppendUrl))
-                                                                         .WithArgs(x.ToArg());
+            invocationExpression = this.ChainWithUriParameters(invocationExpression);
 
-                              if (x.IsMutable)
-                              {
-                                  invocationExpression = invocationExpression.AddArgumentListArguments(NewTrueArgument());
-                              }
-                          });
+            return invocationExpression;
+        }
 
-            var queries = this.methodRequestInfo.Queries;
-            if (queries.Count > 0)
+        private InvocationExpressionSyntax ChainWithParameters(InvocationExpressionSyntax invocationExpression, IReadOnlyDictionary<string, Parameter> parameters, string methodName)
+        {
+            var headers = this.methodRequestInfo.Headers;
+            if (parameters.Count > 0)
             {
-                queries.ForEach(x =>
-                       {
-                           invocationExpression = invocationExpression.ChainWith(nameof(RestRequest.AddQuery))
-                                                                      .AddArgumentListArguments(x.Key.ToArgLiteral(), x.Value.ToArg());
-                       });
+                parameters.ForEach(x =>
+                {
+                    invocationExpression = invocationExpression.ChainWith(methodName)
+                                                               .WithArgs(x.Key.ToArgLiteral(), x.Value.ToArg());
+                });
             }
-
 
             return invocationExpression;
         }
 
         private InvocationExpressionSyntax ChainWithHeaders(InvocationExpressionSyntax invocationExpression)
         {
-            var headers = this.methodRequestInfo.Headers;
-            if (headers.Count > 0)
-            {
-                headers.ForEach(x =>
-                       {
-                           invocationExpression = invocationExpression.ChainWith(nameof(RestRequest.WithHeader))
-                                                                      .WithArgs(x.Key.ToArgLiteral(), x.Value.ToArg());
-                       });
-            }
+            return this.ChainWithParameters(invocationExpression, this.methodRequestInfo.Headers, nameof(RestRequest.WithHeader));
+        }
 
-            return invocationExpression;
+        private InvocationExpressionSyntax ChainWithUriParameters(InvocationExpressionSyntax invocationExpression)
+        {
+            return this.ChainWithParameters(invocationExpression, this.methodRequestInfo.UriVariables, nameof(RestRequest.WithParameter));
         }
 
         private InvocationExpressionSyntax ChainWithBody(InvocationExpressionSyntax invocationExpression)
@@ -189,7 +179,11 @@ namespace DoLess.Rest.Tasks
             var bodyIdentifier = this.methodRequestInfo.BodyIdentifier;
             if (bodyIdentifier.HasContent())
             {
-                invocationExpression = invocationExpression.ChainWith(nameof(RestRequest.WithBody))
+                string methodName = this.methodRequestInfo.IsBodyFormUrlEncoded ?
+                                    nameof(RestRequest.WithFormUrlEncodedBody) :
+                                    nameof(RestRequest.WithBody);
+
+                invocationExpression = invocationExpression.ChainWith(methodName)
                                                            .WithArgs(bodyIdentifier.ToArg());
             }
 
@@ -228,7 +222,7 @@ namespace DoLess.Rest.Tasks
                     return invocationExpression.ChainWith(nameof(RestRequest.SendAsync));
 
                 case ArrayTypeSyntax type01 when type01.ElementType.GetTypeName() == nameof(Byte):
-                case ArrayTypeSyntax type02 when type02.ElementType is PredefinedTypeSyntax elementType && 
+                case ArrayTypeSyntax type02 when type02.ElementType is PredefinedTypeSyntax elementType &&
                                                  elementType.Keyword.IsKind(SyntaxKind.ByteKeyword):
                     // Task<byte[]>.
                     return invocationExpression.ChainWith(nameof(RestRequest.ReadAsByteArrayAsync));

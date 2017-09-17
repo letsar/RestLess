@@ -21,7 +21,7 @@ namespace DoLess.Rest.RestInterfaces
         Task UpdateBook(List<string> id, [UrlId("queries")] string name);
 
         [Delete("v1/app/books/{id}")]
-        Task DeleteBook(List<string> id, [Header("X-test")] string name);
+        Task DeleteBook(List<string> id, [HeaderValue("X-test")] string name);
 
         [Get("v1/app/books/{id}")]
         Task<Stream> GetBook01(string id);

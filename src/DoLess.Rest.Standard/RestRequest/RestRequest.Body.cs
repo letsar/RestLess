@@ -39,5 +39,12 @@ namespace DoLess.Rest
             this.httpRequestMessage.Content = new ObjectContent<T>(body, this.client.Settings.MediaTypeFormatter);
             return this;
         }
+
+        public RestRequest WithFormUrlEncodedBody<T>(T body)
+        {
+            this.EnsureFormFormatter();
+            this.httpRequestMessage.Content = new FormUrlEncodedContent(this.client.Settings.FormFormatter.Format(body));
+            return this;
+        }
     }
 }

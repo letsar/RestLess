@@ -30,7 +30,9 @@ namespace DoLess.Rest
                 nameof(UrlIdAttribute),
                 nameof(BaseUrlAttribute),
                 nameof(HeaderAttribute),
-                nameof(BodyAttribute)
+                nameof(HeaderValueAttribute),
+                nameof(BodyAttribute),
+                nameof(FormUrlEncodedAttribute)
             }
             .ToAttributeNamesHashSet();
 
@@ -131,8 +133,12 @@ namespace DoLess.Rest
                         return RequestAttributeType.BaseUrl;
                     case nameof(HeaderAttribute):
                         return RequestAttributeType.Header;
+                    case nameof(HeaderValueAttribute):
+                        return RequestAttributeType.HeaderValue;
                     case nameof(BodyAttribute):
                         return RequestAttributeType.Body;
+                    case nameof(FormUrlEncodedAttribute):
+                        return RequestAttributeType.BodyFormUrlEncoded;
                     default:
                         return default(RequestAttributeType);
                 }

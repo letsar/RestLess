@@ -2,13 +2,9 @@
 
 namespace DoLess.Rest
 {
-    [AttributeUsage(
-        AttributeTargets.Interface | 
-        AttributeTargets.Method | 
-        AttributeTargets.Parameter,
-        AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Method, AllowMultiple = true)]
     public sealed class HeaderAttribute : Attribute
     {
-        public HeaderAttribute(string name, string value = null) { }
+        public HeaderAttribute(string name, string value) { }
     }
 }

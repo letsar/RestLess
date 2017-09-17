@@ -19,4 +19,8 @@
   <ItemGroup>
     <ProjectReference Include="..\DoLess.Rest.Tasks\DoLess.Rest.Tasks.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
 </Project>

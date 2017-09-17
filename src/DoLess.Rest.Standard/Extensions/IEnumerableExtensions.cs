@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,29 @@ namespace DoLess.Rest
             }
 
             if (self is IReadOnlyList<T> list)
+            {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    action(list[i]);
+                }
+            }
+            else
+            {
+                foreach (var item in self)
+                {
+                    action(item);
+                }
+            }
+        }
+
+        public static void ForEachSpecialized(this IEnumerable self, Action<object> action)
+        {
+            if (self == null)
+            {
+                return;
+            }
+
+            if (self is IList list)
             {
                 for (int i = 0; i < list.Count; i++)
                 {

@@ -38,7 +38,7 @@ namespace DoLess.Rest.RestInterfaces
         Task<string> UrlIdAlreadyExists04(string id, [UrlId("name")] string name01, string name, [UrlId("id")] string id01);
 
         [Get("v1/app/books/{id}")]
-        Task<string> MultipleRestAttributes01([UrlId("id")][Header("X-Test")]string name, string sortOrder);
+        Task<string> MultipleRestAttributes01([UrlId("id")][HeaderValue("X-Test")]string name, string sortOrder);
 
         Task<string> MissingHttpAttribute01([UrlId("id")]string name);
 
@@ -109,7 +109,7 @@ namespace DoLess.Rest.RestInterfaces
 
         [Get("/v1/app/{id}")]
         [Header("X-Scope", "Method")]
-        Task<string> GetSomeStuffWithHeader03(string id, [Header("X-Scope")] string scope);
+        Task<string> GetSomeStuffWithHeader03(string id, [HeaderValue("X-Scope")] string scope);
 
         [Post("/v1/app/{id}")]
         Task<string> PostSomeStuffWithoutBody(string id);

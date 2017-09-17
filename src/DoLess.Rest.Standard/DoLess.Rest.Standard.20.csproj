@@ -6,10 +6,18 @@
     <AssemblyName>DoLess.Rest</AssemblyName>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="UriTemplates\" />
-  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
 
   <Import Project="..\DoLess.Rest.Shared\DoLess.Rest.Shared.projitems" Label="Shared" />
+
+  <ItemGroup>
+    <PackageReference Include="DoLess.UriTemplates" Version="1.3.0" />
+  </ItemGroup>
 
 </Project>

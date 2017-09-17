@@ -11,6 +11,7 @@ namespace DoLess.Rest.Json
         {
             this.JsonSerializerSettings = jsonSerializerSettings ?? new JsonSerializerSettings();
             this.MediaTypeFormatter = new JsonMediaTypeFormatter(JsonSerializer.Create(this.JsonSerializerSettings));
+            this.FormFormatter = new JsonFormFormatter();
         }
 
         public JsonSerializerSettings JsonSerializerSettings { get; }

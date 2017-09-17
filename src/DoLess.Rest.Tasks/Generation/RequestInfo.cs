@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using DoLess.Rest.Tasks.Diagnostics;
 using DoLess.Rest.Tasks.Exceptions;
 using DoLess.Rest.Tasks.Helpers;
-using DoLess.Rest.Tasks.UrlTemplating;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -17,7 +17,7 @@ namespace DoLess.Rest.Tasks
         private const string TaskName = "Task";
 
         private readonly Dictionary<string, Parameter> headers;
-        private readonly Dictionary<string, string> queries;
+        private readonly Dictionary<string, Parameter> uriVariables;
 
         private MethodDeclarationSyntax methodDeclaration;
         private ParameterSyntax parameter;
@@ -27,30 +27,32 @@ namespace DoLess.Rest.Tasks
         public RequestInfo(InterfaceDeclarationSyntax interfaceDeclaration)
         {
             this.headers = new Dictionary<string, Parameter>();
-
             this.ParseInterfaceDeclaration(interfaceDeclaration);
         }
 
         private RequestInfo(RequestInfo requestInfo)
         {
             this.headers = new Dictionary<string, Parameter>(requestInfo.headers);
+            this.uriVariables = new Dictionary<string, Parameter>();
+
             this.BaseUrl = requestInfo.BaseUrl;
-            this.queries = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            this.hasTaskUsingNamespace = requestInfo.hasTaskUsingNamespace;            
+            this.hasTaskUsingNamespace = requestInfo.hasTaskUsingNamespace;
         }
 
         public string BaseUrl { get; private set; }
 
         public string HttpMethod { get; private set; }
 
-        public StringTemplate StringTemplate { get; private set; }
+        public string UriTemplate { get; set; }
 
         public IReadOnlyDictionary<string, Parameter> Headers => this.headers;
 
+        public IReadOnlyDictionary<string, Parameter> UriVariables => this.uriVariables;
+
         public string BodyIdentifier { get; private set; }
 
-        public IReadOnlyDictionary<string, string> Queries => this.queries;
-        
+        public bool IsBodyFormUrlEncoded { get; private set; }
+
         public MethodDeclarationSyntax MethodDeclaration => this.methodDeclaration;
 
         public RequestInfo WithMethod(MethodDeclarationSyntax methodDeclaration)
@@ -98,36 +100,15 @@ namespace DoLess.Rest.Tasks
                         this.ParseRequestAttribute(firstRequestAttribute);
                         if (this.urlId != null)
                         {
-                            this.SetParameterValue(this.urlId, parameterName);
+                            this.uriVariables[this.urlId] = parameterName.ToMutable();
                             this.urlId = null;
                         }
                     }
-                    else
+                    else if (parameter.Type.GetTypeName() != nameof(CancellationToken))
                     {
-                        this.SetParameterValue(parameterName, parameterName);
+                        this.uriVariables[parameterName] = parameterName.ToMutable();
                     }
                 }
-
-                this.ThrowIfUrlIdNotFound();
-            }
-        }
-
-        private void SetParameterValue(string urlId, string value)
-        {
-            Parameter parameter = this.StringTemplate.GetParameter(urlId);
-            if (parameter != null)
-            {
-                // Ensure the parameter has not already been set.
-                this.ThrowIfUrlIdAlreadyExists(parameter, urlId);
-                parameter.Value = value;
-            }
-            else
-            {
-                if (this.queries.ContainsKey(urlId))
-                {
-                    this.ThrowUrlIdAlreadyExists(urlId);
-                }
-                this.queries[urlId] = value;
             }
         }
 
@@ -150,8 +131,14 @@ namespace DoLess.Rest.Tasks
                 case RequestAttributeType.Body:
                     this.ParseBodyAttribute(attribute);
                     break;
+                case RequestAttributeType.BodyFormUrlEncoded:
+                    this.ParseBodyFormUrlEncodedAttribute(attribute);
+                    break;
                 case RequestAttributeType.Header:
                     this.ParseHeaderAttribute(attribute);
+                    break;
+                case RequestAttributeType.HeaderValue:
+                    this.ParseHeaderValueAttribute(attribute);
                     break;
                 case RequestAttributeType.BaseUrl:
                     this.ParseBaseUrlAttribute(attribute);
@@ -164,8 +151,15 @@ namespace DoLess.Rest.Tasks
         private void ParseHeaderAttribute(RequestAttribute attribute)
         {
             string name = attribute.GetArgument(0);
-            Parameter value = attribute.AttachedParameterName?.ToMutable() ??
-                              attribute.GetArgument(1)?.ToImmutable();
+            Parameter value = attribute.GetArgument(1)?.ToImmutable();
+
+            this.headers[name] = value;
+        }
+
+        private void ParseHeaderValueAttribute(RequestAttribute attribute)
+        {
+            string name = attribute.GetArgument(0);
+            Parameter value = attribute.AttachedParameterName?.ToMutable();
 
             this.headers[name] = value;
         }
@@ -180,6 +174,11 @@ namespace DoLess.Rest.Tasks
             this.BodyIdentifier = attribute.AttachedParameterName;
         }
 
+        private void ParseBodyFormUrlEncodedAttribute(RequestAttribute attribute)
+        {
+            this.IsBodyFormUrlEncoded = true;
+        }
+
         private void ParseUrlIdAttribute(RequestAttribute attribute)
         {
             this.urlId = attribute.GetArgument(0);
@@ -188,15 +187,7 @@ namespace DoLess.Rest.Tasks
         private void ParseHttpMethodAttribute(RequestAttribute attribute)
         {
             this.HttpMethod = attribute.ClassName;
-
-            try
-            {
-                this.StringTemplate = StringTemplate.Parse(attribute.GetArgument(0));
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidUrlTemplateError(this.methodDeclaration).ToException(ex);
-            }
+            this.UriTemplate = attribute.GetArgument(0);
         }
 
         private void ThrowIfUrlIdAlreadyExists(Parameter parameter, string urlId)
@@ -210,20 +201,6 @@ namespace DoLess.Rest.Tasks
         private void ThrowUrlIdAlreadyExists(string urlId)
         {
             throw new UrlIdAlreadyExistsError(urlId, this.parameter).ToException();
-        }
-
-        private void ThrowIfUrlIdNotFound()
-        {
-            var notFoundIds = this.StringTemplate
-                                  .Parameters
-                                  .Where(x => x.IsMutable && !x.HasBeenSet)
-                                  .Select(x => x.Value)
-                                  .ToList();
-
-            if (notFoundIds.Count > 0)
-            {
-                throw new UrlIdNotFoundError(notFoundIds, this.methodDeclaration).ToException();
-            }
         }
 
         private void ThrowIfMethodDoesNotContainsSingleHttpAttribute(IEnumerable<RequestAttribute> requestAttributes)

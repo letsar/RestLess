@@ -23,6 +23,14 @@ namespace DoLess.Rest
             }
         }
 
+        private void EnsureFormFormatter()
+        {
+            if (this.client.Settings?.FormFormatter == null)
+            {
+                throw new RestClientException("In order to url encode the body you need to provide an IFormFormatter to the RestSettings of the REST client");
+            }
+        }
+
         private void EnsureRequestUriIsSet()
         {
             if (this.httpRequestMessage.RequestUri == null)

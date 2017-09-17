@@ -128,10 +128,6 @@ namespace DoLess.Rest.Tasks.Tests.Generation
         {
             RequestInfo requestInfo = GetRequestInfo<IRestApi00>(nameof(IRestApi00.GetSomeStuffWithHeader01));
 
-            requestInfo.StringTemplate
-                       .ParameterNames
-                       .Should()
-                       .BeEquivalentTo("id");
             requestInfo.Headers
                        .Should()
                        .HaveCount(1);
@@ -148,10 +144,6 @@ namespace DoLess.Rest.Tasks.Tests.Generation
         {
             RequestInfo requestInfo = GetRequestInfo<IRestApi00>(nameof(IRestApi00.GetSomeStuffWithHeader02));
 
-            requestInfo.StringTemplate
-                       .ParameterNames
-                       .Should()
-                       .BeEquivalentTo("id");
             requestInfo.Headers
                        .Should()
                        .HaveCount(1);
@@ -167,11 +159,7 @@ namespace DoLess.Rest.Tasks.Tests.Generation
         public void GetSomeStuffWithHeaderTest03()
         {
             RequestInfo requestInfo = GetRequestInfo<IRestApi00>(nameof(IRestApi00.GetSomeStuffWithHeader03));
-
-            requestInfo.StringTemplate
-                       .ParameterNames
-                       .Should()
-                       .BeEquivalentTo("id");
+                     
             requestInfo.Headers
                        .Should()
                        .HaveCount(1);

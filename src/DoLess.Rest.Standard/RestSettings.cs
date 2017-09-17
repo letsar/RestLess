@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using DoLess.Rest.Helpers;
 using DoLess.Rest.Interfaces;
+using DoLess.UriTemplates;
 
 namespace DoLess.Rest
 {
@@ -12,7 +14,7 @@ namespace DoLess.Rest
     {
         public RestSettings()
         {
-            this.UrlParameterFormatter = new DefaultUrlParameterFormatter();
+            this.FormFormatter = new DefaultFormFormatter();
         }
 
         /// <summary>
@@ -23,6 +25,11 @@ namespace DoLess.Rest
         /// <summary>
         /// Gets or sets the formatter used to transform an <see cref="object"/> in <see cref="string"/>.
         /// </summary>
-        public IUrlParameterFormatter UrlParameterFormatter { get; set; }
+        public IValueFormatter UrlParameterFormatter { get; set; }
+
+        /// <summary>
+        /// Gets or sets the formatter used when the body is FormUrlEncoded.
+        /// </summary>
+        public IFormFormatter FormFormatter { get; set; }
     }
 }

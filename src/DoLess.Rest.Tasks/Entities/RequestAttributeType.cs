@@ -5,7 +5,9 @@
         HttpMethod,
         UrlId,
         Body,
+        BodyFormUrlEncoded,
         Header,
+        HeaderValue,
         BaseUrl
     }
 }
