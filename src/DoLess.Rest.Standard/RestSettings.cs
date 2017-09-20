@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 using DoLess.Rest.Helpers;
-using DoLess.Rest.Interfaces;
 using DoLess.UriTemplates;
 
 namespace DoLess.Rest
@@ -31,5 +31,10 @@ namespace DoLess.Rest
         /// Gets or sets the formatter used when the body is FormUrlEncoded.
         /// </summary>
         public IFormFormatter FormFormatter { get; set; }
+
+        /// <summary>
+        /// Gets or sets the factory used to create a <see cref="HttpMessageHandler"/> when creating a RestClient from <see cref="Uri"/> or <see cref="string"/>.
+        /// </summary>
+        public Func<HttpMessageHandler> HttpMessageHandlerFactory { get; set; }
     }
 }

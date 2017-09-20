@@ -14,12 +14,7 @@ namespace DoLess.Rest.Tasks.Tests.Generation
     [TestFixture]
     public class RestClientGeneratorTests
     {
-        [Test]
-        public void ShouldInterfaceHaveTypeParameter()
-        {
-            SyntaxNode root = GetRootNode("IRestApi03");
-            SyntaxNode newRoot = RestClientGenerator.Generate(root);
-        }
+
 
         private static SyntaxNode GetRootNode(string restApiName)
         {

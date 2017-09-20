@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Net.Http;
 
-namespace DoLess.Rest.Interfaces
+namespace DoLess.Rest
 {
     public interface IRestClient
     {
+        HttpClient HttpClient { get; set; }
+
+        RestSettings Settings { get; set; }
     }
 }

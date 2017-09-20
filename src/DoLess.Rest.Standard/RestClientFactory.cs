@@ -6,32 +6,46 @@ namespace DoLess.Rest
 {
     public class RestClientFactory
     {
-        private readonly Dictionary<Type, Func<HttpClient, RestSettings, object>> factories;
+        private readonly Dictionary<Type, Func<IRestClient>> initializers;
 
         public RestClientFactory()
         {
-            this.factories = new Dictionary<Type, Func<HttpClient, RestSettings, object>>();
+            this.initializers = new Dictionary<Type, Func<IRestClient>>();
         }
 
-        public void AddClient(Type clientType, Func<HttpClient, RestSettings, object> clientFactory)
+        public void SetRestClient<TInterface, TImplementation>()
+            where TInterface : class
+            where TImplementation : TInterface, IRestClient, new()
         {
-            this.factories[clientType] = clientFactory;
+            this.initializers[typeof(TInterface)] = () => new TImplementation();
         }
 
-        /// <summary>
-        /// Creates a Rest Client from the specified interface.
-        /// </summary>
-        /// <param name="client">The client.</param>
-        /// <param name="settings">The optional settings.</param>
-        /// <returns></returns>
-        public object Create(Type clientType, HttpClient client, RestSettings settings = null)
+        public T Create<T>(HttpClient httpClient, RestSettings settings)
+            where T : class
         {
             settings = settings ?? new RestSettings();
-            if (!this.factories.TryGetValue(clientType, out Func<HttpClient, RestSettings, object> factory))
+            if (!this.initializers.TryGetValue(typeof(T), out Func<IRestClient> initializer))
             {
-                throw new ArgumentException($"The type '{clientType.FullName}' is not a Rest interface.");
+                throw new ArgumentException($"The type '{typeof(T).FullName}' is not a Rest interface.");
             }
-            return factory(client, settings);
+
+            IRestClient restClient = initializer();
+            restClient.HttpClient = httpClient;
+            restClient.Settings = settings;
+            return (T)restClient;
+        }
+
+        public T Create<T>(Uri hostUri, RestSettings settings)
+            where T : class
+        {
+            var handler = settings?.HttpMessageHandlerFactory?.Invoke() ?? new HttpClientHandler();
+            return this.Create<T>(new HttpClient(handler) { BaseAddress = hostUri }, settings);
+        }
+
+        public T Create<T>(string hostUrl, RestSettings settings)
+            where T : class
+        {
+            return this.Create<T>(new Uri(hostUrl), settings);
         }
     }
 }

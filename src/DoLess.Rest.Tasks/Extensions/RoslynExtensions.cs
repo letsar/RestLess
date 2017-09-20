@@ -19,7 +19,7 @@ namespace DoLess.Rest
     /// </summary>
     internal static partial class RoslynExtensions
     {
-        private static readonly string DoLessRestNamespace = typeof(RestClient).Namespace;
+        private static readonly string DoLessRestNamespace = typeof(IRestClient).Namespace;
 
         /// <summary>
         /// Indicates wether the specified symbol inherits from the type parameter.
@@ -57,7 +57,7 @@ namespace DoLess.Rest
 
         public static ParameterListSyntax ToParameterList(this IEnumerable<ParameterSyntax> self)
         {
-            return SyntaxFactory.ParameterList(SyntaxFactory.SeparatedList<ParameterSyntax>(self));
+            return ParameterList(SeparatedList(self));
         }
 
         public static ParameterListSyntax WithoutAttributes(this ParameterListSyntax self)
@@ -67,9 +67,9 @@ namespace DoLess.Rest
                 return self;
             }
 
-            return SyntaxFactory.ParameterList(
-                   SyntaxFactory.SeparatedList<ParameterSyntax>(self.Parameters
-                                                                    .Select(x => x.WithoutAttributes())));
+            return ParameterList(
+                   SeparatedList(self.Parameters
+                                     .Select(x => x.WithoutAttributes())));
         }
 
         public static TypeParameterListSyntax WithoutAttributes(this TypeParameterListSyntax self)
@@ -79,9 +79,9 @@ namespace DoLess.Rest
                 return self;
             }
 
-            return SyntaxFactory.TypeParameterList(
-                   SyntaxFactory.SeparatedList<TypeParameterSyntax>(self.Parameters
-                                                                        .Select(x => x.WithoutAttributes())));
+            return TypeParameterList(
+                   SeparatedList(self.Parameters
+                                     .Select(x => x.WithoutAttributes())));
         }
 
         public static MethodDeclarationSyntax WithoutAttributes(this MethodDeclarationSyntax self)
@@ -124,7 +124,7 @@ namespace DoLess.Rest
             {
                 case CompilationUnitSyntax node:
                     return node.Usings;
-                case NamespaceDeclarationSyntax node:                    
+                case NamespaceDeclarationSyntax node:
                     return node.Usings;
                 default:
                     return Enumerable.Empty<UsingDirectiveSyntax>();
@@ -136,6 +136,18 @@ namespace DoLess.Rest
             return self.AncestorsAndSelf()
                        .SelectMany(x => x.GetUsings())
                        .Any(x => x.Name.ToString() == usingName);
+        }
+
+        public static IEnumerable<UsingDirectiveSyntax> GetRequiredUsings(this InterfaceDeclarationSyntax self)
+        {
+            return self.AncestorsAndSelf()
+                       .SelectMany(x => x.GetUsings())
+                       .Union(new[] { self.GetDeclaringNamespace() });
+        }
+
+        public static UsingDirectiveSyntax GetDeclaringNamespace(this InterfaceDeclarationSyntax self)
+        {
+            return UsingDirective(ParseName(self.Ancestors().OfType<NamespaceDeclarationSyntax>().Select(x => x.Name.ToString()).Concatenate(".")));
         }
 
         public static string GetTypeName(this TypeSyntax self)

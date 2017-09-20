@@ -19,7 +19,7 @@ namespace DoLess.Rest
         public Task<HttpResponseMessage> ReadAsHttpResponseMessageAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             this.EnsureAllIsSetBeforeSendingTheRequest();
-            return this.client.HttpClient.SendAsync(this.httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken);
+            return this.restClient.HttpClient.SendAsync(this.httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace DoLess.Rest
             using (Stream stream = await this.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false))
             using (StreamReader streamReader = new StreamReader(stream))
             {
-                return await this.client.Settings.MediaTypeFormatter.ReadAsync<T>(streamReader);
+                return await this.restClient.Settings.MediaTypeFormatter.ReadAsync<T>(streamReader);
             }
         }
 
@@ -97,7 +97,7 @@ namespace DoLess.Rest
         private Task<HttpResponseMessage> ReadAsHttpResponseMessageWithoutContent(CancellationToken cancellationToken = default(CancellationToken))
         {
             this.EnsureAllIsSetBeforeSendingTheRequest();
-            return this.client.HttpClient.SendAsync(this.httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            return this.restClient.HttpClient.SendAsync(this.httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
         }
 
         private async Task<T> ReadHttpContentAsync<T>(Func<HttpContent, Task<T>> func, CancellationToken cancellationToken = default(CancellationToken))

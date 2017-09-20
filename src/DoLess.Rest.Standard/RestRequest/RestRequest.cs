@@ -11,16 +11,16 @@ namespace DoLess.Rest
     public sealed partial class RestRequest
     {
         private readonly HttpRequestMessage httpRequestMessage;
-        private readonly RestClient client;
+        private readonly IRestClient restClient;
 
         private Uri baseUri;
         private UriTemplate uriTemplate;
 
-        private RestRequest(HttpMethod httpMethod, RestClient client)
+        private RestRequest(HttpMethod httpMethod, IRestClient restClient)
         {
             this.httpRequestMessage = new HttpRequestMessage();
             this.httpRequestMessage.Method = httpMethod;
-            this.client = client;
+            this.restClient = restClient;
             this.baseUri = new Uri("/", UriKind.Relative);
         }
 

@@ -11,85 +11,114 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
+
 namespace DoLess.Rest.Tasks
 {
-    internal class RestClientGenerator : CSharpSyntaxRewriter
+    internal class RestClientBuilder : CodeBuilder
     {
-        private RequestInfo requestInfo;
+        private readonly string originalFilePath;
+        private RequestInfo interfaceRequestInfo;
         private RequestInfo methodRequestInfo;
-        private string className;
 
-        private RestClientGenerator()
+        public RestClientBuilder(string originalFilePath)
+            : base(originalFilePath)
         {
+            this.originalFilePath = originalFilePath;
         }
 
-        public static SyntaxNode Generate(SyntaxNode rootNode)
-        {
-            var generator = new RestClientGenerator();
-            return generator.Visit(rootNode);
-        }
+        public bool HasRestInterfaces { get; private set; }
 
-        public static ClassDeclarationSyntax Generate(InterfaceDeclarationSyntax interfaceDeclarationSyntax)
-        {
-            var generator = new RestClientGenerator();
-            return generator.Visit(interfaceDeclarationSyntax) as ClassDeclarationSyntax;
-        }
+        public bool HasReferenceToDoLessRest { get; private set; }
 
-        public override SyntaxNode VisitInterfaceDeclaration(InterfaceDeclarationSyntax node)
+        public SyntaxNode OriginalRoot { get; private set; }
+
+        public IReadOnlyList<UsingDirectiveSyntax> RequiredUsings { get; private set; }
+
+        public IReadOnlyList<RestClientInfo> RestClients { get; private set; }
+
+        public RestClientBuilder Build()
         {
-            if (node.IsRestInterface())
+            var content = File.ReadAllText(this.originalFilePath, Encoding.UTF8);
+            this.OriginalRoot = CSharpSyntaxTree.ParseText(content).GetRoot();
+            var nodes = this.OriginalRoot
+                            .DescendantNodes()
+                            .ToArray();
+            this.HasReferenceToDoLessRest = nodes.HasReferenceToDoLessRest();
+
+            if (this.HasReferenceToDoLessRest)
             {
-                this.requestInfo = new RequestInfo(node);
+                var restInterfaces = nodes.OfType<InterfaceDeclarationSyntax>()
+                                          .Where(x => x.IsRestInterface())
+                                          .ToArray();
 
-                this.className = $"{Constants.RestClientPrefix}{node.Identifier.ValueText}";
-                var classDeclaration = ClassDeclaration(className)
-                                      .AddModifiers(Token(SyntaxKind.InternalKeyword))
-                                      .AddModifiers(Token(SyntaxKind.SealedKeyword))
-                                      .WithTypeParameterList(node.TypeParameterList)
-                                      .WithConstraintClauses(node.ConstraintClauses)
-                                      .AddMembers(ImplementConstructor())
-                                      .AddMembers(ImplementMethods(node.Members))
-                                      .WithBaseList(BaseList(SeparatedList<BaseTypeSyntax>(new[]
-                                      {
-                                          SimpleBaseType(IdentifierName(nameof(RestClient))),
-                                          SimpleBaseType(node.GetTypeSyntax())
-                                      })));
+                this.HasRestInterfaces = restInterfaces.Length > 0;
+                if (this.HasRestInterfaces)
+                {
+                    this.RestClients = restInterfaces.Select(x => new RestClientInfo(x))
+                                                     .ToList();
 
-                return classDeclaration;
+                    this.RootNode = this.BuildRootNode();
+                }
             }
-            else
-            {
-                return null;
-            }
+
+            return this;
         }
 
-        public override SyntaxNode VisitClassDeclaration(ClassDeclarationSyntax node)
+        private static InvocationExpressionSyntax NewMethodInvocation(string identifier, string method)
         {
-            return null;
+            return
+                InvocationExpression(
+                    MemberAccessExpression(
+                        SyntaxKind.SimpleMemberAccessExpression,
+                        IdentifierName(identifier),
+                        IdentifierName(method)));
         }
 
-        public override SyntaxNode VisitDelegateDeclaration(DelegateDeclarationSyntax node)
+        private CompilationUnitSyntax BuildRootNode()
         {
-            return null;
+            this.RequiredUsings = this.BuildRequiredUsings();
+
+            return CompilationUnit().WithUsings(List(this.RequiredUsings))
+                                    .WithMembers(SingletonList(this.BuildNamespace()));
         }
 
-        public override SyntaxNode VisitEnumDeclaration(EnumDeclarationSyntax node)
+        private IReadOnlyList<UsingDirectiveSyntax> BuildRequiredUsings()
         {
-            return null;
+            return this.RestClients.SelectMany(x => x.InterfaceDeclaration.GetRequiredUsings())
+                                   .Distinct(UsingDirectiveSyntaxEqualityComparer.Default)
+                                   .OrderBy(x => x, UsingDirectiveSyntaxComparer.Default)
+                                   .ToArray();
         }
 
-        public override SyntaxNode VisitStructDeclaration(StructDeclarationSyntax node)
+        private MemberDeclarationSyntax BuildNamespace()
         {
-            return null;
+            return Constants.DoLessRestGeneratedNamespace
+                            .WithMembers(List(this.BuildRestClients()));
         }
 
-        private MemberDeclarationSyntax ImplementConstructor()
+        private IEnumerable<MemberDeclarationSyntax> BuildRestClients()
         {
-            return ConstructorDeclaration(this.className)
-                  .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword)))
-                  .WithParameterList(NewParameterList(NewParameter(nameof(HttpClient), "httpClient"), NewParameter(nameof(RestSettings), "settings")))
-                  .WithInitializer(ConstructorInitializer(SyntaxKind.BaseConstructorInitializer, NewArgumentList("httpClient", "settings")))
-                  .WithBody(Block());
+            return this.RestClients.Select(x => this.BuildRestClient(x));
+        }
+
+        private ClassDeclarationSyntax BuildRestClient(RestClientInfo restClient)
+        {
+            var interfaceDeclaration = restClient.InterfaceDeclaration;
+            this.interfaceRequestInfo = new RequestInfo(interfaceDeclaration);
+
+            var classDeclaration = ClassDeclaration(restClient.ClassName)
+                                  .AddModifiers(Token(SyntaxKind.InternalKeyword))
+                                  .AddModifiers(Token(SyntaxKind.SealedKeyword))
+                                  .WithTypeParameterList(interfaceDeclaration.TypeParameterList)
+                                  .WithConstraintClauses(interfaceDeclaration.ConstraintClauses)
+                                  .AddMembers(this.ImplementMethods(interfaceDeclaration.Members))
+                                  .WithBaseList(BaseList(SeparatedList<BaseTypeSyntax>(new[]
+                                  {
+                                          SimpleBaseType(IdentifierName(nameof(RestClientBase))),
+                                          SimpleBaseType(interfaceDeclaration.GetTypeSyntax())
+                                  })));
+
+            return classDeclaration;
         }
 
         private MemberDeclarationSyntax[] ImplementMethods(SyntaxList<MemberDeclarationSyntax> syntaxList)
@@ -115,9 +144,9 @@ namespace DoLess.Rest.Tasks
 
         private BlockSyntax ImplementMethodBody(MethodDeclarationSyntax node)
         {
-            this.methodRequestInfo = this.requestInfo.WithMethod(node);
+            this.methodRequestInfo = this.interfaceRequestInfo.WithMethod(node);
 
-            return Block(ReturnStatement(ImplementRequest()));
+            return Block(ReturnStatement(this.ImplementRequest()));
         }
 
         private ExpressionSyntax ImplementRequest()
@@ -250,41 +279,5 @@ namespace DoLess.Rest.Tasks
                     return invocationExpression.ChainWith(nameof(RestRequest.ReadAsObject), returnType);
             }
         }
-
-        private static ParameterSyntax NewParameter(string type, string identifier)
-        {
-            return Parameter(Identifier(identifier)).WithType(IdentifierName(type));
-        }
-
-        private static ParameterListSyntax NewParameterList(params ParameterSyntax[] parameters)
-        {
-            return ParameterList(SeparatedList(parameters));
-        }
-
-        private static ArgumentListSyntax NewArgumentList(params string[] identifiers)
-        {
-            return ArgumentList(SeparatedList(identifiers.Select(x => x.ToArg())));
-        }
-
-        private static InvocationExpressionSyntax NewMethodInvocation(string identifier, string method)
-        {
-            return
-                InvocationExpression(
-                    MemberAccessExpression(
-                        SyntaxKind.SimpleMemberAccessExpression,
-                        IdentifierName(identifier),
-                        IdentifierName(method)));
-        }
-
-        private static ArgumentSyntax NewFalseArgument()
-        {
-            return Argument(LiteralExpression(SyntaxKind.FalseLiteralExpression));
-        }
-
-        private static ArgumentSyntax NewTrueArgument()
-        {
-            return Argument(LiteralExpression(SyntaxKind.TrueLiteralExpression));
-        }
-
     }
 }

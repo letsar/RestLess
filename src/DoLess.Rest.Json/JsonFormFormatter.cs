@@ -12,11 +12,5 @@ namespace DoLess.Rest.Json
             return propertyInfo.GetCustomAttribute<JsonPropertyAttribute>()?.PropertyName ??
                    propertyInfo.GetCustomAttribute<DataMemberAttribute>()?.Name;
         }
-
-        protected override bool CanReadInternal(PropertyInfo propertyInfo)
-        {
-            return propertyInfo.GetCustomAttribute<JsonIgnoreAttribute>() == null &&
-                   propertyInfo.GetCustomAttribute<IgnoreDataMemberAttribute>() == null;
-        }
     }
 }

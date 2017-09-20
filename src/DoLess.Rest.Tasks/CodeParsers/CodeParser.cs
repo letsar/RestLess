@@ -13,18 +13,16 @@ namespace DoLess.Rest.Tasks.CodeParsers
     {
         public IReadOnlyList<string> GetRestInterfaces(string[] files)
         {
-            var syntaxTrees = files.Select(x => File.ReadAllText(x, Encoding.UTF8))
-                                   .Select(x => CSharpSyntaxTree.ParseText(x))
-                                   .Select(x => x.GetRoot())
-                                   .Where(x => x.DescendantNodes().HasReferenceToDoLessRest())
-                                   .Select(x => RestClientGenerator.Generate(x))
-                                   .Select(x => x.NormalizeWhitespace())
-                                   .Select(x => x.Normalize())
-                                   .Select(x => x.ToFullString())
+            var syntaxTrees = files.Select(x => new RestClientBuilder(x).Build())
+                                   .Where(x => x.HasRestInterfaces)
                                    .ToList();
 
 
+            RestClientFactoryBuilder rcfb = new RestClientFactoryBuilder(syntaxTrees, "");
+            rcfb.Build();
+            var factory = rcfb.ToString();
 
+            var t = syntaxTrees.Select(x => x.ToString()).ToList();
             //return this.GetSemanticModels(files, references)
             //           .SelectMany(x => GetInterfaceAnalyzers(x))
             //           .Where(x => x.IsRestInterface)

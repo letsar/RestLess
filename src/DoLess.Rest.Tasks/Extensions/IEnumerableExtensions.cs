@@ -12,6 +12,11 @@ namespace DoLess.Rest.Tasks
             return self.Aggregate(new StringBuilder(), (builder, s) => builder.Append(s), builder => builder.ToString());
         }
 
+        public static string Concatenate(this IEnumerable<string> self, string separator)
+        {
+            return string.Join(separator, self);
+        }
+
         public static string ToMultilineSting(this IEnumerable<string> self)
         {
             return self.Aggregate(new StringBuilder(), (builder, s) => builder.AppendLine(s), builder => builder.ToString());
@@ -27,7 +32,7 @@ namespace DoLess.Rest.Tasks
             return self.Select(x => x.Replace(nameof(Attribute), string.Empty))
                        .ToHashSet();
         }
-        
+
         public static TSource ZeroOrSingle<TSource, TException>(this IEnumerable<TSource> self, Func<TException> getException)
             where TException : Exception
         {

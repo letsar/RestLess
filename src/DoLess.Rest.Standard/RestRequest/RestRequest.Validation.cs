@@ -17,7 +17,7 @@ namespace DoLess.Rest
 
         private void EnsureMediaTypeFormatter()
         {
-            if (this.client.Settings?.MediaTypeFormatter == null)
+            if (this.restClient.Settings?.MediaTypeFormatter == null)
             {
                 throw new RestClientException("In order to serialize/deserialize the http response from/into an object you need to provide an IMediaTypeFormatter to the RestSettings of the REST client");
             }
@@ -25,7 +25,7 @@ namespace DoLess.Rest
 
         private void EnsureFormFormatter()
         {
-            if (this.client.Settings?.FormFormatter == null)
+            if (this.restClient.Settings?.FormFormatter == null)
             {
                 throw new RestClientException("In order to url encode the body you need to provide an IFormFormatter to the RestSettings of the REST client");
             }
@@ -41,7 +41,7 @@ namespace DoLess.Rest
 
         private void EnsureUrlParameterFormatter()
         {
-            if(this.client.Settings?.UrlParameterFormatter == null)
+            if(this.restClient.Settings?.UrlParameterFormatter == null)
             {
                 throw new RestClientException("In order to format an objet parameter into a string, you need to provide an IUrlParameterFormatter to the RestSettings of the REST client");
             }

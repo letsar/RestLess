@@ -22,15 +22,10 @@ namespace DoLess.Rest.Helpers
                 case IEnumerable<KeyValuePair<string, string>> values:
                     return values;
                 case IDictionary dictionary:
-                    return dictionary.Keys.Cast<object>().ToDictionary(x => x.ToString(), x => dictionary[x]?.ToString());
+                    return dictionary.Keys.Cast<object>().ToDictionary(x => x.ToString(), x => dictionary[x]?.ToString() ?? string.Empty);
                 default:
                     return this.DefaultFormat(value);
             }
-        }
-
-        protected virtual bool CanReadInternal(PropertyInfo propertyInfo)
-        {
-            return true;
         }
 
         protected virtual string GetFallbackPropertyNameInternal(PropertyInfo propertyInfo)
@@ -41,8 +36,7 @@ namespace DoLess.Rest.Helpers
         private bool CanRead(PropertyInfo propertyInfo)
         {
             return propertyInfo.CanRead &&
-                   propertyInfo.GetCustomAttribute<UrlIdIgnoreAttribute>() == null &&
-                   this.CanReadInternal(propertyInfo);
+                   propertyInfo.GetCustomAttribute<UrlIdIgnoreAttribute>() == null;
         }
 
         private string GetFallbackPropertyName(PropertyInfo propertyInfo)
@@ -92,12 +86,13 @@ namespace DoLess.Rest.Helpers
 
             public NamedPropertyInfo(string name, PropertyInfo propertyInfo)
             {
+                this.Name = name;
                 this.propertyInfo = propertyInfo;
             }
 
             public string Name { get; }
 
-            public string GetValue(object source) => this.propertyInfo.GetValue(source, null)?.ToString();
+            public string GetValue(object source) => this.propertyInfo.GetValue(source, null)?.ToString() ?? string.Empty;
         }
     }
 }

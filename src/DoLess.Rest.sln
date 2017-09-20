@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extras", "Extras", "{51BEE5
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoLess.Rest.Json", "DoLess.Rest.Json\DoLess.Rest.Json.csproj", "{F7922F54-F61E-44BB-A7B7-A881BD0A8775}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoLess.Rest.Json.Tests", "DoLess.Rest.Json.Tests\DoLess.Rest.Json.Tests.csproj", "{D8C480DC-206D-458F-8F6D-FA682AEEDC23}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{F7922F54-F61E-44BB-A7B7-A881BD0A8775}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7922F54-F61E-44BB-A7B7-A881BD0A8775}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7922F54-F61E-44BB-A7B7-A881BD0A8775}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8C480DC-206D-458F-8F6D-FA682AEEDC23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8C480DC-206D-458F-8F6D-FA682AEEDC23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8C480DC-206D-458F-8F6D-FA682AEEDC23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8C480DC-206D-458F-8F6D-FA682AEEDC23}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,6 +72,7 @@ Global
 		{DAD05DA7-2637-44A1-83C3-0C5DF30958C1} = {32AB77C6-9380-482D-A0DD-2D20D2D72037}
 		{55601750-6D0F-4927-9995-A1585F697BE7} = {C1577B55-7553-4809-9515-03BF9016BFF5}
 		{F7922F54-F61E-44BB-A7B7-A881BD0A8775} = {51BEE58C-F060-40B8-81BD-87B8AAFEDBE8}
+		{D8C480DC-206D-458F-8F6D-FA682AEEDC23} = {32AB77C6-9380-482D-A0DD-2D20D2D72037}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {75844D60-9147-49E7-B88F-238EB392FBB1}
