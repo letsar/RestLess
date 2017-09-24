@@ -1,6 +1,6 @@
 ﻿namespace DoLess.Rest
 {
-    internal static class StringExtensions
+    internal static partial class StringExtensions
     {
         private const char RelativePathStart = '/';
 

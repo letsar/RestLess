@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DoLess.Rest.Tasks
 {
-    internal static class IEnumerableExtensions
+    internal static partial  class IEnumerableExtensions
     {
         public static string Concatenate(this IEnumerable<string> self)
         {

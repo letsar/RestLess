@@ -8,17 +8,15 @@ namespace DoLess.Rest.Tasks
     {
         public CodeBuilder(string originalFilePath)
         {
+            this.OriginalFilePath = originalFilePath;
             this.GeneratedFilePath = GetGeneratedFilePath(originalFilePath);
         }
 
-        public CodeBuilder(string directoryPath, string fileName)
-        {
-            this.GeneratedFilePath = Path.Combine(directoryPath, fileName);
-        }
+        public string OriginalFilePath { get; }
 
         public string GeneratedFilePath { get; }
 
-        public SyntaxNode RootNode { get; protected set; }
+        public SyntaxNode RootNode { get; protected set; }        
 
         public override string ToString()
         {

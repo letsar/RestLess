@@ -10,7 +10,7 @@ namespace DoLess.Rest
     /// <summary>
     /// Represents the settings used by this rest library.
     /// </summary>
-    public class RestSettings
+    public partial class RestSettings
     {
         public RestSettings()
         {
@@ -31,10 +31,5 @@ namespace DoLess.Rest
         /// Gets or sets the formatter used when the body is FormUrlEncoded.
         /// </summary>
         public IFormFormatter FormFormatter { get; set; }
-
-        /// <summary>
-        /// Gets or sets the factory used to create a <see cref="HttpMessageHandler"/> when creating a RestClient from <see cref="Uri"/> or <see cref="string"/>.
-        /// </summary>
-        public Func<HttpMessageHandler> HttpMessageHandlerFactory { get; set; }
     }
 }

@@ -2,8 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Product>DoLess.Rest</Product>
     <RootNamespace>DoLess.Rest</RootNamespace>
     <AssemblyName>DoLess.Rest</AssemblyName>
+    <GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
+    <DebugType>embedded</DebugType>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
+    <!-- Suppresses the warnings about the package not having assemblies in lib/*/.dll.-->
+    <NoPackageAnalysis>true</NoPackageAnalysis>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -17,5 +24,27 @@
   <ItemGroup>
     <PackageReference Include="DoLess.UriTemplates" Version="1.3.0" />
   </ItemGroup>
+
+  <ItemGroup Label="Package">
+    <None Include="../../nuget/DoLess.Rest.targets" LinkBase="nuget/build/netstandard2.0" PackagePath="build/netstandard2.0" Pack="true" />
+    <None Include="../../nuget/DoLess.Rest.targets" LinkBase="nuget/buildMultiTargeting/netstandard2.0" PackagePath="buildMultiTargeting/netstandard2.0" Pack="true" />
+    <None Include="../DoLess.Rest.Tasks/bin/$(Configuration)/netstandard2.0/*.dll" LinkBase="nuget/tasks/netstandard2.0" PackagePath="tasks/netstandard2.0" Pack="true" />    
+    <None Include="../DoLess.Rest.Tasks/bin/$(Configuration)/net46/*.dll" LinkBase="nuget/tasks/net46" PackagePath="tasks/net46" Pack="true" />
+  </ItemGroup>  
+  
+  <Target Name="BuildAndPublishDoLessRestTasks" BeforeTargets="CoreBuild" Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
+      <DoLessBuildCommand46>dotnet build $(MSBuildThisFileDirectory)..\DoLess.Rest.Tasks\DoLess.Rest.Tasks.csproj -c $(Configuration) -f net46</DoLessBuildCommand46>      
+      <DoLessBuildCommand20>dotnet build $(MSBuildThisFileDirectory)..\DoLess.Rest.Tasks\DoLess.Rest.Tasks.csproj -c $(Configuration)</DoLessBuildCommand20>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(OS)' != 'Windows_NT'">
+      <DoLessBuildCommand46>dotnet build $(MSBuildThisFileDirectory)../DoLess.Rest.Tasks/DoLess.Rest.Tasks.csproj -c $(Configuration) -f net46</DoLessBuildCommand46>
+      <DoLessBuildCommand20>dotnet build $(MSBuildThisFileDirectory)../DoLess.Rest.Tasks/DoLess.Rest.Tasks.csproj -c $(Configuration)</DoLessBuildCommand20>
+    </PropertyGroup>
+    <Exec Command="$(DoLessBuildCommand46)" />
+    <Exec Command="$(DoLessBuildCommand20)" />
+  </Target>
+
+  <Import Project="..\DoLess.Rest.Shared\DoLess.Rest.Shared.projitems" Label="Shared" />
 
 </Project>

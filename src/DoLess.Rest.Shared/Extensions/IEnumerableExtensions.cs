@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace DoLess.Rest
 {
-    internal static class IEnumerableExtensions
+    internal static partial  class IEnumerableExtensions
     {
         public static void ForEach<T>(this IEnumerable<T> self, Action<T> action)
         {

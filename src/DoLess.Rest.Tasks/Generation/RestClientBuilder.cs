@@ -167,10 +167,10 @@ namespace DoLess.Rest.Tasks
             //Add the BaseUrl if any.
             if (!string.IsNullOrEmpty(this.methodRequestInfo.BaseUrl))
             {
-                invocationExpression = invocationExpression.ChainWith(nameof(RestRequest.WithBaseUrl))
+                invocationExpression = invocationExpression.ChainWith(nameof(IRestRequest.WithBaseUrl))
                                                            .WithArgs(this.methodRequestInfo.BaseUrl.ToArgLiteral());
             }
-            invocationExpression = invocationExpression.ChainWith(nameof(RestRequest.WithUriTemplate))
+            invocationExpression = invocationExpression.ChainWith(nameof(IRestRequest.WithUriTemplate))
                                                        .WithArgs(this.methodRequestInfo.UriTemplate.ToArgLiteral());
 
             invocationExpression = this.ChainWithUriParameters(invocationExpression);
@@ -195,12 +195,12 @@ namespace DoLess.Rest.Tasks
 
         private InvocationExpressionSyntax ChainWithHeaders(InvocationExpressionSyntax invocationExpression)
         {
-            return this.ChainWithParameters(invocationExpression, this.methodRequestInfo.Headers, nameof(RestRequest.WithHeader));
+            return this.ChainWithParameters(invocationExpression, this.methodRequestInfo.Headers, nameof(IRestRequest.WithHeader));
         }
 
         private InvocationExpressionSyntax ChainWithUriParameters(InvocationExpressionSyntax invocationExpression)
         {
-            return this.ChainWithParameters(invocationExpression, this.methodRequestInfo.UriVariables, nameof(RestRequest.WithParameter));
+            return this.ChainWithParameters(invocationExpression, this.methodRequestInfo.UriVariables, nameof(IRestRequest.WithParameter));
         }
 
         private InvocationExpressionSyntax ChainWithBody(InvocationExpressionSyntax invocationExpression)
@@ -209,8 +209,8 @@ namespace DoLess.Rest.Tasks
             if (bodyIdentifier.HasContent())
             {
                 string methodName = this.methodRequestInfo.IsBodyFormUrlEncoded ?
-                                    nameof(RestRequest.WithFormUrlEncodedBody) :
-                                    nameof(RestRequest.WithBody);
+                                    nameof(IRestRequest.WithFormUrlEncodedBody) :
+                                    nameof(IRestRequest.WithBody);
 
                 invocationExpression = invocationExpression.ChainWith(methodName)
                                                            .WithArgs(bodyIdentifier.ToArg());
@@ -248,35 +248,35 @@ namespace DoLess.Rest.Tasks
             {
                 case null:
                     // Task.
-                    return invocationExpression.ChainWith(nameof(RestRequest.SendAsync));
+                    return invocationExpression.ChainWith(nameof(IRestRequest.SendAsync));
 
                 case ArrayTypeSyntax type01 when type01.ElementType.GetTypeName() == nameof(Byte):
                 case ArrayTypeSyntax type02 when type02.ElementType is PredefinedTypeSyntax elementType &&
                                                  elementType.Keyword.IsKind(SyntaxKind.ByteKeyword):
                     // Task<byte[]>.
-                    return invocationExpression.ChainWith(nameof(RestRequest.ReadAsByteArrayAsync));
+                    return invocationExpression.ChainWith(nameof(IRestRequest.ReadAsByteArrayAsync));
 
                 case PredefinedTypeSyntax predefinedType when predefinedType.Keyword.IsKind(SyntaxKind.StringKeyword):
                 case var simpleType when simpleType.GetTypeName() == nameof(String):
                     // Task<string>.
-                    return invocationExpression.ChainWith(nameof(RestRequest.ReadAsStringAsync));
+                    return invocationExpression.ChainWith(nameof(IRestRequest.ReadAsStringAsync));
 
                 case var type when type.GetTypeName() == nameof(Stream):
                     // Task<Stream>.
-                    return invocationExpression.ChainWith(nameof(RestRequest.ReadAsStreamAsync));
+                    return invocationExpression.ChainWith(nameof(IRestRequest.ReadAsStreamAsync));
 
                 case PredefinedTypeSyntax predefinedType when predefinedType.Keyword.IsKind(SyntaxKind.BoolKeyword):
                 case var simpleType when simpleType.GetTypeName() == nameof(Boolean):
                     // Task<bool>.
-                    return invocationExpression.ChainWith(nameof(RestRequest.SendAndGetSuccessAsync));
+                    return invocationExpression.ChainWith(nameof(IRestRequest.SendAndGetSuccessAsync));
 
                 case var simpleType when simpleType.GetTypeName() == nameof(HttpResponseMessage):
                     // Task<HttpResponseMessage>.
-                    return invocationExpression.ChainWith(nameof(RestRequest.ReadAsHttpResponseMessageAsync));
+                    return invocationExpression.ChainWith(nameof(IRestRequest.ReadAsHttpResponseMessageAsync));
 
                 default:
                     // Task<T>.
-                    return invocationExpression.ChainWith(nameof(RestRequest.ReadAsObject), returnType);
+                    return invocationExpression.ChainWith(nameof(IRestRequest.ReadAsObject), returnType);
             }
         }
     }

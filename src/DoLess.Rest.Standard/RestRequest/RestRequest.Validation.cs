@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.IO;
-using System.Net.Http;
-using System.Text;
-using DoLess.Rest.Exceptions;
+﻿using DoLess.Rest.Exceptions;
 
 namespace DoLess.Rest
 {

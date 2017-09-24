@@ -16,11 +16,7 @@ namespace DoLess.Rest.Tasks.CodeParsers
             var syntaxTrees = files.Select(x => new RestClientBuilder(x).Build())
                                    .Where(x => x.HasRestInterfaces)
                                    .ToList();
-
-
-            RestClientFactoryBuilder rcfb = new RestClientFactoryBuilder(syntaxTrees, "");
-            rcfb.Build();
-            var factory = rcfb.ToString();
+                       
 
             var t = syntaxTrees.Select(x => x.ToString()).ToList();
             //return this.GetSemanticModels(files, references)

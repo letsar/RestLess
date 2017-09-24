@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+         ToolsVersion="4.0" 
+         DefaultTargets="Build"          
+         TreatAsLocalProperty="TaskFolder;TaskAssembly"
+         >
+  <PropertyGroup>
+    <CoreCompileDependsOn>
+      $(CoreCompileDependsOn);
+      GenerateRestClients;
+    </CoreCompileDependsOn>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <TaskFolder Condition="'$(MSBuildRuntimeType)' == 'Core'">netstandard2.0</TaskFolder>
+    <TaskFolder Condition="'$(MSBuildRuntimeType)' != 'Core'">net46</TaskFolder>
+    <TaskAssembly>$(MSBuildThisFileDirectory)..\tasks\$(TaskFolder)\DoLess.Rest.Tasks.dll</TaskAssembly>
+  </PropertyGroup>  
+
+  <UsingTask TaskName="DoLess.Rest.Tasks.BuildRestClientsTask" AssemblyFile="$(TaskAssembly)" />
+  
+  <Target Name="GenerateRestClients" BeforeTargets="CoreCompile">   
+    
+    <BuildRestClientsTask SourceFiles="@(Compile)">
+        <Output ItemName="DoLessRestFiles" TaskParameter="UpdatedFiles"/>
+    </BuildRestClientsTask>
+
+    <Message Text="Processed DoLess.Rest Stubs" />       
+
+    <ItemGroup>
+        <Compile Update="%(DoLessRestFiles.GeneratedFilePath)">
+            <DependentUpon>%(DoLessRestFiles.OriginalFilePath)</DependentUpon>
+        </Compile>
+  </ItemGroup>
+  </Target>
+</Project>

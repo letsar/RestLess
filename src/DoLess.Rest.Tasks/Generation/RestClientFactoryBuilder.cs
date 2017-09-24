@@ -13,8 +13,8 @@ namespace DoLess.Rest.Tasks
     {
         private readonly IReadOnlyList<RestClientBuilder> restClientBuilders;
 
-        public RestClientFactoryBuilder(IReadOnlyList<RestClientBuilder> restClientBuilders, string directoryPath)
-            : base(directoryPath, Constants.RestClientFactoryBuilderFileName)
+        public RestClientFactoryBuilder(string originalFileName, IReadOnlyList<RestClientBuilder> restClientBuilders)
+            : base(originalFileName)
         {
             this.restClientBuilders = restClientBuilders;
         }

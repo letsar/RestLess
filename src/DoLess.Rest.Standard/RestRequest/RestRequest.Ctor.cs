@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.IO;
 using System.Net.Http;
-using System.Text;
 using DoLess.UriTemplates;
 
 namespace DoLess.Rest
 {
-    public sealed partial class RestRequest
+    public sealed partial class RestRequest : IRestRequest
     {
         private readonly HttpRequestMessage httpRequestMessage;
         private readonly IRestClient restClient;

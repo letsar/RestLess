@@ -5,19 +5,19 @@ namespace DoLess.Rest
 {
     public sealed partial class RestRequest
     {
-        public RestRequest WithUriTemplate(string uriTemplate)
+        public IRestRequest WithUriTemplate(string uriTemplate)
         {
             this.uriTemplate = UriTemplate.For(uriTemplate, true);
             return this;
         }
 
-        public RestRequest WithParameter(string name, object parameter)
+        public IRestRequest WithParameter(string name, object parameter)
         {
             this.uriTemplate.WithParameter(name, parameter);
             return this;
         }
 
-        public RestRequest WithBaseUrl(string baseUrl)
+        public IRestRequest WithBaseUrl(string baseUrl)
         {
             this.baseUri = new Uri(baseUrl, UriKind.Relative);
             return this;
