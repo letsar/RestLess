@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using DoLess.Rest.Tasks.Helpers;
 using Microsoft.CodeAnalysis;
@@ -14,7 +15,7 @@ namespace DoLess.Rest.Tasks
         private readonly IReadOnlyList<RestClientBuilder> restClientBuilders;
 
         public RestClientFactoryBuilder(string originalFileName, IReadOnlyList<RestClientBuilder> restClientBuilders)
-            : base(originalFileName)
+            : base(originalFileName, Constants.ProductName)
         {
             this.restClientBuilders = restClientBuilders;
         }
@@ -55,7 +56,7 @@ namespace DoLess.Rest.Tasks
         private MethodDeclarationSyntax BuildInitializerFactoryMethod()
         {
             return MethodDeclaration(PredefinedType(Token(SyntaxKind.VoidKeyword)), "InitializeRestClientFactory")
-                  .WithModifiers(TokenList(Token(SyntaxKind.StaticKeyword)))
+                  .WithModifiers(TokenList(Token(SyntaxKind.StaticKeyword), Token(SyntaxKind.PartialKeyword)))
                   .WithBody(this.BuildInitializerFactoryMethodBlock());
         }
 

@@ -14,10 +14,7 @@ namespace DoLess.Rest.Tasks
     {
         [Required]
         public ITaskItem[] SourceFiles { get; set; }
-
-        [Output]
-        public ITaskItem[] UpdatedFiles { get; set; }
-
+        
         public override bool Execute()
         {
             try
@@ -32,14 +29,13 @@ namespace DoLess.Rest.Tasks
                                              .ToArray();
 
                 var restClientFactory = sourceFiles.Where(x => Path.GetFileNameWithoutExtension(x) == nameof(RestClient))
-                                                   .Select(x => new RestClientFactoryBuilder(x, restClients))
+                                                   .Select(x => new RestClientFactoryBuilder(x, restClients).Build())
                                                    .FirstOrDefault();
 
-                var codeBuilders = new List<CodeBuilder>(restClients);
-                codeBuilders.Add(restClientFactory);
-
-                this.UpdatedFiles = codeBuilders.Select(x => new TaskItem(x.OriginalFilePath, GetMetadata(x)))
-                                                .ToArray();
+                if (restClientFactory == null)
+                {
+                    throw new FileNotFoundException($"The {nameof(RestClient)}.cs file has not been found. Please re-add {Constants.ProductName} nuget package.", $"{nameof(RestClient)}.cs");
+                }                
 
                 // Save the files.                
                 for (int i = 0; i < restClients.Length; i++)
@@ -70,6 +66,11 @@ namespace DoLess.Rest.Tasks
         private bool Save(CodeBuilder codeBuilder)
         {
             var target = new FileInfo(codeBuilder.GeneratedFilePath);
+            if (!target.Directory.Exists)
+            {
+                target.Directory.Create();
+            }
+
             var newContent = codeBuilder.ToString();
 
             if (target.Exists)
@@ -124,7 +125,7 @@ namespace DoLess.Rest.Tasks
 
         private bool LogErrorFromException(Exception ex)
         {
-            this.Log.LogErrorFromException(ex);
+            this.Log.LogErrorFromException(ex, true);
             return false;
         }
     }

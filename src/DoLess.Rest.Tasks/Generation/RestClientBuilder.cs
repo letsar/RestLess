@@ -79,7 +79,7 @@ namespace DoLess.Rest.Tasks
             this.RequiredUsings = this.BuildRequiredUsings();
 
             return CompilationUnit().WithUsings(List(this.RequiredUsings))
-                                    .WithMembers(SingletonList(this.BuildNamespace()));
+                                    .WithMembers(SingletonList<MemberDeclarationSyntax>(this.BuildNamespace()));
         }
 
         private IReadOnlyList<UsingDirectiveSyntax> BuildRequiredUsings()
@@ -90,7 +90,7 @@ namespace DoLess.Rest.Tasks
                                    .ToArray();
         }
 
-        private MemberDeclarationSyntax BuildNamespace()
+        private NamespaceDeclarationSyntax BuildNamespace()
         {
             return Constants.DoLessRestGeneratedNamespace
                             .WithMembers(List(this.BuildRestClients()));

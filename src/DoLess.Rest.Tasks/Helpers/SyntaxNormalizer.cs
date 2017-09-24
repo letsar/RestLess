@@ -23,7 +23,7 @@ namespace DoLess.Rest.Tasks.Helpers
                             Token(
                                 TriviaList(new[]
                                 {
-                                    LineFeed,
+                                    CarriageReturnLineFeed,
                                     Whitespace(new string(' ', position))
                                 }),
                                 SyntaxKind.DotToken,
