@@ -14,28 +14,20 @@ namespace DoLess.Rest.Tasks
     {
         [Required]
         public ITaskItem[] SourceFiles { get; set; }
-        
+
         public override bool Execute()
         {
             try
             {
                 var sourceFiles = (this.SourceFiles ?? Array.Empty<ITaskItem>()).Select(x => x.ItemSpec)
                                                                                 .Distinct();
-
                 var restClients = sourceFiles.Select(x => new { FilePath = x, FileName = Path.GetFileNameWithoutExtension(x) })
                                              .Where(x => !x.FileName.Contains(Constants.DoLessGeneratedFileSuffix))
                                              .Select(x => new RestClientBuilder(x.FilePath).Build())
                                              .Where(x => x.HasRestInterfaces)
                                              .ToArray();
 
-                var restClientFactory = sourceFiles.Where(x => Path.GetFileNameWithoutExtension(x) == nameof(RestClient))
-                                                   .Select(x => new RestClientFactoryBuilder(x, restClients).Build())
-                                                   .FirstOrDefault();
-
-                if (restClientFactory == null)
-                {
-                    throw new FileNotFoundException($"The {nameof(RestClient)}.cs file has not been found. Please re-add {Constants.ProductName} nuget package.", $"{nameof(RestClient)}.cs");
-                }                
+                var restClientFactory = new RestClientFactoryBuilder(restClients).Build();
 
                 // Save the files.                
                 for (int i = 0; i < restClients.Length; i++)

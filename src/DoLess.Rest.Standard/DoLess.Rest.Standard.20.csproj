@@ -6,10 +6,10 @@
 		<AssemblyName>DoLess.Rest</AssemblyName>
 		<GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
 		<DebugType>embedded</DebugType>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<!-- Suppresses the warnings about the package not having assemblies in lib/*/.dll. -->
 		<NoPackageAnalysis>true</NoPackageAnalysis>
-		<Version>0.0.1036</Version>
+		<Version>0.0.1045</Version>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<LangVersion>latest</LangVersion>
@@ -24,11 +24,7 @@
 	<ItemGroup Label="Package">
 		<None Include="../../nuget/DoLess.Rest.targets" LinkBase="nuget/build/netstandard2.0" PackagePath="build/netstandard2.0" Pack="true" />
 		<None Include="../../nuget/DoLess.Rest.targets" LinkBase="nuget/buildMultiTargeting/netstandard2.0" PackagePath="buildMultiTargeting/netstandard2.0" Pack="true" />
-		<None Include="../DoLess.Rest.Tasks/bin/$(Configuration)/netstandard2.0/*.dll" LinkBase="nuget/tasks/netstandard2.0" PackagePath="tasks/netstandard2.0" Pack="true" />
-		<None Include="../DoLess.Rest.Tasks/bin/$(Configuration)/net46/*.dll" LinkBase="nuget/tasks/net46" PackagePath="tasks/net46" Pack="true" />
-		<Compile Include="../DoLess.Rest.Tasks/RestClient.cs" LinkBase="nuget/contentFiles/cs" PackagePath="contentFiles/cs/any/DoLess.Rest" Pack="true" />
+		<None Include="../DoLess.Rest.Tasks/bin/$(Configuration)/netstandard2.0/*" LinkBase="nuget/tasks/netstandard2.0" PackagePath="tasks/netstandard2.0" Pack="true" />
+		<None Include="../DoLess.Rest.Tasks/bin/$(Configuration)/net46/*" LinkBase="nuget/tasks/net46" PackagePath="tasks/net46" Pack="true" />
 	</ItemGroup>
-	<Target Name="BuildDoLessRestTasks" BeforeTargets="CoreCompile">		
-		<Exec Command="dotnet build $(MSBuildThisFileDirectory)../DoLess.Rest.Tasks/DoLess.Rest.Tasks.csproj -c $(Configuration)" />
-	</Target>
 </Project>

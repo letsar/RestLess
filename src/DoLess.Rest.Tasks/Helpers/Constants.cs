@@ -15,10 +15,14 @@ namespace DoLess.Rest.Tasks.Helpers
         public const string DoLessGeneratedFileSuffix = ".g.dl.rest.cs";
         public const string RestClientFactoryBuilderFileName = RestClientFactoryName + DoLessGeneratedFileSuffix;
 
-
         public static readonly NamespaceDeclarationSyntax DoLessRestNamespace = NamespaceDeclaration(ParseName(ProductName));
         public static readonly NamespaceDeclarationSyntax DoLessRestGeneratedNamespace = NamespaceDeclaration(ParseName(ProductName + ".Generated"));
-        public static readonly IReadOnlyList<UsingDirectiveSyntax> DoLessRestGeneratedUsings = new[] { UsingDirective(DoLessRestGeneratedNamespace.Name) };
+        public static readonly IReadOnlyList<UsingDirectiveSyntax> DoLessRestGeneratedUsings = new[] 
+        {
+            UsingDirective(DoLessRestGeneratedNamespace.Name),
+            UsingDirective(ParseName("System")),
+            UsingDirective(ParseName("System.Net.Http"))
+        };
 
     }
 }

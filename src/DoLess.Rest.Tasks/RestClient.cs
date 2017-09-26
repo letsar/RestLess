@@ -1,27 +1,14 @@
 ﻿using System;
 using System.Net.Http;
 
-/* 
- * This file is copied in your poject when you install the NuGet package DoLess.Rest.
- * It is used to let you use RestClient.For<T> before the first compilation.
- * Every time you build the project, the dependent file, RestClient.g.dl.rest.cs is updated with the last Rest implementations generated.
- * You must not modified this file.
- */
-
 namespace DoLess.Rest
 {
     /// <summary>
     /// Contains methods used to create the Rest clients.
     /// </summary>
-    public static partial class RestClient
+    public static class RestClient
     {
-        private static readonly RestClientFactory RestClientFactory;
-
-        static RestClient()
-        {
-            RestClientFactory = new RestClientFactory();
-            InitializeRestClientFactory();
-        }
+        private static readonly RestClientFactory RestClientFactory = null;
 
         /// <summary>
         /// Creates a Rest client using the specified <paramref name="httpClient"/> and <paramref name="settings"/>.
@@ -60,11 +47,6 @@ namespace DoLess.Rest
             where T : class
         {
             return RestClientFactory.Create<T>(hostUrl, settings);
-        }
-
-        /// <summary>
-        /// This method is generated in RestClient.g.dl.rest.cs and contains the rest clients initializations.
-        /// </summary>
-        static partial void InitializeRestClientFactory();        
+        }    
     }
 }

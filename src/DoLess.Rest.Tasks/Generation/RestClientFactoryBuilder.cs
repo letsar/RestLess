@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using DoLess.Rest.Tasks.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -12,18 +13,27 @@ namespace DoLess.Rest.Tasks
 {
     internal class RestClientFactoryBuilder : CodeBuilder
     {
+        private const string InitializeRestClientMethodName = "InitializeRestClient";
+        private const string RestClientFactoryName = "RestClientFactory";
         private readonly IReadOnlyList<RestClientBuilder> restClientBuilders;
 
-        public RestClientFactoryBuilder(string originalFileName, IReadOnlyList<RestClientBuilder> restClientBuilders)
-            : base(originalFileName, Constants.ProductName)
+        public RestClientFactoryBuilder(IReadOnlyList<RestClientBuilder> restClientBuilders)
+            : base($"{Constants.RestClientFactoryName}.cs", Constants.ProductName)
         {
             this.restClientBuilders = restClientBuilders;
         }
 
         public RestClientFactoryBuilder Build()
         {
-            this.RootNode = CompilationUnit().WithUsings(List(this.BuildUsings()))
-                                             .WithMembers(SingletonList<MemberDeclarationSyntax>(this.BuildNamespaceDeclaration()));
+            string restClientFactoryFilePath = Path.Combine(Path.GetDirectoryName(typeof(RestClient).Assembly.Location), $"{Constants.RestClientFactoryName}.cs");
+            var compilationUnit = CSharpSyntaxTree.ParseText(File.ReadAllText(restClientFactoryFilePath, Encoding.UTF8))
+                                            .GetCompilationUnitRoot()
+                                            .WithUsings(List(this.BuildUsings()));
+
+            compilationUnit = compilationUnit.WithMembers(SingletonList<MemberDeclarationSyntax>(this.BuildNamespaceDeclaration(compilationUnit.DescendantNodes().OfType<ClassDeclarationSyntax>().FirstOrDefault()?.Members)));
+
+            this.RootNode = compilationUnit;
+
             return this;
         }
 
@@ -37,26 +47,39 @@ namespace DoLess.Rest.Tasks
                        .OrderBy(x => x, UsingDirectiveSyntaxComparer.Default);
         }
 
-        private NamespaceDeclarationSyntax BuildNamespaceDeclaration()
+        private NamespaceDeclarationSyntax BuildNamespaceDeclaration(IEnumerable<MemberDeclarationSyntax> members)
         {
             return Constants.DoLessRestNamespace
-                            .WithMembers(SingletonList<MemberDeclarationSyntax>(this.BuildClass()));
+                            .WithMembers(SingletonList<MemberDeclarationSyntax>(this.BuildClass(members)));
         }
 
-        private ClassDeclarationSyntax BuildClass()
+        private ClassDeclarationSyntax BuildClass(IEnumerable<MemberDeclarationSyntax> members)
         {
             return ClassDeclaration(Constants.RestClientFactoryName)
                   .WithModifiers(TokenList(
                       Token(SyntaxKind.PublicKeyword),
-                      Token(SyntaxKind.StaticKeyword),
-                      Token(SyntaxKind.PartialKeyword)))
-                  .WithMembers(SingletonList<MemberDeclarationSyntax>(this.BuildInitializerFactoryMethod()));
+                      Token(SyntaxKind.StaticKeyword)))
+                  .WithMembers(List(members))
+                  .AddMembers(this.BuildConstructorDeclaration(), this.BuildInitializerFactoryMethod());
+        }
+
+        private ConstructorDeclarationSyntax BuildConstructorDeclaration()
+        {
+            return ConstructorDeclaration(Constants.RestClientFactoryName)
+                   .WithModifiers(TokenList(Token(SyntaxKind.StaticKeyword)))
+                   .WithBody(Block(
+                                ExpressionStatement(
+                                    AssignmentExpression(
+                                        SyntaxKind.SimpleAssignmentExpression,
+                                        IdentifierName(RestClientFactoryName),
+                                        ObjectCreationExpression(IdentifierName(RestClientFactoryName)).WithArgumentList(ArgumentList()))),
+                                ExpressionStatement(InvocationExpression(IdentifierName(InitializeRestClientMethodName)))));
         }
 
         private MethodDeclarationSyntax BuildInitializerFactoryMethod()
         {
-            return MethodDeclaration(PredefinedType(Token(SyntaxKind.VoidKeyword)), "InitializeRestClientFactory")
-                  .WithModifiers(TokenList(Token(SyntaxKind.StaticKeyword), Token(SyntaxKind.PartialKeyword)))
+            return MethodDeclaration(PredefinedType(Token(SyntaxKind.VoidKeyword)), InitializeRestClientMethodName)
+                  .WithModifiers(TokenList(Token(SyntaxKind.PrivateKeyword), Token(SyntaxKind.StaticKeyword)))
                   .WithBody(this.BuildInitializerFactoryMethodBlock());
         }
 

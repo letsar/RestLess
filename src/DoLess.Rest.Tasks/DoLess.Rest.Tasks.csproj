@@ -20,6 +20,12 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net46'">    
     <Reference Include="System.Net.Http" />
+  </ItemGroup> 
+
+  <ItemGroup>
+    <Compile Update="RestClient.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
 
   <Import Project="..\DoLess.Rest.Shared\DoLess.Rest.Shared.projitems" Label="Shared" />  
