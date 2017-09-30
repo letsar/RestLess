@@ -16,44 +16,6 @@ namespace DoLess.Rest.Tasks.Tests.Generation
     [TestFixture]
     public class RequestInfoTests
     {
-
-        [TestCase(nameof(IRestApi00.UrlIdNotFound01), "id")]
-        [TestCase(nameof(IRestApi00.UrlIdNotFound02), "id")]
-        [TestCase(nameof(IRestApi00.UrlIdNotFound03), "id")]
-        [TestCase(nameof(IRestApi00.UrlIdNotFound04), "id", "foo")]
-        [TestCase(nameof(IRestApi00.UrlIdNotFound05), "id", "foo", "end")]
-        public void ShouldThrowUrlIdNotFound(string methodName, params string[] notFoundIds)
-        {
-            Action job = () => GetRequestInfo<IRestApi00>(methodName);
-            job.ShouldThrowExactly<ErrorDiagnosticException>()
-               .And
-               .Error
-               .Should()
-               .BeOfType<UrlIdNotFoundError>()
-               .Which
-               .UrlIds
-               .Should()
-               .BeEquivalentTo(notFoundIds);
-        }
-
-        [TestCase(nameof(IRestApi00.UrlIdAlreadyExists01), "name")]
-        [TestCase(nameof(IRestApi00.UrlIdAlreadyExists02), "name")]
-        [TestCase(nameof(IRestApi00.UrlIdAlreadyExists03), "name")]
-        [TestCase(nameof(IRestApi00.UrlIdAlreadyExists04), "name")]
-        public void ShouldThrowUrlIdAlreadyExists(string methodName, params string[] notFoundIds)
-        {
-            Action job = () => GetRequestInfo<IRestApi00>(methodName);
-            job.ShouldThrowExactly<ErrorDiagnosticException>()
-               .And
-               .Error
-               .Should()
-               .BeOfType<UrlIdAlreadyExistsError>()
-               .Which
-               .UrlId
-               .Should()
-               .BeEquivalentTo(notFoundIds[0]);
-        }
-
         [TestCase(nameof(IRestApi00.MultipleRestAttributes01))]
         public void ShouldThrowMultipleRestAttributes(string methodName)
         {
@@ -94,22 +56,7 @@ namespace DoLess.Rest.Tasks.Tests.Generation
                .Error
                .Should()
                .BeOfType<MultipleHttpAttributesError>();
-        }
-
-        [TestCase(nameof(IRestApi00.InvalidUrlTemplate01))]
-        [TestCase(nameof(IRestApi00.InvalidUrlTemplate02))]
-        [TestCase(nameof(IRestApi00.InvalidUrlTemplate03))]
-        [TestCase(nameof(IRestApi00.InvalidUrlTemplate04))]
-        [TestCase(nameof(IRestApi00.InvalidUrlTemplate05))]
-        public void ShouldThrowInvalidUrlTemplate(string methodName)
-        {
-            Action job = () => GetRequestInfo<IRestApi00>(methodName);
-            job.ShouldThrowExactly<ErrorDiagnosticException>()
-               .And
-               .Error
-               .Should()
-               .BeOfType<InvalidUrlTemplateError>();
-        }
+        }        
 
         [TestCase(nameof(IRestApi00.ReturnType01))]
         [TestCase(nameof(IRestApi00.ReturnType02))]

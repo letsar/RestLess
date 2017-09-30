@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using DoLess.Rest.Generated;
 using DoLess.Rest.Tasks.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -42,7 +43,7 @@ namespace DoLess.Rest.Tasks
             return this.restClientBuilders
                        .SelectMany(x => x.RestClients)
                        .Select(x => x.InterfaceDeclaration?.GetDeclaringNamespace())
-                       .Union(Constants.DoLessRestGeneratedUsings)
+                       .Union(Constants.DoLessRestFactoryRequiredUsings)
                        .Distinct(UsingDirectiveSyntaxEqualityComparer.Default)
                        .OrderBy(x => x, UsingDirectiveSyntaxComparer.Default);
         }

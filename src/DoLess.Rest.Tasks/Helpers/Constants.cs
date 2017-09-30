@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
@@ -17,12 +15,11 @@ namespace DoLess.Rest.Tasks.Helpers
 
         public static readonly NamespaceDeclarationSyntax DoLessRestNamespace = NamespaceDeclaration(ParseName(ProductName));
         public static readonly NamespaceDeclarationSyntax DoLessRestGeneratedNamespace = NamespaceDeclaration(ParseName(ProductName + ".Generated"));
-        public static readonly IReadOnlyList<UsingDirectiveSyntax> DoLessRestGeneratedUsings = new[] 
+        public static readonly IReadOnlyList<UsingDirectiveSyntax> DoLessRestFactoryRequiredUsings = new[]
         {
             UsingDirective(DoLessRestGeneratedNamespace.Name),
             UsingDirective(ParseName("System")),
             UsingDirective(ParseName("System.Net.Http"))
         };
-
     }
 }

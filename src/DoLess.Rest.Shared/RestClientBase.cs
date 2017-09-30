@@ -1,6 +1,6 @@
 ﻿using System.Net.Http;
 
-namespace DoLess.Rest
+namespace DoLess.Rest.Generated
 {
     public abstract class RestClientBase : IRestClient
     {

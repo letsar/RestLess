@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 
-namespace DoLess.Rest
+namespace DoLess.Rest.Generated
 {
     public class RestClientFactory
     {

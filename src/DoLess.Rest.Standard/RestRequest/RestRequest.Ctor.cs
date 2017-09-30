@@ -2,7 +2,7 @@
 using System.Net.Http;
 using DoLess.UriTemplates;
 
-namespace DoLess.Rest
+namespace DoLess.Rest.Generated
 {
     public sealed partial class RestRequest : IRestRequest
     {
@@ -19,6 +19,5 @@ namespace DoLess.Rest
             this.restClient = restClient;
             this.baseUri = new Uri("/", UriKind.Relative);
         }
-
     }
 }

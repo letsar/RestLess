@@ -1,7 +1,7 @@
 ﻿using System;
 using DoLess.UriTemplates;
 
-namespace DoLess.Rest
+namespace DoLess.Rest.Generated
 {
     public sealed partial class RestRequest
     {
@@ -19,6 +19,10 @@ namespace DoLess.Rest
 
         public IRestRequest WithBaseUrl(string baseUrl)
         {
+            if (baseUrl.IsNullOrWhiteSpace())
+            {
+                baseUrl = "/";
+            }
             this.baseUri = new Uri(baseUrl, UriKind.Relative);
             return this;
         }
@@ -26,10 +30,11 @@ namespace DoLess.Rest
         private Uri BuildUri()
         {
             var uriString = this.uriTemplate.ExpandToString();
+            var relativeUri = $"{this.baseUri.OriginalString.TrimEnd('/')}/{uriString.TrimStart('/')}";
 
             // The UriBuilder needs to be initialized with an absolute uri, so we
             // give him a dumb one.
-            var uriBuilder = new UriBuilder(new Uri(new Uri("http://api"), new Uri(this.baseUri, new Uri(uriString, UriKind.Relative))));
+            var uriBuilder = new UriBuilder(new Uri(new Uri("http://api"), relativeUri));
 
             return new Uri(uriBuilder.Uri.GetComponents(UriComponents.PathAndQuery, UriFormat.UriEscaped), UriKind.Relative);
         }

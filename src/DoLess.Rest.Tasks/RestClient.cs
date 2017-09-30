@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using DoLess.Rest.Generated;
 
 namespace DoLess.Rest
 {
