@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace DoLess.Rest.Json
+namespace DoLess.Rest
 {
     public class JsonMediaTypeFormatter : IMediaTypeFormatter
     {

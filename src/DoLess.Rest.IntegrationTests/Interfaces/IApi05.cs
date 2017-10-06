@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using DoLess.Rest.IntegrationTests.Entities;
 
 namespace DoLess.Rest.IntegrationTests.Interfaces
 {
@@ -26,5 +27,8 @@ namespace DoLess.Rest.IntegrationTests.Interfaces
 
         [Get("api/ko")]
         Task<bool> GetBoolIsKoAsync();
+
+        [Get("api/students/1")]
+        Task<Person> GetStudentAsync();
     }
 }

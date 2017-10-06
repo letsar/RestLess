@@ -41,12 +41,10 @@ namespace DoLess.Rest.Generated
 
         public async Task<T> ReadAsObject<T>(CancellationToken cancellationToken = default)
         {
-            this.EnsureMediaTypeFormatter();
-
             using (Stream stream = await this.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false))
             using (StreamReader streamReader = new StreamReader(stream))
             {
-                return await this.restClient.Settings.MediaTypeFormatter.ReadAsync<T>(streamReader);
+                return await this.mediaTypeFormatter.ReadAsync<T>(streamReader);
             }
         }
         

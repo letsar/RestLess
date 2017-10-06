@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFrameworks>net46;netstandard2.0</TargetFrameworks>
+    <Product>DoLess.Rest.Tasks</Product>
+    <!-- Suppresses the warnings about the package not having assemblies in lib/*/.dll. -->
+		<NoPackageAnalysis>true</NoPackageAnalysis>
+    <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
+    <PackageId>DoLess.Rest.Tasks</PackageId>
+    <Authors>Romain Rastel</Authors>
+    <Company>Romain Rastel</Company>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -16,18 +23,14 @@
     <PackageReference Include="Microsoft.Build" Version="15.3.409" />
     <PackageReference Include="Microsoft.Build.Tasks.Core" Version="15.3.409" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.3.2" />
+
+    <!-- marks all packages as 'local only' so they don't end up in the nuspec -->
+    <PackageReference Update="@(PackageReference)" PrivateAssets="All" />
   </ItemGroup> 
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net46'">    
     <Reference Include="System.Net.Http" />
   </ItemGroup> 
 
-  <ItemGroup>
-    <Compile Update="RestClient.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-  </ItemGroup>
-
-  <Import Project="..\DoLess.Rest.Shared\DoLess.Rest.Shared.projitems" Label="Shared" />  
-
+  <Import Project="..\DoLess.Rest.Shared\DoLess.Rest.Shared.projitems" Label="Shared" /> 
 </Project>

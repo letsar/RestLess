@@ -11,9 +11,9 @@ namespace DoLess.Rest.Generated
             return this;
         }
 
-        public IRestRequest WithParameter(string name, object parameter)
+        public IRestRequest WithUriVariable(string name, object variable)
         {
-            this.uriTemplate.WithParameter(name, parameter);
+            this.uriTemplate.WithParameter(name, variable);
             return this;
         }
 

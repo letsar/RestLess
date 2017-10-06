@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace DoLess.Rest.Helpers
 {
-    internal class DefaultFormFormatter : IFormFormatter
+    public class DefaultFormFormatter : IFormFormatter
     {
         private static readonly Dictionary<Type, NamedPropertyInfo[]> PropertyCache = new Dictionary<Type, NamedPropertyInfo[]>();
 

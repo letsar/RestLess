@@ -78,8 +78,14 @@ namespace DoLess.Rest
 
         IRestRequest WithUriTemplate(string uriTemplate);
 
-        IRestRequest WithParameter(string name, object parameter);
+        IRestRequest WithUriVariable(string name, object variable);
 
         IRestRequest WithBaseUrl(string baseUrl);
+
+        IRestRequest WithMediaTypeFormatter(string mediaTypeFormatterName);
+
+        IRestRequest WithUrlParameterFormatter(string urlParameterFormatterName);
+
+        IRestRequest WithFormFormatter(string formFormatterName);
     }
 }

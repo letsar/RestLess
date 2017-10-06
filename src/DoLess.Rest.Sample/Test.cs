@@ -7,8 +7,8 @@ namespace DoLess.Rest.Sample
     class Test
     {
         public Test()
-        {
-            //var t = RestClient.For<IRestApi01>("");            
+        { 
+            var t = RestClient.For<IRestApi01>("");            
         }
     }
 }

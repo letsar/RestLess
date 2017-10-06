@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<Product>DoLess.Rest</Product>
+		<RootNamespace>DoLess.Rest</RootNamespace>
+		<AssemblyName>DoLess.Rest</AssemblyName>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<!-- Suppresses the warnings about the package not having assemblies in lib/*/.dll. -->
+		<NoPackageAnalysis>true</NoPackageAnalysis>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+	</PropertyGroup>	
+
+	<ItemGroup>
+	  <ProjectReference Include="..\DoLess.Rest.Core\DoLess.Rest.Core.csproj" />	  
+	</ItemGroup>
+
+	<ItemGroup>
+    <Content Include="build\*" PackagePath="build\" />		
+    <Content Include="buildMultiTargeting\*" PackagePath="buildMultiTargeting\" />
+
+		<None Include="..\DoLess.Rest.Tasks\bin\$(Configuration)\netstandard2.0\*.dll" LinkBase="nuget\tasks\netstandard2.0" PackagePath="tasks\netstandard2.0" Pack="true"/>
+		<None Include="..\DoLess.Rest.Tasks\bin\$(Configuration)\net46\*.dll" LinkBase="nuget\tasks\net46" PackagePath="tasks\net46" Pack="true"/>
+		<None Include="..\DoLess.Rest.Tasks\RestClient.cs" LinkBase="nuget\tasks\netstandard2.0" PackagePath="tasks\netstandard2.0" Pack="true"/>
+    <None Include="..\DoLess.Rest.Tasks\RestClient.cs" LinkBase="nuget\tasks\net46" PackagePath="tasks\net46" Pack="true"/>
+  </ItemGroup>
+</Project>

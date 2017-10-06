@@ -26,7 +26,7 @@ namespace DoLess.Rest.Tasks
 
         public RestClientFactoryBuilder Build()
         {
-            string restClientFactoryFilePath = Path.Combine(Path.GetDirectoryName(typeof(RestClient).Assembly.Location), $"{Constants.RestClientFactoryName}.cs");
+            string restClientFactoryFilePath = Path.Combine(Path.GetDirectoryName(typeof(RestClientFactoryBuilder).Assembly.Location), $"{Constants.RestClientFactoryName}.cs");
             var compilationUnit = CSharpSyntaxTree.ParseText(File.ReadAllText(restClientFactoryFilePath, Encoding.UTF8))
                                             .GetCompilationUnitRoot()
                                             .WithUsings(List(this.BuildUsings()));

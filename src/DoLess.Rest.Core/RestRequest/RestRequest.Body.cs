@@ -6,6 +6,8 @@ namespace DoLess.Rest.Generated
 {
     public sealed partial class RestRequest
     {
+        private const string DoLessRestBoundary = "DoLessRestBoundary";
+
         public IRestRequest WithBody(HttpContent body)
         {
             this.httpRequestMessage.Content = body;
@@ -31,17 +33,30 @@ namespace DoLess.Rest.Generated
         }
 
         public IRestRequest WithBody<T>(T body)
-        {
-            this.EnsureMediaTypeFormatter();
-            this.httpRequestMessage.Content = new ObjectContent<T>(body, this.restClient.Settings.MediaTypeFormatter);
+        {            
+            this.httpRequestMessage.Content = new ObjectContent<T>(body, this.mediaTypeFormatter);
             return this;
         }
 
         public IRestRequest WithFormUrlEncodedBody<T>(T body)
-        {
-            this.EnsureFormFormatter();
-            this.httpRequestMessage.Content = new FormUrlEncodedContent(this.restClient.Settings.FormFormatter.Format(body));
+        {            
+            this.httpRequestMessage.Content = new FormUrlEncodedContent(this.formFormatter.Format(body));
             return this;
+        }
+
+        public IRestRequest WithBodyPart(string name, string value)
+        {
+            this.EnsureIsMultipartContent();
+            // TODO.
+            return this;
+        }
+
+        private void EnsureIsMultipartContent()
+        {
+            if (!(this.httpRequestMessage.Content is MultipartContent))
+            {
+                this.httpRequestMessage.Content = new MultipartFormDataContent(DoLessRestBoundary);
+            }
         }
     }
 }

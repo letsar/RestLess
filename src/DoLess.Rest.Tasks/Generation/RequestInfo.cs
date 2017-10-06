@@ -16,38 +16,38 @@ namespace DoLess.Rest.Tasks
         private const string TaskNamespace = "System.Threading.Tasks";
         private const string TaskName = "Task";
 
-        private readonly Dictionary<string, Parameter> headers;
-        private readonly Dictionary<string, Parameter> uriVariables;
+        private readonly List<ArgumentSyntax[]> withHeaderArguments;
+        private readonly List<ArgumentSyntax[]> withUriVariableArguments;
 
         private MethodDeclarationSyntax methodDeclaration;
         private ParameterSyntax parameter;
-        private string urlId;
+        private ArgumentSyntax urlId;
         private bool hasTaskUsingNamespace;
 
         public RequestInfo(InterfaceDeclarationSyntax interfaceDeclaration)
         {
-            this.headers = new Dictionary<string, Parameter>();
+            this.withHeaderArguments = new List<ArgumentSyntax[]>();
             this.ParseInterfaceDeclaration(interfaceDeclaration);
         }
 
         private RequestInfo(RequestInfo requestInfo)
         {
-            this.headers = new Dictionary<string, Parameter>(requestInfo.headers);
-            this.uriVariables = new Dictionary<string, Parameter>();
+            this.withHeaderArguments = new List<ArgumentSyntax[]>(requestInfo.withHeaderArguments);
+            this.withUriVariableArguments = new List<ArgumentSyntax[]>();
 
             this.BaseUrl = requestInfo.BaseUrl;
             this.hasTaskUsingNamespace = requestInfo.hasTaskUsingNamespace;
         }
 
-        public string BaseUrl { get; private set; }
+        public ArgumentSyntax BaseUrl { get; private set; }
 
         public string HttpMethod { get; private set; }
 
-        public string UriTemplate { get; set; }
+        public ArgumentSyntax UriTemplate { get; set; }
 
-        public IReadOnlyDictionary<string, Parameter> Headers => this.headers;
+        public IReadOnlyList<ArgumentSyntax[]> WithHeaderArguments => this.withHeaderArguments;
 
-        public IReadOnlyDictionary<string, Parameter> UriVariables => this.uriVariables;
+        public IReadOnlyList<ArgumentSyntax[]> WithUriVariableArguments => this.withUriVariableArguments;
 
         public string BodyIdentifier { get; private set; }
 
@@ -66,7 +66,6 @@ namespace DoLess.Rest.Tasks
         {
             this.hasTaskUsingNamespace = interfaceDeclaration.HasUsingDirective(TaskNamespace);
             this.ParseAttributeLists(interfaceDeclaration.AttributeLists);
-            this.ThrowIfInvalidBaseUrl(interfaceDeclaration);
         }
 
         private void ParseMethodDeclaration(MethodDeclarationSyntax methodDeclaration)
@@ -100,13 +99,21 @@ namespace DoLess.Rest.Tasks
                         this.ParseRequestAttribute(firstRequestAttribute);
                         if (this.urlId != null)
                         {
-                            this.uriVariables[this.urlId] = parameterName.ToMutable();
+                            this.withUriVariableArguments.Add(new[]
+                            {
+                                this.urlId,
+                                parameterName.ToArg()
+                            });
                             this.urlId = null;
                         }
                     }
                     else if (parameter.Type.GetTypeName() != nameof(CancellationToken))
                     {
-                        this.uriVariables[parameterName] = parameterName.ToMutable();
+                        this.withUriVariableArguments.Add(new[]
+                        {
+                            parameterName.ToArgLiteral(),
+                            parameterName.ToArg()
+                        });
                     }
                 }
             }
@@ -150,18 +157,16 @@ namespace DoLess.Rest.Tasks
 
         private void ParseHeaderAttribute(RequestAttribute attribute)
         {
-            string name = attribute.GetArgument(0);
-            Parameter value = attribute.GetArgument(1)?.ToImmutable();
-
-            this.headers[name] = value;
+            this.withHeaderArguments.Add(attribute.Arguments);
         }
 
         private void ParseHeaderValueAttribute(RequestAttribute attribute)
         {
-            string name = attribute.GetArgument(0);
-            Parameter value = attribute.AttachedParameterName?.ToMutable();
-
-            this.headers[name] = value;
+            this.withHeaderArguments.Add(new[]
+            {
+                attribute.GetArgument(0),
+                attribute.AttachedParameterName.ToArg()
+            });
         }
 
         private void ParseBaseUrlAttribute(RequestAttribute attribute)
@@ -240,22 +245,6 @@ namespace DoLess.Rest.Tasks
             if (!isTask)
             {
                 throw new ReturnTypeError(this.methodDeclaration).ToException();
-            }
-        }
-
-        private void ThrowIfInvalidBaseUrl(InterfaceDeclarationSyntax interfaceDeclaration)
-        {
-            if (this.BaseUrl != null)
-            {
-                var baseUrl = this.BaseUrl;
-
-                // The Uri.IsWellFormedUriString does not check if there is query string in a relative uri.
-                bool isWellFormed = !baseUrl.Contains('?') && Uri.IsWellFormedUriString(baseUrl, UriKind.Relative);
-
-                if (!isWellFormed)
-                {
-                    throw new InvalidBaseUrlError(interfaceDeclaration).ToException();
-                }
             }
         }
     }

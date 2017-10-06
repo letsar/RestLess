@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace DoLess.Rest.Json
+namespace DoLess.Rest
 {
     public class JsonRestSettings : RestSettings
     {
         public JsonRestSettings(JsonSerializerSettings jsonSerializerSettings = null)
         {
             this.JsonSerializerSettings = jsonSerializerSettings ?? new JsonSerializerSettings();
-            this.MediaTypeFormatter = new JsonMediaTypeFormatter(JsonSerializer.Create(this.JsonSerializerSettings));
-            this.FormFormatter = new JsonFormFormatter();
+            this.FormFormatters.Default = new JsonFormFormatter();
+            this.MediaTypeFormatters.Default = new JsonMediaTypeFormatter(JsonSerializer.Create(this.JsonSerializerSettings));
         }
 
         public JsonSerializerSettings JsonSerializerSettings { get; }

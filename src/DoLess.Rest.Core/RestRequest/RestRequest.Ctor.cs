@@ -11,6 +11,9 @@ namespace DoLess.Rest.Generated
 
         private Uri baseUri;
         private UriTemplate uriTemplate;
+        private IMediaTypeFormatter mediaTypeFormatter;
+        private IFormFormatter formFormatter;
+        private IValueFormatter valueFormatter;
 
         private RestRequest(HttpMethod httpMethod, IRestClient restClient)
         {
@@ -18,6 +21,10 @@ namespace DoLess.Rest.Generated
             this.httpRequestMessage.Method = httpMethod;
             this.restClient = restClient;
             this.baseUri = new Uri("/", UriKind.Relative);
+
+            this.formFormatter = this.EnsureDefaultValueSet(this.restClient.Settings.FormFormatters);
+            this.mediaTypeFormatter = this.EnsureDefaultValueSet(this.restClient.Settings.MediaTypeFormatters);
+            this.valueFormatter = this.EnsureDefaultValueSet(this.restClient.Settings.UrlParameterFormatters);
         }
     }
 }

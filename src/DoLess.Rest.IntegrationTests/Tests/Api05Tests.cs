@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using DoLess.Rest.IntegrationTests.Entities;
 using DoLess.Rest.IntegrationTests.Interfaces;
 using FluentAssertions;
 using NUnit.Framework;
@@ -91,7 +92,7 @@ namespace DoLess.Rest.IntegrationTests.Tests
             var mockHttp = new MockHttpMessageHandler();
 
             mockHttp.Expect(HttpMethod.Get, url + "/api/posts")
-                    .Respond("text/plain", response);            
+                    .Respond("text/plain", response);
 
             var settings = new RestSettings()
             {
@@ -158,7 +159,7 @@ namespace DoLess.Rest.IntegrationTests.Tests
         }
 
         [Test]
-        public async Task ShouldCallIsKoMessageMethod()
+        public async Task ShouldCallIsKoMethod()
         {
             string url = "http://example.org";
             var mockHttp = new MockHttpMessageHandler();
@@ -175,6 +176,33 @@ namespace DoLess.Rest.IntegrationTests.Tests
 
             bool isKo = await restClient.GetBoolIsKoAsync();
             isKo.Should().BeFalse();
+
+            mockHttp.VerifyNoOutstandingExpectation();
+        }
+
+        [Test]
+        public async Task ShouldCallGetStudentMethod()
+        {
+            string url = "http://example.org";
+            var mockHttp = new MockHttpMessageHandler();
+
+            mockHttp.Expect(HttpMethod.Get, url + "/api/students/1")
+                    .Respond("application/json", "{'firstName':'Bob', 'lastName':'Walker', 'age': 22}");
+
+            var settings = new JsonRestSettings()
+            {
+                HttpMessageHandlerFactory = () => mockHttp
+            };
+
+            IApi05 restClient = RestClient.For<IApi05>(url, settings);
+
+            Person student = await restClient.GetStudentAsync();
+            student.FirstName
+                   .ShouldBeEquivalentTo("Bob");
+            student.LastName
+                   .ShouldBeEquivalentTo("Walker");
+            student.Age
+                   .ShouldBeEquivalentTo(22);
 
             mockHttp.VerifyNoOutstandingExpectation();
         }

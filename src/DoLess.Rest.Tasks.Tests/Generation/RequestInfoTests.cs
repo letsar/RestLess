@@ -75,15 +75,9 @@ namespace DoLess.Rest.Tasks.Tests.Generation
         {
             RequestInfo requestInfo = GetRequestInfo<IRestApi00>(nameof(IRestApi00.GetSomeStuffWithHeader01));
 
-            requestInfo.Headers
+            requestInfo.WithHeaderArguments
                        .Should()
                        .HaveCount(1);
-            requestInfo.Headers
-                       .First()
-                       .Value
-                       .Value
-                       .Should()
-                       .Be("Interface");
         }
 
         [Test]
@@ -91,15 +85,9 @@ namespace DoLess.Rest.Tasks.Tests.Generation
         {
             RequestInfo requestInfo = GetRequestInfo<IRestApi00>(nameof(IRestApi00.GetSomeStuffWithHeader02));
 
-            requestInfo.Headers
+            requestInfo.WithHeaderArguments
                        .Should()
-                       .HaveCount(1);
-            requestInfo.Headers
-                       .First()
-                       .Value
-                       .Value
-                       .Should()
-                       .Be("Method");
+                       .HaveCount(2);
         }
 
         [Test]
@@ -107,15 +95,9 @@ namespace DoLess.Rest.Tasks.Tests.Generation
         {
             RequestInfo requestInfo = GetRequestInfo<IRestApi00>(nameof(IRestApi00.GetSomeStuffWithHeader03));
                      
-            requestInfo.Headers
+            requestInfo.WithHeaderArguments
                        .Should()
-                       .HaveCount(1);
-            requestInfo.Headers
-                       .First()
-                       .Value
-                       .Value
-                       .Should()
-                       .Be("scope");
+                       .HaveCount(3);            
         }
 
         [Test]
@@ -169,22 +151,13 @@ namespace DoLess.Rest.Tasks.Tests.Generation
             RequestInfo requestInfo = GetRequestInfo<IRestApi00>(method);
 
             requestInfo.BaseUrl
+                       .Expression
+                       .As<LiteralExpressionSyntax>()
+                       .Token
+                       .ValueText
                        .Should()
                        .Be(baseUrl);
-        }
-
-        [TestCase(nameof(IRestApiForTestingBaseUrl02))]
-        [TestCase(nameof(IRestApiForTestingBaseUrl03))]
-        public void ShouldThrowInvalidBaseUrl(string interfaceName)
-        {
-            Action job = () => new RequestInfo(GetInterfaceDeclaration(interfaceName, "IRestApi04.cs"));
-
-            job.ShouldThrowExactly<ErrorDiagnosticException>()
-                      .And
-                      .Error
-                      .Should()
-                      .BeOfType<InvalidBaseUrlError>();
-        }
+        }        
 
         [TestCase(nameof(IRestApiForTestingBaseUrl01))]
         [TestCase(nameof(IRestApiForTestingBaseUrl04))]

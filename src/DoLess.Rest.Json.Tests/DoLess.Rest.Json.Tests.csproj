@@ -14,8 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DoLess.Rest.Json\DoLess.Rest.Json.csproj" />
-    <ProjectReference Include="..\DoLess.Rest.Standard\DoLess.Rest.Standard.20.csproj" />
+    <ProjectReference Include="..\DoLess.Rest.Newtonsoft.Json\DoLess.Rest.Newtonsoft.Json.csproj" />
   </ItemGroup>
 
 </Project>
