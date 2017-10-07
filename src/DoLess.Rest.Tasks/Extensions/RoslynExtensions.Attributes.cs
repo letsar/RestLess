@@ -27,12 +27,12 @@ namespace DoLess.Rest
         private static readonly HashSet<string> OtherRestAttributeNames =
             new[]
             {
-                nameof(UrlIdAttribute),
+                nameof(NameAttribute),
                 nameof(BaseUrlAttribute),
                 nameof(HeaderAttribute),
                 nameof(HeaderValueAttribute),
-                nameof(BodyAttribute),
-                nameof(FormUrlEncodedAttribute)
+                nameof(ContentAttribute),
+                nameof(FormUrlEncodedContentAttribute)
             }
             .ToAttributeNamesHashSet();
 
@@ -127,18 +127,18 @@ namespace DoLess.Rest
                 string fullClassName = className + (nameof(Attribute));
                 switch (fullClassName)
                 {
-                    case nameof(UrlIdAttribute):
-                        return RequestAttributeType.UrlId;
+                    case nameof(NameAttribute):
+                        return RequestAttributeType.Name;
                     case nameof(BaseUrlAttribute):
                         return RequestAttributeType.BaseUrl;
                     case nameof(HeaderAttribute):
                         return RequestAttributeType.Header;
                     case nameof(HeaderValueAttribute):
                         return RequestAttributeType.HeaderValue;
-                    case nameof(BodyAttribute):
-                        return RequestAttributeType.Body;
-                    case nameof(FormUrlEncodedAttribute):
-                        return RequestAttributeType.BodyFormUrlEncoded;
+                    case nameof(ContentAttribute):
+                        return RequestAttributeType.Content;
+                    case nameof(FormUrlEncodedContentAttribute):
+                        return RequestAttributeType.FormUrlEncodedContent;
                     default:
                         return default(RequestAttributeType);
                 }

@@ -3,9 +3,9 @@
     internal enum RequestAttributeType
     {
         HttpMethod,
-        UrlId,
-        Body,
-        BodyFormUrlEncoded,
+        Name,
+        Content,
+        FormUrlEncodedContent,
         Header,
         HeaderValue,
         BaseUrl

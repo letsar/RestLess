@@ -120,12 +120,12 @@ namespace DoLess.Rest.Tests.Helpers
 
         private class ObjectWithUrlIdAttributes
         {
-            [UrlId("key1")]
+            [Name("key1")]
             public string Key1 { get; set; }
                         
             public string Key2 { get; set; }
 
-            [UrlIdIgnore]
+            [NameIgnore]
             public string Key3 { get; set; }
 
             public string Key4 { get; set; }

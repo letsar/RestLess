@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using DoLess.Rest.Tasks.Diagnostics;
+using DoLess.Rest.Tasks.Entities;
 using DoLess.Rest.Tasks.Exceptions;
 using DoLess.Rest.Tasks.Helpers;
 using Microsoft.CodeAnalysis;
@@ -18,10 +19,11 @@ namespace DoLess.Rest.Tasks
 
         private readonly List<ArgumentSyntax[]> withHeaderArguments;
         private readonly List<ArgumentSyntax[]> withUriVariableArguments;
+        private readonly List<ContentArgument> withContentArguments;
 
         private MethodDeclarationSyntax methodDeclaration;
         private ParameterSyntax parameter;
-        private ArgumentSyntax urlId;
+        private ArgumentSyntax parameterNewName;
         private bool hasTaskUsingNamespace;
 
         public RequestInfo(InterfaceDeclarationSyntax interfaceDeclaration)
@@ -34,6 +36,7 @@ namespace DoLess.Rest.Tasks
         {
             this.withHeaderArguments = new List<ArgumentSyntax[]>(requestInfo.withHeaderArguments);
             this.withUriVariableArguments = new List<ArgumentSyntax[]>();
+            this.withContentArguments = new List<ContentArgument>();
 
             this.BaseUrl = requestInfo.BaseUrl;
             this.hasTaskUsingNamespace = requestInfo.hasTaskUsingNamespace;
@@ -49,9 +52,7 @@ namespace DoLess.Rest.Tasks
 
         public IReadOnlyList<ArgumentSyntax[]> WithUriVariableArguments => this.withUriVariableArguments;
 
-        public string BodyIdentifier { get; private set; }
-
-        public bool IsBodyFormUrlEncoded { get; private set; }
+        public IReadOnlyList<ContentArgument> WithContentArguments => this.withContentArguments;
 
         public MethodDeclarationSyntax MethodDeclaration => this.methodDeclaration;
 
@@ -74,12 +75,12 @@ namespace DoLess.Rest.Tasks
 
             this.ThrowIfReturnTypeIsNotAccepted();
 
-            var requestAttributes = methodDeclaration.AttributeLists
-                                                     .ToRequesAttributes();
+            var methodAttributes = methodDeclaration.AttributeLists
+                                                    .ToRequesAttributes();
 
-            this.ThrowIfMethodDoesNotContainsSingleHttpAttribute(requestAttributes);
+            this.ThrowIfMethodDoesNotContainsSingleHttpAttribute(methodAttributes);
 
-            requestAttributes.ForEach(x => this.ParseRequestAttribute(x));
+            methodAttributes.ForEach(x => this.ParseRequestAttribute(x));
 
             if (methodDeclaration.ParameterList != null)
             {
@@ -88,24 +89,32 @@ namespace DoLess.Rest.Tasks
                     this.parameter = parameter;
                     string parameterName = parameter.Identifier.Text;
 
+                    var parameterAttributes = parameter.AttributeLists
+                                                       .ToRequesAttributes();
+
+                    // Gets the new name attribute.
+                    var parameterNewNameAttribute = parameterAttributes.FirstOrDefault(x => x.Type == RequestAttributeType.Name);
+                    if (parameterNewNameAttribute != null)
+                    {
+                        this.ParseRequestAttribute(parameterNewNameAttribute);
+                    }
 
                     // Only one request attribute on parameter.
-                    var firstRequestAttribute = parameter.AttributeLists
-                                                         .ToRequesAttributes()
-                                                         .ZeroOrSingle(() => new MultipleRestAttributesError(parameter).ToException());
+                    var firstRequestAttribute = parameterAttributes.Where(x => x.Type != RequestAttributeType.Name)
+                                                                   .ZeroOrSingle(() => new MultipleRestAttributesError(parameter).ToException());
 
                     if (firstRequestAttribute != null)
                     {
                         this.ParseRequestAttribute(firstRequestAttribute);
-                        if (this.urlId != null)
+                    }
+                    else if (this.parameterNewName != null)
+                    {
+                        this.withUriVariableArguments.Add(new[]
                         {
-                            this.withUriVariableArguments.Add(new[]
-                            {
-                                this.urlId,
+                                this.parameterNewName,
                                 parameterName.ToArg()
                             });
-                            this.urlId = null;
-                        }
+                        this.parameterNewName = null;
                     }
                     else if (parameter.Type.GetTypeName() != nameof(CancellationToken))
                     {
@@ -132,14 +141,14 @@ namespace DoLess.Rest.Tasks
                 case RequestAttributeType.HttpMethod:
                     this.ParseHttpMethodAttribute(attribute);
                     break;
-                case RequestAttributeType.UrlId:
-                    this.ParseUrlIdAttribute(attribute);
+                case RequestAttributeType.Name:
+                    this.ParseNameAttribute(attribute);
                     break;
-                case RequestAttributeType.Body:
-                    this.ParseBodyAttribute(attribute);
+                case RequestAttributeType.Content:
+                    this.ParseContentAttribute(attribute);
                     break;
-                case RequestAttributeType.BodyFormUrlEncoded:
-                    this.ParseBodyFormUrlEncodedAttribute(attribute);
+                case RequestAttributeType.FormUrlEncodedContent:
+                    this.ParseFormUrlEncodedContentAttribute(attribute);
                     break;
                 case RequestAttributeType.Header:
                     this.ParseHeaderAttribute(attribute);
@@ -174,19 +183,30 @@ namespace DoLess.Rest.Tasks
             this.BaseUrl = attribute.GetArgument(0);
         }
 
-        private void ParseBodyAttribute(RequestAttribute attribute)
+        private void ParseContentAttribute(RequestAttribute attribute)
         {
-            this.BodyIdentifier = attribute.AttachedParameterName;
+            List<ArgumentSyntax> arguments = new List<ArgumentSyntax>(attribute.ArgumentCount + 2)
+            {
+                attribute.AttachedParameterName.ToArg(),
+                this.parameterNewName ?? attribute.AttachedParameterName.ToArgLiteral()
+            };
+
+            if (attribute.ArgumentCount > 0)
+            {
+                arguments.AddRange(attribute.Arguments);
+            }
+
+            this.withContentArguments.Add(new ContentArgument(arguments.ToArray()));
         }
 
-        private void ParseBodyFormUrlEncodedAttribute(RequestAttribute attribute)
+        private void ParseFormUrlEncodedContentAttribute(RequestAttribute attribute)
         {
-            this.IsBodyFormUrlEncoded = true;
+            this.withContentArguments.Add(new FormUlrEncodedContentArgument(attribute.AttachedParameterName.ToArg()));
         }
 
-        private void ParseUrlIdAttribute(RequestAttribute attribute)
+        private void ParseNameAttribute(RequestAttribute attribute)
         {
-            this.urlId = attribute.GetArgument(0);
+            this.parameterNewName = attribute.GetArgument(0);
         }
 
         private void ParseHttpMethodAttribute(RequestAttribute attribute)

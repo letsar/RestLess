@@ -10,8 +10,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\BaseUrlAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\BodyAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\FormUrlEncodedAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\ContentAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\FormUrlEncodedContentAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\HeaderAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\HeaderValueAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\DeleteAttribute.cs" />
@@ -22,8 +22,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\PostAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\PutAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\TraceAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\UrlIdAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\UrlIdIgnoreAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\NameAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\NameIgnoreAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\IEnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Check.cs" />

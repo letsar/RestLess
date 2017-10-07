@@ -1,13 +1,18 @@
 ﻿using System;
 using DoLess.Rest.Exceptions;
+using System.Net.Http;
+
 
 namespace DoLess.Rest.Generated
 {
     public sealed partial class RestRequest
     {
+        private const string DoLessRestBoundary = "DoLessRestBoundary";
+
         private void EnsureAllIsSetBeforeSendingTheRequest()
         {
             this.EnsureRequestUriIsSet();
+            this.EnsureRequestContentIsSet();
         }
 
         private void EnsureRequestUriIsSet()
@@ -15,6 +20,30 @@ namespace DoLess.Rest.Generated
             if (this.httpRequestMessage.RequestUri == null)
             {
                 this.httpRequestMessage.RequestUri = this.BuildUri();
+            }
+        }
+
+        private void EnsureRequestContentIsSet()
+        {
+            int parts = this.contentParts.Count;
+            if (parts > 0 && this.httpRequestMessage.Content == null)
+            {
+                if (parts == 1)
+                {
+                    this.httpRequestMessage.Content = this.contentParts[0].Content;
+                }
+                else
+                {
+                    // Multipart.
+                    var multipartContent = new MultipartFormDataContent(DoLessRestBoundary);
+                    for (int i = 0; i < parts; i++)
+                    {
+                        var contentPart = this.contentParts[i];
+                        multipartContent.Add(contentPart.Content, contentPart.Name, contentPart.FileName);
+                    }
+
+                    this.httpRequestMessage.Content = multipartContent;
+                }
             }
         }
 

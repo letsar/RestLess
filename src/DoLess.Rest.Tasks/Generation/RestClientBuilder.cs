@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using DoLess.Rest.Generated;
+using DoLess.Rest.Tasks.Entities;
 using DoLess.Rest.Tasks.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -162,7 +163,7 @@ namespace DoLess.Rest.Tasks
 
             result = this.ChainWithRequestUrlBuilding(result);
             result = this.ChainWithHeaders(result);
-            result = this.ChainWithBody(result);
+            result = this.ChainWithContent(result);
             result = this.ChainWithSendMethod(result);
 
             return result;
@@ -186,7 +187,6 @@ namespace DoLess.Rest.Tasks
 
         private InvocationExpressionSyntax ChainWithArguments(InvocationExpressionSyntax invocationExpression, IReadOnlyList<ArgumentSyntax[]> args, string methodName)
         {
-            var headers = this.methodRequestInfo.WithHeaderArguments;
             if (args.Count > 0)
             {
                 args.ForEach(x =>
@@ -209,18 +209,20 @@ namespace DoLess.Rest.Tasks
             return this.ChainWithArguments(invocationExpression, this.methodRequestInfo.WithUriVariableArguments, nameof(IRestRequest.WithUriVariable));
         }
 
-        private InvocationExpressionSyntax ChainWithBody(InvocationExpressionSyntax invocationExpression)
+        private InvocationExpressionSyntax ChainWithContent(InvocationExpressionSyntax invocationExpression)
         {
-            var bodyIdentifier = this.methodRequestInfo.BodyIdentifier;
-            if (bodyIdentifier.HasContent())
+            var contents = this.methodRequestInfo.WithContentArguments;
+            if (contents.Count > 0)
             {
-                string methodName = this.methodRequestInfo.IsBodyFormUrlEncoded ?
-                                    nameof(IRestRequest.WithFormUrlEncodedBody) :
-                                    nameof(IRestRequest.WithBody);
-
-                invocationExpression = invocationExpression.ChainWith(methodName)
-                                                           .WithArgs(bodyIdentifier.ToArg());
-            }
+                contents.ForEach(x =>
+                {
+                    string methodName = (x is FormUlrEncodedContentArgument) ?
+                                        nameof(IRestRequest.WithFormUrlEncodedContent) :
+                                        nameof(IRestRequest.WithContent);
+                    invocationExpression = invocationExpression.ChainWith(methodName)
+                                                               .WithArgs(x.Arguments);
+                });
+            };
 
             return invocationExpression;
         }

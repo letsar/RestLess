@@ -105,9 +105,9 @@ namespace DoLess.Rest.Tasks.Tests.Generation
         {
             RequestInfo requestInfo = GetRequestInfo<IRestApi00>(nameof(IRestApi00.PostSomeStuffWithoutBody));
 
-            requestInfo.BodyIdentifier
+            requestInfo.WithContentArguments
                        .Should()
-                       .BeNull();
+                       .BeEmpty();
         }
 
         [Test]
@@ -115,7 +115,13 @@ namespace DoLess.Rest.Tasks.Tests.Generation
         {
             RequestInfo requestInfo = GetRequestInfo<IRestApi00>(nameof(IRestApi00.PostSomeStuffWithBody));
 
-            requestInfo.BodyIdentifier
+            requestInfo.WithContentArguments
+                       .FirstOrDefault()
+                       .Arguments[1]                       
+                       .Expression
+                       .As<LiteralExpressionSyntax>()
+                       .Token
+                       .ValueText
                        .Should()
                        .Be("body");
         }

@@ -139,7 +139,7 @@ namespace DoLess.Rest.Json.Tests
             [JsonProperty("key2")]
             public string Key2 { get; set; }
 
-            [UrlId("key3")]
+            [Name("key3")]
             public string Key3 { get; set; }
 
             [IgnoreDataMember]
@@ -148,16 +148,16 @@ namespace DoLess.Rest.Json.Tests
             [JsonIgnore]
             public string Key5 { get; set; }
 
-            [UrlIdIgnore]
+            [NameIgnore]
             public string Key6 { get; set; }
 
             public string Key7 { get; set; }
 
-            [UrlId("urlId8")]
+            [Name("urlId8")]
             [JsonProperty("jsonProperty8")]
             public string Key8 { get; set; }
 
-            [UrlId("urlId9")]
+            [Name("urlId9")]
             [DataMember(Name = "dataMember9")]
             public string Key9 { get; set; }
 
@@ -165,24 +165,24 @@ namespace DoLess.Rest.Json.Tests
             [DataMember(Name = "dataMember10")]
             public string Key10 { get; set; }
 
-            [UrlId("urlId11")]
+            [Name("urlId11")]
             [JsonProperty("jsonProperty11")]
             [DataMember(Name = "dataMember11")]
             public string Key11 { get; set; }
 
-            [UrlId("urlId12")]
+            [Name("urlId12")]
             [JsonProperty("jsonProperty12")]
             [DataMember(Name = "dataMember12")]
-            [UrlIdIgnore]
+            [NameIgnore]
             public string Key12 { get; set; }
 
-            [UrlId("urlId13")]
+            [Name("urlId13")]
             [JsonProperty("jsonProperty13")]
             [DataMember(Name = "dataMember13")]
             [JsonIgnore]
             public string Key13 { get; set; }
 
-            [UrlId("urlId14")]
+            [Name("urlId14")]
             [JsonProperty("jsonProperty14")]
             [DataMember(Name = "dataMember14")]
             [IgnoreDataMember]

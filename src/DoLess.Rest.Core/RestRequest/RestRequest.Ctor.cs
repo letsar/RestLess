@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using DoLess.UriTemplates;
 
@@ -8,6 +9,7 @@ namespace DoLess.Rest.Generated
     {
         private readonly HttpRequestMessage httpRequestMessage;
         private readonly IRestClient restClient;
+        private readonly List<ContentPart> contentParts;
 
         private Uri baseUri;
         private UriTemplate uriTemplate;
@@ -21,6 +23,7 @@ namespace DoLess.Rest.Generated
             this.httpRequestMessage.Method = httpMethod;
             this.restClient = restClient;
             this.baseUri = new Uri("/", UriKind.Relative);
+            this.contentParts = new List<ContentPart>();
 
             this.formFormatter = this.EnsureDefaultValueSet(this.restClient.Settings.FormFormatters);
             this.mediaTypeFormatter = this.EnsureDefaultValueSet(this.restClient.Settings.MediaTypeFormatters);

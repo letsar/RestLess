@@ -3,7 +3,7 @@
 namespace DoLess.Rest
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public sealed class UrlIdIgnoreAttribute : Attribute
+    public sealed class NameIgnoreAttribute : Attribute
     {
     }
 }

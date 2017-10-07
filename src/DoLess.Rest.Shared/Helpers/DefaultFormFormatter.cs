@@ -36,7 +36,7 @@ namespace DoLess.Rest.Helpers
         private bool CanRead(PropertyInfo propertyInfo)
         {
             return propertyInfo.CanRead &&
-                   propertyInfo.GetCustomAttribute<UrlIdIgnoreAttribute>() == null;
+                   propertyInfo.GetCustomAttribute<NameIgnoreAttribute>() == null;
         }
 
         private string GetFallbackPropertyName(PropertyInfo propertyInfo)
@@ -69,7 +69,7 @@ namespace DoLess.Rest.Helpers
 
         private string GetPropertyName(PropertyInfo propertyInfo)
         {
-            return propertyInfo.GetCustomAttribute<UrlIdAttribute>(true)?.Id ??
+            return propertyInfo.GetCustomAttribute<NameAttribute>(true)?.Name ??
                    this.GetFallbackPropertyName(propertyInfo);
         }
 

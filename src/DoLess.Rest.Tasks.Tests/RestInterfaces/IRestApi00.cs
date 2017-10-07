@@ -14,7 +14,7 @@ namespace DoLess.Rest.RestInterfaces
         Task<string> UrlIdNotFound01(string name);
 
         [Get("v1/app/books/{id}")]
-        Task UrlIdNotFound02([UrlId("name")] string id);
+        Task UrlIdNotFound02([Name("name")] string id);
 
         [Get("v1/app/books/{id}/{name}")]
         System.Threading.Tasks.Task<string> UrlIdNotFound03(string name);
@@ -26,21 +26,21 @@ namespace DoLess.Rest.RestInterfaces
         Task<string> UrlIdNotFound05(string name);
 
         [Get("v1/app/books/{name}")]
-        Task<string> UrlIdAlreadyExists01(string name, [UrlId("name")] string name01);
+        Task<string> UrlIdAlreadyExists01(string name, [Name("name")] string name01);
 
         [Get("v1/app/books/{id}/{name}")]
-        Task<string> UrlIdAlreadyExists02(string id, string name, [UrlId("name")] string name01);
+        Task<string> UrlIdAlreadyExists02(string id, string name, [Name("name")] string name01);
 
         [Get("v1/app/books/{id}/{name}")]
-        Task<string> UrlIdAlreadyExists03(string id, [UrlId("name")] string name01, string name);
+        Task<string> UrlIdAlreadyExists03(string id, [Name("name")] string name01, string name);
 
         [Get("v1/app/books/{id}/{name}")]
-        Task<string> UrlIdAlreadyExists04(string id, [UrlId("name")] string name01, string name, [UrlId("id")] string id01);
+        Task<string> UrlIdAlreadyExists04(string id, [Name("name")] string name01, string name, [Name("id")] string id01);
 
         [Get("v1/app/books/{id}")]
-        Task<string> MultipleRestAttributes01([UrlId("id")][HeaderValue("X-Test")]string name, string sortOrder);
+        Task<string> MultipleRestAttributes01([HeaderValue("id")][HeaderValue("X-Test")]string name, string sortOrder);
 
-        Task<string> MissingHttpAttribute01([UrlId("id")]string name);
+        Task<string> MissingHttpAttribute01([Name("id")]string name);
 
         Task<string> MissingHttpAttribute02();
 
@@ -115,7 +115,7 @@ namespace DoLess.Rest.RestInterfaces
         Task<string> PostSomeStuffWithoutBody(string id);
 
         [Post("/v1/app/{id}")]
-        Task<string> PostSomeStuffWithBody(string id, [Body] string body);
+        Task<string> PostSomeStuffWithBody(string id, [Content] string body);
 
         [Delete("/v1/app/{id}")]
         Task<string> DeleteSomeStuff(string id);

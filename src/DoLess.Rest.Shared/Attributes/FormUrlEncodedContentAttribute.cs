@@ -3,10 +3,7 @@
 namespace DoLess.Rest
 {
     [AttributeUsage(AttributeTargets.Parameter)]
-    public class BodyAttribute : Attribute
+    public sealed class FormUrlEncodedContentAttribute : Attribute
     {
-        public BodyAttribute()
-        {
-        }
     }
 }
