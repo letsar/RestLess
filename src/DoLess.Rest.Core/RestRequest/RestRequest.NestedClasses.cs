@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using DoLess.Rest.Helpers;
-using DoLess.UriTemplates;
 
 namespace DoLess.Rest.Generated
 {
@@ -11,7 +8,7 @@ namespace DoLess.Rest.Generated
     {
         private class ContentPart
         {
-            public ContentPart(HttpContent content, string name, string fileName, string contentType)
+            public ContentPart(HttpContent content, string name, string fileName, string contentType, bool isMultipartRequired = false)
             {
                 Check.NotNull(content, nameof(content));
 
@@ -23,6 +20,7 @@ namespace DoLess.Rest.Generated
                 this.Content = content;
                 this.Name = name;
                 this.FileName = fileName;
+                this.IsMultipartRequired = isMultipartRequired;
             }
 
             public HttpContent Content { get; }
@@ -30,6 +28,8 @@ namespace DoLess.Rest.Generated
             public string Name { get; }
 
             public string FileName { get; }
+
+            public bool IsMultipartRequired { get; }
         }
     }
 }

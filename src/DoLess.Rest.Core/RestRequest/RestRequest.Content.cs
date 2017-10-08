@@ -56,6 +56,16 @@ namespace DoLess.Rest.Generated
             return this;
         }
 
+        public IRestRequest WithContent(FileInfo content, string name = null, string fileName = null, string contentType = null)
+        {
+            if (content != null)
+            {
+                this.contentParts.Add(new ContentPart(new StreamContent(content.OpenRead()), name, fileName ?? content.Name, contentType, true));
+            }
+
+            return this;
+        }
+
         public IRestRequest WithFormUrlEncodedContent<T>(T content)
         {
             if (content != null)
@@ -64,6 +74,6 @@ namespace DoLess.Rest.Generated
             }
 
             return this;
-        }       
+        }
     }
 }

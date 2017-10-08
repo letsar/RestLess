@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using DoLess.Rest.RestInterfaces;
 using DoLess.Rest.Tasks.Diagnostics;
+using DoLess.Rest.Tasks.Entities;
 using DoLess.Rest.Tasks.Exceptions;
 using FluentAssertions;
 using Microsoft.CodeAnalysis.CSharp;
@@ -173,6 +174,83 @@ namespace DoLess.Rest.Tasks.Tests.Generation
             Action job = () => new RequestInfo(GetInterfaceDeclaration(interfaceName, "IRestApi04.cs"));
 
             job.ShouldNotThrow<ErrorDiagnosticException>();
+        }
+
+        [Test]
+        public void ShouldHaveFormUrlEncodedContent()
+        {
+            RequestInfo requestInfo = GetRequestInfo<IRestApi00>(nameof(IRestApi00.FormUrlEncodedContent));
+
+            requestInfo.WithContentArguments
+                       .Should()
+                       .HaveCount(1);
+
+            requestInfo.WithContentArguments
+                       .OfType<FormUlrEncodedContentArgument>()
+                       .Should()
+                       .HaveCount(1);
+        }
+
+        [Test]
+        public void ShouldHaveMultipartContent01()
+        {
+            RequestInfo requestInfo = GetRequestInfo<IRestApi00>(nameof(IRestApi00.MultipartContent01));
+
+            requestInfo.WithContentArguments
+                       .Should()
+                       .HaveCount(1);
+        }
+
+        [Test]
+        public void ShouldHaveMultipartContent02()
+        {
+            RequestInfo requestInfo = GetRequestInfo<IRestApi00>(nameof(IRestApi00.MultipartContent02));
+
+            requestInfo.WithContentArguments
+                       .Should()
+                       .HaveCount(2);
+
+            requestInfo.WithContentArguments[1]
+                       .Arguments
+                       .Should().HaveCount(4);
+
+            requestInfo.WithContentArguments[1]
+                       .Arguments[2]
+                       .Expression
+                       .As<LiteralExpressionSyntax>()
+                       .Token
+                       .ValueText
+                       .ShouldBeEquivalentTo("fileName");
+
+            requestInfo.WithContentArguments[1]
+                       .Arguments[3]
+                       .Expression
+                       .As<LiteralExpressionSyntax>()
+                       .Token
+                       .ValueText
+                       .ShouldBeEquivalentTo("text/plain");
+        }
+
+        [Test]
+        public void ShouldHaveMultipartContent03()
+        {
+            RequestInfo requestInfo = GetRequestInfo<IRestApi00>(nameof(IRestApi00.MultipartContent03));
+
+            requestInfo.WithContentArguments
+                       .Should()
+                       .HaveCount(2);
+
+            requestInfo.WithContentArguments[1]
+                       .Arguments
+                       .Should().HaveCount(2);
+
+            requestInfo.WithContentArguments[1]
+                       .Arguments[1]
+                       .Expression
+                       .As<LiteralExpressionSyntax>()
+                       .Token
+                       .ValueText
+                       .ShouldBeEquivalentTo("newContent");
         }
 
         private static RequestInfo GetRequestInfo<IRestApi>(string methodName, string fileName = null)

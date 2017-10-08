@@ -140,5 +140,17 @@ namespace DoLess.Rest.RestInterfaces
 
         [Trace("/v1/app/{id}")]
         Task<string> TraceSomeStuff(string id);
+
+        [Get("/v1/app")]
+        Task<string> FormUrlEncodedContent([FormUrlEncodedContent] Dictionary<string, string> form);
+
+        [Get("/v1/app")]
+        Task<string> MultipartContent01([Content] string content01);
+
+        [Get("/v1/app")]
+        Task<string> MultipartContent02([Content] string content01, [Content("fileName", "text/plain")] string content02);
+
+        [Get("/v1/app")]
+        Task<string> MultipartContent03([Content] string content01, [Name("newContent")][Content] string content02);
     }
 }

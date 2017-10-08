@@ -28,7 +28,7 @@ namespace DoLess.Rest.Generated
             int parts = this.contentParts.Count;
             if (parts > 0 && this.httpRequestMessage.Content == null)
             {
-                if (parts == 1)
+                if (parts == 1 && !this.contentParts[0].IsMultipartRequired)
                 {
                     this.httpRequestMessage.Content = this.contentParts[0].Content;
                 }
@@ -39,7 +39,15 @@ namespace DoLess.Rest.Generated
                     for (int i = 0; i < parts; i++)
                     {
                         var contentPart = this.contentParts[i];
-                        multipartContent.Add(contentPart.Content, contentPart.Name, contentPart.FileName);
+
+                        if (contentPart.FileName != null)
+                        {
+                            multipartContent.Add(contentPart.Content, contentPart.Name, contentPart.FileName);
+                        }
+                        else
+                        {
+                            multipartContent.Add(contentPart.Content, contentPart.Name);
+                        }
                     }
 
                     this.httpRequestMessage.Content = multipartContent;

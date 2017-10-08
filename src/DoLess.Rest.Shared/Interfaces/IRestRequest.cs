@@ -60,17 +60,19 @@ namespace DoLess.Rest
         /// <returns></returns>
         Task SendAsync(CancellationToken cancellationToken = default);
 
-        IRestRequest WithContent(HttpContent body, string name = null, string fileName = null, string contentType = null);
+        IRestRequest WithContent(HttpContent content, string name = null, string fileName = null, string contentType = null);
 
-        IRestRequest WithContent(Stream body, string name = null, string fileName = null, string contentType = null);
+        IRestRequest WithContent(Stream content, string name = null, string fileName = null, string contentType = null);
 
-        IRestRequest WithContent(string body, string name = null, string fileName = null, string contentType = null);
+        IRestRequest WithContent(string content, string name = null, string fileName = null, string contentType = null);
 
-        IRestRequest WithContent(byte[] body, string name = null, string fileName = null, string contentType = null);
+        IRestRequest WithContent(byte[] content, string name = null, string fileName = null, string contentType = null);
 
-        IRestRequest WithContent<T>(T body, string name = null, string fileName = null, string contentType = null);
+        IRestRequest WithContent<T>(T content, string name = null, string fileName = null, string contentType = null);
 
-        IRestRequest WithFormUrlEncodedContent<T>(T body);
+        IRestRequest WithContent(FileInfo content, string name = null, string fileName = null, string contentType = null);
+
+        IRestRequest WithFormUrlEncodedContent<T>(T content);
 
         IRestRequest WithHeader(string name, string value);
 
