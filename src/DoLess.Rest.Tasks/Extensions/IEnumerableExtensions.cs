@@ -1,26 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DoLess.Rest.Tasks
 {
     internal static partial  class IEnumerableExtensions
-    {
-        public static string Concatenate(this IEnumerable<string> self)
-        {
-            return self.Aggregate(new StringBuilder(), (builder, s) => builder.Append(s), builder => builder.ToString());
-        }
-
+    {  
         public static string Concatenate(this IEnumerable<string> self, string separator)
         {
             return string.Join(separator, self);
-        }
-
-        public static string ToMultilineSting(this IEnumerable<string> self)
-        {
-            return self.Aggregate(new StringBuilder(), (builder, s) => builder.AppendLine(s), builder => builder.ToString());
-        }
+        }       
 
         public static HashSet<T> ToHashSet<T>(this IEnumerable<T> self)
         {

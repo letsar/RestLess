@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using DoLess.Rest.Tasks.Helpers;
 using Microsoft.CodeAnalysis;
 

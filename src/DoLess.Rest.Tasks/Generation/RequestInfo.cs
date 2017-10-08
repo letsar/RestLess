@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using DoLess.Rest.Tasks.Diagnostics;
 using DoLess.Rest.Tasks.Entities;
-using DoLess.Rest.Tasks.Exceptions;
-using DoLess.Rest.Tasks.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -213,19 +209,6 @@ namespace DoLess.Rest.Tasks
         {
             this.HttpMethod = attribute.ClassName;
             this.UriTemplate = attribute.GetArgument(0);
-        }
-
-        private void ThrowIfUrlIdAlreadyExists(Parameter parameter, string urlId)
-        {
-            if (parameter.HasBeenSet)
-            {
-                throw new UrlIdAlreadyExistsError(urlId, this.parameter).ToException();
-            }
-        }
-
-        private void ThrowUrlIdAlreadyExists(string urlId)
-        {
-            throw new UrlIdAlreadyExistsError(urlId, this.parameter).ToException();
         }
 
         private void ThrowIfMethodDoesNotContainsSingleHttpAttribute(IEnumerable<RequestAttribute> requestAttributes)

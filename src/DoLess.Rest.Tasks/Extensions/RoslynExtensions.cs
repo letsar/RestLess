@@ -1,64 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.CodeAnalysis;
-using DoLess.Rest;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.CSharp;
-using System.Runtime.Serialization;
 using DoLess.Rest.Tasks;
-using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using DoLess.Rest.Tasks.Helpers;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace DoLess.Rest
 {
-    /// <summary>
-    /// 
-    /// </summary>
     internal static partial class RoslynExtensions
     {
         private static readonly string DoLessRestNamespace = typeof(IRestClient).Namespace;
-
-        /// <summary>
-        /// Indicates wether the specified symbol inherits from the type parameter.
-        /// </summary>
-        /// <typeparam name="T">The type.</typeparam>
-        /// <param name="self">The symbol.</param>
-        /// <returns></returns>
-        public static bool InheritsFrom<T>(this INamedTypeSymbol self)
-        {
-            if (self == null)
-            {
-                return false;
-            }
-            else if (self.ToString() == typeof(T).FullName)
-            {
-                return true;
-            }
-            else
-            {
-                return InheritsFrom<T>(self.BaseType);
-            }
-        }
-
-        public static string ToParsedString(this SyntaxList<TypeParameterConstraintClauseSyntax> self)
-        {
-            if (self.Count == 0)
-            {
-                return string.Empty;
-            }
-            else
-            {
-                return Environment.NewLine + "\t" + self.ToString();
-            }
-        }
-
-        public static ParameterListSyntax ToParameterList(this IEnumerable<ParameterSyntax> self)
-        {
-            return ParameterList(SeparatedList(self));
-        }
 
         public static ParameterListSyntax WithoutAttributes(this ParameterListSyntax self)
         {
@@ -106,7 +59,6 @@ namespace DoLess.Rest
                    self.OfType<NamespaceDeclarationSyntax>()
                        .Any(x => x.Name.ToFullString().StartsWith(DoLessRestNamespace));
         }
-
 
         public static TypeSyntax GetTypeSyntax(this TypeDeclarationSyntax self)
         {
@@ -163,19 +115,9 @@ namespace DoLess.Rest
             }
         }
 
-        public static InvocationExpressionSyntax WithArgs(this InvocationExpressionSyntax self, params string[] arguments)
-        {
-            return self.WithArgs(arguments.Select(x => x.ToArg()).ToArray());
-        }
-
         public static InvocationExpressionSyntax WithArgs(this InvocationExpressionSyntax self, params ArgumentSyntax[] arguments)
         {
             return self.WithArgumentList(ArgumentList(SeparatedList(arguments)));
-        }
-
-        public static ArgumentSyntax ToArgWithThis(this string self)
-        {
-            return Argument(MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, ThisExpression(), IdentifierName(self)));
         }
 
         public static ArgumentSyntax ToArg(this string self)
@@ -186,11 +128,6 @@ namespace DoLess.Rest
         public static ArgumentSyntax ToArgLiteral(this string self)
         {
             return Argument(LiteralExpression(SyntaxKind.StringLiteralExpression, SyntaxFactory.Literal(self)));
-        }
-
-        public static ArgumentSyntax ToArg(this Parameter self)
-        {
-            return self.IsMutable ? self.Value.ToArg() : self.Value.ToArgLiteral();
         }
 
         public static InvocationExpressionSyntax ChainWith(this InvocationExpressionSyntax self, string methodName)

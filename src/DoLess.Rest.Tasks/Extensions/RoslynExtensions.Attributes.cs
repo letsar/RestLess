@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DoLess.Rest.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -42,14 +41,7 @@ namespace DoLess.Rest
         {
             return self.Members
                        .All(x => x.IsRestMethodDeclaration());
-        }
-
-        public static bool HasRestAttribute(this MethodDeclarationSyntax self)
-        {
-            return self.AttributeLists
-                       .SelectMany(x => x.Attributes)
-                       .Any(x => x.IsRestAttribute());
-        }
+        }  
 
         public static string GetClassName(this AttributeSyntax self)
         {
@@ -60,17 +52,6 @@ namespace DoLess.Rest
                        .Replace(nameof(Attribute), string.Empty);
         }
 
-        public static bool IsRestAttribute(this AttributeSyntax self)
-        {
-            if (self == null)
-            {
-                return false;
-            }
-
-            string className = self.GetClassName();
-            return HttpMethodAttributeNames.Contains(className) ||
-                   OtherRestAttributeNames.Contains(className);
-        }
 
         public static bool IsRestMethodDeclaration(this MemberDeclarationSyntax self)
         {
@@ -82,14 +63,6 @@ namespace DoLess.Rest
             }
             return false;
         }
-
-        //public static IReadOnlyList<RestAttribute> ToRestAttributes(this SyntaxList<AttributeListSyntax> self)
-        //{
-        //    return self.SelectMany(x => x.Attributes)
-        //               .Where(x => x.IsRestAttribute())
-        //               .Select(x => x.ToRestAttribute())
-        //               .ToList();
-        //}
 
         public static T GetAttachedElement<T>(this AttributeSyntax self)
             where T : SyntaxNode
@@ -148,11 +121,6 @@ namespace DoLess.Rest
         private static bool IsInAttributeSet(this AttributeSyntax self, HashSet<string> set)
         {
             return self != null && set.Contains(self.GetClassName());
-        }
-
-        private static bool IsAttribute(this AttributeSyntax self, string attributeFullName)
-        {
-            return (self.GetClassName() + nameof(Attribute)) == attributeFullName;
         }
     }
 }
