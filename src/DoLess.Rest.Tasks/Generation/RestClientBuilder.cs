@@ -171,12 +171,20 @@ namespace DoLess.Rest.Tasks
 
         private InvocationExpressionSyntax ChainWithRequestUrlBuilding(InvocationExpressionSyntax invocationExpression)
         {
-            //Add the BaseUrl if any.
-            if (this.methodRequestInfo.BaseUrl != null)
+            //Add the UriTemplatePrefix if any.
+            if (this.methodRequestInfo.UriTemplatePrefix != null)
             {
-                invocationExpression = invocationExpression.ChainWith(nameof(IRestRequest.WithBaseUrl))
-                                                           .WithArgs(this.methodRequestInfo.BaseUrl);
+                invocationExpression = invocationExpression.ChainWith(nameof(IRestRequest.WithUriTemplatePrefix))
+                                                           .WithArgs(this.methodRequestInfo.UriTemplatePrefix);
             }
+
+            //Add the UriTemplateSuffix if any.
+            if (this.methodRequestInfo.UriTemplateSuffix != null)
+            {
+                invocationExpression = invocationExpression.ChainWith(nameof(IRestRequest.WithUriTemplateSuffix))
+                                                           .WithArgs(this.methodRequestInfo.UriTemplateSuffix);
+            }
+
             invocationExpression = invocationExpression.ChainWith(nameof(IRestRequest.WithUriTemplate))
                                                        .WithArgs(this.methodRequestInfo.UriTemplate);
 

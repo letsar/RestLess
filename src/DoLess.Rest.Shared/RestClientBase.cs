@@ -2,6 +2,9 @@
 
 namespace DoLess.Rest.Generated
 {
+    /// <summary>
+    /// Represents the base of a REST client.
+    /// </summary>
     public abstract class RestClientBase : IRestClient
     {
         protected RestClientBase() { }

@@ -7,6 +7,7 @@ namespace DoLess.Rest.Generated
     {
         public IRestRequest WithUriTemplate(string uriTemplate)
         {
+            uriTemplate = this.uriTemplatePrefix + uriTemplate + this.uriTemplateSuffix;
             this.uriTemplate = UriTemplate.For(uriTemplate, true);
             return this;
         }
@@ -17,24 +18,28 @@ namespace DoLess.Rest.Generated
             return this;
         }
 
-        public IRestRequest WithBaseUrl(string baseUrl)
+        public IRestRequest WithUriTemplatePrefix(string urlPrefix)
         {
-            if (baseUrl.IsNullOrWhiteSpace())
-            {
-                baseUrl = "/";
-            }
-            this.baseUri = new Uri(baseUrl, UriKind.Relative);
+            this.uriTemplatePrefix = urlPrefix;
+            return this;
+        }
+
+        public IRestRequest WithUriTemplateSuffix(string urlSuffix)
+        {
+            this.uriTemplateSuffix = urlSuffix;
             return this;
         }
 
         private Uri BuildUri()
         {
+            // Adds the custom parameters if any.
+            this.restClient.Settings?.CustomParameters.ForEach(x => this.uriTemplate.WithParameter(x.Key, x.Value));
+
             var uriString = this.uriTemplate.ExpandToString();
-            var relativeUri = $"{this.baseUri.OriginalString.TrimEnd('/')}/{uriString.TrimStart('/')}";
 
             // The UriBuilder needs to be initialized with an absolute uri, so we
             // give him a dumb one.
-            var uriBuilder = new UriBuilder(new Uri(new Uri("http://api"), relativeUri));
+            var uriBuilder = new UriBuilder(new Uri(new Uri("http://api"), uriString));
 
             return new Uri(uriBuilder.Uri.GetComponents(UriComponents.PathAndQuery, UriFormat.UriEscaped), UriKind.Relative);
         }

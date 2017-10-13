@@ -1,13 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 using System.Threading.Tasks;
 
 namespace DoLess.Rest
 {
+    /// <summary>
+    /// Represents a formatter used for writing into a <see cref="System.Net.Http.HttpRequestMessage"/> and reading from a <see cref="System.Net.Http.HttpResponseMessage"/>.
+    /// </summary>
     public interface IMediaTypeFormatter
     {
+        /// <summary>
+        /// Gets the media type (also called content type).
+        /// </summary>
         string MediaType { get; }
 
         /// <summary>
@@ -25,6 +28,5 @@ namespace DoLess.Rest
         /// <param name="content">The content to write.</param>
         /// <returns></returns>
         Task WriteAsync<T>(T content, TextWriter writer);
-
     }
 }

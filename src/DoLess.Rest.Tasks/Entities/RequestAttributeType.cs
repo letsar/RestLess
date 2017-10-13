@@ -8,6 +8,7 @@
         FormUrlEncodedContent,
         Header,
         HeaderValue,
-        BaseUrl
+        UriTemplatePrefix,
+        UriTemplateSuffix
     }
 }

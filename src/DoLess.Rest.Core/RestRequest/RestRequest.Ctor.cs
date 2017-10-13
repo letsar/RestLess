@@ -5,13 +5,17 @@ using DoLess.UriTemplates;
 
 namespace DoLess.Rest.Generated
 {
+    /// <summary>
+    /// Contains methods to create a <see cref="IRestRequest"/>.
+    /// </summary>
     public sealed partial class RestRequest : IRestRequest
     {
         private readonly HttpRequestMessage httpRequestMessage;
         private readonly IRestClient restClient;
         private readonly List<ContentPart> contentParts;
-
-        private Uri baseUri;
+                
+        private string uriTemplatePrefix;
+        private string uriTemplateSuffix;
         private UriTemplate uriTemplate;
         private IMediaTypeFormatter mediaTypeFormatter;
         private IFormFormatter formFormatter;
@@ -22,7 +26,6 @@ namespace DoLess.Rest.Generated
             this.httpRequestMessage = new HttpRequestMessage();
             this.httpRequestMessage.Method = httpMethod;
             this.restClient = restClient;
-            this.baseUri = new Uri("/", UriKind.Relative);
             this.contentParts = new List<ContentPart>();
 
             this.formFormatter = this.EnsureDefaultValueSet(this.restClient.Settings.FormFormatters);

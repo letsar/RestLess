@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DoLess.Rest.RestInterfaces
 {
-    [BaseUrl("/v1/app")]
+    [UriTemplatePrefix("/v1/app")]
     [Header("X-test", "DoLess")]
     public interface IRestApi02<T, U>
     {

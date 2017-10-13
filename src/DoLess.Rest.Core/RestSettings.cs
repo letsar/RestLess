@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
+﻿using System.Collections.Generic;
 using DoLess.Rest.Helpers;
 using DoLess.UriTemplates;
 
@@ -12,11 +9,15 @@ namespace DoLess.Rest
     /// </summary>
     public partial class RestSettings
     {
+        /// <summary>
+        /// Creates a new <see cref="RestSettings"/>.
+        /// </summary>
         public RestSettings()
         {
             this.MediaTypeFormatters = new RestSettingStore<IMediaTypeFormatter>(nameof(this.MediaTypeFormatters), new DefaultMediaFormatter());
             this.UrlParameterFormatters = new RestSettingStore<IValueFormatter>(nameof(this.UrlParameterFormatters), new DefaultValueFormatter());
             this.FormFormatters = new RestSettingStore<IFormFormatter>(nameof(this.FormFormatters), new DefaultFormFormatter());
+            this.CustomParameters = new Dictionary<string, string>();
         }
 
         /// <summary>
@@ -33,5 +34,10 @@ namespace DoLess.Rest
         /// Gets the formatters used when the body is FormUrlEncoded.
         /// </summary>
         public RestSettingStore<IFormFormatter> FormFormatters { get; }
+
+        /// <summary>
+        /// Gets the custom parameters.
+        /// </summary>
+        public IDictionary<string, string> CustomParameters { get; }
     }
 }

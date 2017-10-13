@@ -3,42 +3,45 @@ using System.Threading.Tasks;
 
 namespace DoLess.Rest.IntegrationTests.Interfaces
 {
-    public interface IApi02WithoutBaseUrl
+    public interface IApi02WithoutUriTemplatePrefix
     {
         [Get("api/posts")]
-        Task<HttpResponseMessage> Get01Async();
-
-        [Get("/api/posts")]
-        Task<HttpResponseMessage> Get02Async();
+        Task<HttpResponseMessage> GetAsync();
     }
 
-    [BaseUrl("api")]
-    public interface IApi02WithBaseUrl01
+    [UriTemplatePrefix("api/")]
+    public interface IApi02WithUriTemplatePrefix01
     {
         [Get("posts")]
-        Task<HttpResponseMessage> Get01Async();
-
-        [Get("/posts")]
-        Task<HttpResponseMessage> Get02Async();
+        Task<HttpResponseMessage> GetAsync();
     }
 
-    [BaseUrl("/api")]
-    public interface IApi02WithBaseUrl02
+    [UriTemplatePrefix("/api/")]
+    public interface IApi02WithUriTemplatePrefix02
     {
         [Get("posts")]
-        Task<HttpResponseMessage> Get01Async();
+        Task<HttpResponseMessage> GetAsync();
+    }   
 
-        [Get("/posts")]
-        Task<HttpResponseMessage> Get02Async();
+    [UriTemplatePrefix("/api/")]
+    [UriTemplateSuffix("/suffix")]
+    public interface IApi02WithUriTemplatePrefixAndSuffix
+    {
+        [Get("posts")]
+        Task<HttpResponseMessage> GetAsync();        
     }
 
-    [BaseUrl("/api/")]
-    public interface IApi02WithBaseUrl03
+    [UriTemplateSuffix("{?api_key}")]
+    public interface IApi02WithUriTemplateSuffix01
     {
-        [Get("posts")]
-        Task<HttpResponseMessage> Get01Async();
+        [Get("api/posts")]
+        Task<HttpResponseMessage> GetAsync();        
+    }
 
-        [Get("/posts")]
-        Task<HttpResponseMessage> Get02Async();
+    [UriTemplateSuffix("{?notFound}")]
+    public interface IApi02WithUriTemplateSuffix02
+    {
+        [Get("api/posts")]
+        Task<HttpResponseMessage> GetAsync();
     }
 }

@@ -3,7 +3,7 @@ using System.Net.Http;
 using DoLess.Rest.Http;
 
 namespace DoLess.Rest.Generated
-{
+{    
     public sealed partial class RestRequest
     {
         public IRestRequest WithContent(HttpContent content, string name = null, string fileName = null, string contentType = null)

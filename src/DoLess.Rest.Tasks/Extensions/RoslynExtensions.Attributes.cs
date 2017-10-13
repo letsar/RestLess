@@ -27,7 +27,8 @@ namespace DoLess.Rest
             new[]
             {
                 nameof(NameAttribute),
-                nameof(BaseUrlAttribute),
+                nameof(UriTemplatePrefixAttribute),
+                nameof(UriTemplateSuffixAttribute),
                 nameof(HeaderAttribute),
                 nameof(HeaderValueAttribute),
                 nameof(ContentAttribute),
@@ -102,8 +103,10 @@ namespace DoLess.Rest
                 {
                     case nameof(NameAttribute):
                         return RequestAttributeType.Name;
-                    case nameof(BaseUrlAttribute):
-                        return RequestAttributeType.BaseUrl;
+                    case nameof(UriTemplatePrefixAttribute):
+                        return RequestAttributeType.UriTemplatePrefix;
+                    case nameof(UriTemplateSuffixAttribute):
+                        return RequestAttributeType.UriTemplateSuffix;
                     case nameof(HeaderAttribute):
                         return RequestAttributeType.Header;
                     case nameof(HeaderValueAttribute):
@@ -113,7 +116,7 @@ namespace DoLess.Rest
                     case nameof(FormUrlEncodedContentAttribute):
                         return RequestAttributeType.FormUrlEncodedContent;
                     default:
-                        return default(RequestAttributeType);
+                        return default;
                 }
             }
         }

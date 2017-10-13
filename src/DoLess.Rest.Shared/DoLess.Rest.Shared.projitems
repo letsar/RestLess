@@ -9,7 +9,8 @@
     <Import_RootNamespace>DoLess.Rest</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\BaseUrlAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\UriTemplateSuffixAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\UriTemplatePrefixAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\ContentAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\FormUrlEncodedContentAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\HeaderAttribute.cs" />

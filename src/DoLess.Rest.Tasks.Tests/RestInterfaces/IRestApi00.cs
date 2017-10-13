@@ -6,7 +6,7 @@ namespace DoLess.Rest.RestInterfaces
 {
     using System;
 
-    [BaseUrl("/api")]
+    [UriTemplatePrefix("/api")]
     [Header("X-Scope", "Interface")]
     public interface IRestApi00
     {

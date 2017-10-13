@@ -14,7 +14,7 @@ namespace DoLess.Rest.Generated
         public Task<string> GetBook(string id)
         {
             return RestRequest.Get(this)
-                              .WithBaseUrl(Constants.BaseApi)
+                              .WithUriTemplatePrefix(Constants.BaseApi)
                               .WithUriTemplate("/v1/app/books/{id}")
                               .WithUriVariable("id", id)
                               .ReadAsStringAsync();
@@ -23,7 +23,7 @@ namespace DoLess.Rest.Generated
         public Task<string> GetBook2(string id)
         {
             return RestRequest.Get(this)
-                              .WithBaseUrl(Constants.BaseApi)
+                              .WithUriTemplatePrefix(Constants.BaseApi)
                               .WithUriTemplate("/v1/app/books/{id}")
                               .WithUriVariable("id", id)
                               .ReadAsStringAsync();

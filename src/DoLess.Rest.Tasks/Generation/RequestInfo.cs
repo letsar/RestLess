@@ -34,11 +34,14 @@ namespace DoLess.Rest.Tasks
             this.withUriVariableArguments = new List<ArgumentSyntax[]>();
             this.withContentArguments = new List<ContentArgument>();
 
-            this.BaseUrl = requestInfo.BaseUrl;
+            this.UriTemplatePrefix = requestInfo.UriTemplatePrefix;
+            this.UriTemplateSuffix = requestInfo.UriTemplateSuffix;
             this.hasTaskUsingNamespace = requestInfo.hasTaskUsingNamespace;
         }
 
-        public ArgumentSyntax BaseUrl { get; private set; }
+        public ArgumentSyntax UriTemplatePrefix { get; private set; }
+
+        public ArgumentSyntax UriTemplateSuffix { get; private set; }
 
         public string HttpMethod { get; private set; }
 
@@ -152,8 +155,11 @@ namespace DoLess.Rest.Tasks
                 case RequestAttributeType.HeaderValue:
                     this.ParseHeaderValueAttribute(attribute);
                     break;
-                case RequestAttributeType.BaseUrl:
-                    this.ParseBaseUrlAttribute(attribute);
+                case RequestAttributeType.UriTemplatePrefix:
+                    this.ParseUriTemplatePrefixAttribute(attribute);
+                    break;
+                case RequestAttributeType.UriTemplateSuffix:
+                    this.ParseUriTemplateSuffixAttribute(attribute);
                     break;
                 default:
                     break;
@@ -174,9 +180,14 @@ namespace DoLess.Rest.Tasks
             });
         }
 
-        private void ParseBaseUrlAttribute(RequestAttribute attribute)
+        private void ParseUriTemplatePrefixAttribute(RequestAttribute attribute)
         {
-            this.BaseUrl = attribute.GetArgument(0);
+            this.UriTemplatePrefix = attribute.GetArgument(0);
+        }
+
+        private void ParseUriTemplateSuffixAttribute(RequestAttribute attribute)
+        {
+            this.UriTemplateSuffix = attribute.GetArgument(0);
         }
 
         private void ParseContentAttribute(RequestAttribute attribute)

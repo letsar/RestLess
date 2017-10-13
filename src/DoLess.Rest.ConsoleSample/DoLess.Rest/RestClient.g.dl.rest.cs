@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Net.Http;
+using DoLess.Rest.ConsoleSample;
+using DoLess.Rest.ConsoleSample.TheMovieDb;
 using DoLess.Rest.Generated;
-using DoLess.Rest.IntegrationTests.Interfaces;
 
 namespace DoLess.Rest
 {
@@ -52,17 +53,8 @@ namespace DoLess.Rest
 
         private static void InitializeRestClient()
         {
-            RestClientFactory.SetRestClient<IApi01, RestClientForIApi01>();
-            RestClientFactory.SetRestClient<IApi02WithoutUriTemplatePrefix, RestClientForIApi02WithoutUriTemplatePrefix>();
-            RestClientFactory.SetRestClient<IApi02WithUriTemplatePrefix01, RestClientForIApi02WithUriTemplatePrefix01>();
-            RestClientFactory.SetRestClient<IApi02WithUriTemplatePrefix02, RestClientForIApi02WithUriTemplatePrefix02>();
-            RestClientFactory.SetRestClient<IApi02WithUriTemplatePrefixAndSuffix, RestClientForIApi02WithUriTemplatePrefixAndSuffix>();
-            RestClientFactory.SetRestClient<IApi02WithUriTemplateSuffix01, RestClientForIApi02WithUriTemplateSuffix01>();
-            RestClientFactory.SetRestClient<IApi02WithUriTemplateSuffix02, RestClientForIApi02WithUriTemplateSuffix02>();
-            RestClientFactory.SetRestClient<IApi03, RestClientForIApi03>();
-            RestClientFactory.SetRestClient<IApi05, RestClientForIApi05>();
-            RestClientFactory.SetRestClient<IApi06, RestClientForIApi06>();
-            RestClientFactory.SetRestClient<IApi07, RestClientForIApi07>();
+            RestClientFactory.SetRestClient<IGitHubApi, RestClientForIGitHubApi>();
+            RestClientFactory.SetRestClient<ITheMovieDbApi, RestClientForITheMovieDbApi>();
         }
     }
 }

@@ -4,6 +4,9 @@ using System.Net.Http;
 
 namespace DoLess.Rest.Generated
 {
+    /// <summary>
+    /// Represents a REST client factory.
+    /// </summary>
     public class RestClientFactory
     {
         private readonly Dictionary<Type, Func<IRestClient>> initializers;

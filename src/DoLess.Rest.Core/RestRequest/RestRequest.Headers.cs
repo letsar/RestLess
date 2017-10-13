@@ -4,9 +4,15 @@ namespace DoLess.Rest.Generated
 {
     public sealed partial class RestRequest
     {
-        public IRestRequest WithHeader(string name, string value)
+        public IRestRequest WithHeader(string name, string value, bool isCustomParameter = false)
         {
-            this.httpRequestMessage.Headers.Add(name, value);
+            string headerValue = value;
+            if (isCustomParameter)
+            {
+                this.restClient.Settings.CustomParameters.TryGetValue(value, out headerValue);
+            }
+
+            this.httpRequestMessage.Headers.Add(name, headerValue);
             return this;
         }
 
@@ -14,6 +20,6 @@ namespace DoLess.Rest.Generated
         {
             this.httpRequestMessage.Headers.Add(name, values);
             return this;
-        }        
+        }
     }
 }

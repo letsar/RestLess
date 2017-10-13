@@ -70,7 +70,7 @@ namespace DoLess.Rest.Generated
             }
             else
             {
-                return default(T);
+                return default;
             }
         }
     }

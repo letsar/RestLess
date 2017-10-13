@@ -4,7 +4,7 @@ using DoLess.Rest.Sample.ConstantsNamespace;
 
 namespace DoLess.Rest.Sample
 {
-    [BaseUrl(Constants.BaseApi)]
+    [UriTemplatePrefix(Constants.BaseApi)]
     public interface IRestApi01
     {
         [Get("/v1/app/books/{id}")]

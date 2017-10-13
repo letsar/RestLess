@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DoLess.Rest" Version="0.1.0-build20171013-2246" />
+    <PackageReference Include="DoLess.Rest.Newtonsoft.Json" Version="0.1.0-build20171013-2246" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="TheMovieDb\Entities\" />
+  </ItemGroup>
+
+</Project>

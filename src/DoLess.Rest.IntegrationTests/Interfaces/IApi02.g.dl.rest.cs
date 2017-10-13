@@ -8,76 +8,68 @@ using DoLess.Rest.IntegrationTests.Interfaces;
 // Please modify the dependent interface in order to change this file.
 namespace DoLess.Rest.Generated
 {
-    internal sealed class RestClientForIApi02WithoutBaseUrl : RestClientBase, IApi02WithoutBaseUrl
+    internal sealed class RestClientForIApi02WithoutUriTemplatePrefix : RestClientBase, IApi02WithoutUriTemplatePrefix
     {
-        public Task<HttpResponseMessage> Get01Async()
+        public Task<HttpResponseMessage> GetAsync()
         {
             return RestRequest.Get(this)
                               .WithUriTemplate("api/posts")
                               .ReadAsHttpResponseMessageAsync();
         }
+    }
 
-        public Task<HttpResponseMessage> Get02Async()
+    internal sealed class RestClientForIApi02WithUriTemplatePrefix01 : RestClientBase, IApi02WithUriTemplatePrefix01
+    {
+        public Task<HttpResponseMessage> GetAsync()
         {
             return RestRequest.Get(this)
-                              .WithUriTemplate("/api/posts")
+                              .WithUriTemplatePrefix("api/")
+                              .WithUriTemplate("posts")
                               .ReadAsHttpResponseMessageAsync();
         }
     }
 
-    internal sealed class RestClientForIApi02WithBaseUrl01 : RestClientBase, IApi02WithBaseUrl01
+    internal sealed class RestClientForIApi02WithUriTemplatePrefix02 : RestClientBase, IApi02WithUriTemplatePrefix02
     {
-        public Task<HttpResponseMessage> Get01Async()
+        public Task<HttpResponseMessage> GetAsync()
         {
             return RestRequest.Get(this)
-                              .WithBaseUrl("api")
+                              .WithUriTemplatePrefix("/api/")
                               .WithUriTemplate("posts")
-                              .ReadAsHttpResponseMessageAsync();
-        }
-
-        public Task<HttpResponseMessage> Get02Async()
-        {
-            return RestRequest.Get(this)
-                              .WithBaseUrl("api")
-                              .WithUriTemplate("/posts")
                               .ReadAsHttpResponseMessageAsync();
         }
     }
 
-    internal sealed class RestClientForIApi02WithBaseUrl02 : RestClientBase, IApi02WithBaseUrl02
+    internal sealed class RestClientForIApi02WithUriTemplatePrefixAndSuffix : RestClientBase, IApi02WithUriTemplatePrefixAndSuffix
     {
-        public Task<HttpResponseMessage> Get01Async()
+        public Task<HttpResponseMessage> GetAsync()
         {
             return RestRequest.Get(this)
-                              .WithBaseUrl("/api")
+                              .WithUriTemplatePrefix("/api/")
+                              .WithUriTemplateSuffix("/suffix")
                               .WithUriTemplate("posts")
-                              .ReadAsHttpResponseMessageAsync();
-        }
-
-        public Task<HttpResponseMessage> Get02Async()
-        {
-            return RestRequest.Get(this)
-                              .WithBaseUrl("/api")
-                              .WithUriTemplate("/posts")
                               .ReadAsHttpResponseMessageAsync();
         }
     }
 
-    internal sealed class RestClientForIApi02WithBaseUrl03 : RestClientBase, IApi02WithBaseUrl03
+    internal sealed class RestClientForIApi02WithUriTemplateSuffix01 : RestClientBase, IApi02WithUriTemplateSuffix01
     {
-        public Task<HttpResponseMessage> Get01Async()
+        public Task<HttpResponseMessage> GetAsync()
         {
             return RestRequest.Get(this)
-                              .WithBaseUrl("/api/")
-                              .WithUriTemplate("posts")
+                              .WithUriTemplateSuffix("{?api_key}")
+                              .WithUriTemplate("api/posts")
                               .ReadAsHttpResponseMessageAsync();
         }
+    }
 
-        public Task<HttpResponseMessage> Get02Async()
+    internal sealed class RestClientForIApi02WithUriTemplateSuffix02 : RestClientBase, IApi02WithUriTemplateSuffix02
+    {
+        public Task<HttpResponseMessage> GetAsync()
         {
             return RestRequest.Get(this)
-                              .WithBaseUrl("/api/")
-                              .WithUriTemplate("/posts")
+                              .WithUriTemplateSuffix("{?notFound}")
+                              .WithUriTemplate("api/posts")
                               .ReadAsHttpResponseMessageAsync();
         }
     }

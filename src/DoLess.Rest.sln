@@ -33,9 +33,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoLess.Rest.Newtonsoft.Json
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoLess.Rest.Utf8Json", "DoLess.Rest.Utf8Json\DoLess.Rest.Utf8Json.csproj", "{4C671B61-77E3-4FE3-A8CB-9D1B3440AD4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoLess.Rest.Core", "DoLess.Rest.Core\DoLess.Rest.Core.csproj", "{7C55DBB6-FF3B-4819-A695-070E7D5D98D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoLess.Rest.Core", "DoLess.Rest.Core\DoLess.Rest.Core.csproj", "{7C55DBB6-FF3B-4819-A695-070E7D5D98D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoLess.Rest.Core.Tests", "DoLess.Rest.Core.Tests\DoLess.Rest.Core.Tests.csproj", "{36341425-0827-42E3-A0B3-917DD0E0EA41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoLess.Rest.Core.Tests", "DoLess.Rest.Core.Tests\DoLess.Rest.Core.Tests.csproj", "{36341425-0827-42E3-A0B3-917DD0E0EA41}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoLess.Rest.ConsoleSample", "DoLess.Rest.ConsoleSample\DoLess.Rest.ConsoleSample.csproj", "{7163C14E-13A0-4BE8-9104-3CD2968CD33C}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -90,6 +92,10 @@ Global
 		{36341425-0827-42E3-A0B3-917DD0E0EA41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36341425-0827-42E3-A0B3-917DD0E0EA41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36341425-0827-42E3-A0B3-917DD0E0EA41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7163C14E-13A0-4BE8-9104-3CD2968CD33C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7163C14E-13A0-4BE8-9104-3CD2968CD33C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7163C14E-13A0-4BE8-9104-3CD2968CD33C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7163C14E-13A0-4BE8-9104-3CD2968CD33C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -107,6 +113,7 @@ Global
 		{4C671B61-77E3-4FE3-A8CB-9D1B3440AD4A} = {51BEE58C-F060-40B8-81BD-87B8AAFEDBE8}
 		{7C55DBB6-FF3B-4819-A695-070E7D5D98D2} = {777BE9FD-BD20-4D5A-8081-7BBCD78256A8}
 		{36341425-0827-42E3-A0B3-917DD0E0EA41} = {32AB77C6-9380-482D-A0DD-2D20D2D72037}
+		{7163C14E-13A0-4BE8-9104-3CD2968CD33C} = {C1577B55-7553-4809-9515-03BF9016BFF5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {75844D60-9147-49E7-B88F-238EB392FBB1}

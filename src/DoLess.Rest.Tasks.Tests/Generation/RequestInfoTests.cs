@@ -157,7 +157,7 @@ namespace DoLess.Rest.Tasks.Tests.Generation
         {
             RequestInfo requestInfo = GetRequestInfo<IRestApi00>(method);
 
-            requestInfo.BaseUrl
+            requestInfo.UriTemplatePrefix
                        .Expression
                        .As<LiteralExpressionSyntax>()
                        .Token

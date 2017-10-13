@@ -45,10 +45,8 @@ namespace DoLess.Rest.Tests
         [TestCase("http://example.org/api/posts", "http://example.org", null, "api/posts")]
         [TestCase("http://example.org/api/posts", "http://example.org", null, "/api/posts")]
         [TestCase("http://example.org/api/posts", "http://example.org", "", "api/posts")]
-        [TestCase("http://example.org/api/posts", "http://example.org", "", "/api/posts")]
-        [TestCase("http://example.org/api/posts", "http://example.org", "/api", "posts")]
+        [TestCase("http://example.org/api/posts", "http://example.org", "", "/api/posts")]       
         [TestCase("http://example.org/api/posts", "http://example.org", "/api", "/posts")]
-        [TestCase("http://example.org/api/posts", "http://example.org", "api", "posts")]
         [TestCase("http://example.org/api/posts", "http://example.org", "api", "/posts")]
         public async Task ShouldBeRightUrl(string expectedUrl, string hostUrl, string baseUrl, string relativeUrl)
         {
@@ -65,7 +63,7 @@ namespace DoLess.Rest.Tests
 
             if (baseUrl != null)
             {
-                restRequest = restRequest.WithBaseUrl(baseUrl);
+                restRequest = restRequest.WithUriTemplatePrefix(baseUrl);
             }
 
             var httpResponse = await restRequest.WithUriTemplate(relativeUrl)

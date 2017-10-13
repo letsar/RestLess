@@ -14,19 +14,21 @@ namespace DoLess.Rest.IntegrationTests.Tests
     {
         [Test]
         [TestCaseSource(nameof(ShouldBeRightUrlTestCases))]
-        public async Task ShouldBeRightUrl<T>(Func<T, Task<HttpResponseMessage>> sendRequestAsync)
+        public async Task ShouldBeRightUrl<T>(string relativeUrl, Func<T, Task<HttpResponseMessage>> sendRequestAsync)
             where T : class
         {
             string url = "http://example.org";
+            string fullUrl = url + relativeUrl;
             var mockHttp = new MockHttpMessageHandler();
 
-            mockHttp.Expect(HttpMethod.Get, url + "/api/posts")
+            mockHttp.Expect(HttpMethod.Get, fullUrl)
                     .Respond(HttpStatusCode.OK);
 
             var settings = new RestSettings()
             {
-                HttpMessageHandlerFactory = () => mockHttp
+                HttpMessageHandlerFactory = () => mockHttp                
             };
+            settings.CustomParameters.Add("api_key", "4ab542de1f");
 
             T restClient = RestClient.For<T>(url, settings);
 
@@ -35,7 +37,7 @@ namespace DoLess.Rest.IntegrationTests.Tests
             httpResponse.RequestMessage
                         .RequestUri
                         .OriginalString
-                        .ShouldBeEquivalentTo("http://example.org/api/posts");
+                        .ShouldBeEquivalentTo(fullUrl);
 
             httpResponse.StatusCode
                         .Should()
@@ -46,14 +48,12 @@ namespace DoLess.Rest.IntegrationTests.Tests
 
         private static readonly object[] ShouldBeRightUrlTestCases =
         {
-            new TestCaseData((Func<IApi02WithoutBaseUrl, Task<HttpResponseMessage>>)((IApi02WithoutBaseUrl x) => x.Get01Async())).SetName("IApi02WithoutBaseUrl 01"),
-            new TestCaseData((Func<IApi02WithoutBaseUrl, Task<HttpResponseMessage>>)((IApi02WithoutBaseUrl x) => x.Get02Async())).SetName("IApi02WithoutBaseUrl 02"),
-            new TestCaseData((Func<IApi02WithBaseUrl01, Task<HttpResponseMessage>>)((IApi02WithBaseUrl01 x) => x.Get01Async())).SetName("IApi02WithBaseUrl01 01"),
-            new TestCaseData((Func<IApi02WithBaseUrl01, Task<HttpResponseMessage>>)((IApi02WithBaseUrl01 x) => x.Get02Async())).SetName("IApi02WithBaseUrl01 02"),
-            new TestCaseData((Func<IApi02WithBaseUrl02, Task<HttpResponseMessage>>)((IApi02WithBaseUrl02 x) => x.Get01Async())).SetName("IApi02WithBaseUrl02 01"),
-            new TestCaseData((Func<IApi02WithBaseUrl02, Task<HttpResponseMessage>>)((IApi02WithBaseUrl02 x) => x.Get02Async())).SetName("IApi02WithBaseUrl02 02"),
-            new TestCaseData((Func<IApi02WithBaseUrl03, Task<HttpResponseMessage>>)((IApi02WithBaseUrl03 x) => x.Get01Async())).SetName("IApi02WithBaseUrl03 01"),
-            new TestCaseData((Func<IApi02WithBaseUrl03, Task<HttpResponseMessage>>)((IApi02WithBaseUrl03 x) => x.Get02Async())).SetName("IApi02WithBaseUrl03 02"),
+            new TestCaseData("/api/posts", (Func<IApi02WithoutUriTemplatePrefix, Task<HttpResponseMessage>>)((IApi02WithoutUriTemplatePrefix x) => x.GetAsync())).SetName("IApi02WithoutBaseUrl 01"),
+            new TestCaseData("/api/posts", (Func<IApi02WithUriTemplatePrefix01, Task<HttpResponseMessage>>)((IApi02WithUriTemplatePrefix01 x) => x.GetAsync())).SetName("IApi02WithUriTemplatePrefix01"),
+            new TestCaseData("/api/posts", (Func<IApi02WithUriTemplatePrefix02, Task<HttpResponseMessage>>)((IApi02WithUriTemplatePrefix02 x) => x.GetAsync())).SetName("IApi02WithUriTemplatePrefix02"),
+            new TestCaseData("/api/posts/suffix", (Func<IApi02WithUriTemplatePrefixAndSuffix, Task<HttpResponseMessage>>)((IApi02WithUriTemplatePrefixAndSuffix x) => x.GetAsync())).SetName("IApi02WithUriTemplatePrefixAndSuffix"),
+            new TestCaseData("/api/posts?api_key=4ab542de1f", (Func<IApi02WithUriTemplateSuffix01, Task<HttpResponseMessage>>)((IApi02WithUriTemplateSuffix01 x) => x.GetAsync())).SetName("IApi02WithUriTemplateSuffix01"),
+            new TestCaseData("/api/posts", (Func<IApi02WithUriTemplateSuffix02, Task<HttpResponseMessage>>)((IApi02WithUriTemplateSuffix02 x) => x.GetAsync())).SetName("IApi02WithUriTemplateSuffix02")
         };
     }
 }
