@@ -42,32 +42,38 @@ namespace DoLess.Rest.Tests
         }
 
         [Test]
-        [TestCase("http://example.org/api/posts", "http://example.org", null, "api/posts")]
-        [TestCase("http://example.org/api/posts", "http://example.org", null, "/api/posts")]
-        [TestCase("http://example.org/api/posts", "http://example.org", "", "api/posts")]
-        [TestCase("http://example.org/api/posts", "http://example.org", "", "/api/posts")]       
-        [TestCase("http://example.org/api/posts", "http://example.org", "/api", "/posts")]
-        [TestCase("http://example.org/api/posts", "http://example.org", "api", "/posts")]
-        public async Task ShouldBeRightUrl(string expectedUrl, string hostUrl, string baseUrl, string relativeUrl)
+        [TestCase("http://example.org/api/posts", "http://example.org", null, "api/posts", null)]
+        [TestCase("http://example.org/api/posts", "http://example.org", null, "/api/posts", null)]
+        [TestCase("http://example.org/api/posts", "http://example.org", "", "api/posts", null)]
+        [TestCase("http://example.org/api/posts", "http://example.org", "", "/api/posts", null)]
+        [TestCase("http://example.org/api/posts", "http://example.org", "/api", "/posts", null)]
+        [TestCase("http://example.org/api/posts", "http://example.org", "api", "/posts", null)]
+        [TestCase("http://example.org/api/posts/suffix", "http://example.org", "api", "/posts", "/suffix")]
+        [TestCase("http://example.org/api/v2/posts?test=45", "http://example.org", "api{/version}", "/posts", "{?key,test}")]
+        [TestCase("http://example.org/api/v3/posts?ctest=72", "http://example.org", "api{/cversion}", "/posts", "{?key,ctest}")]
+        public async Task ShouldBeRightUrl(string expectedUrl, string hostUrl, string uriTemplatePrefix, string uriTemplate, string uriTemplateSuffix)
         {
             var mockHttp = new MockHttpMessageHandler();
 
             mockHttp.Expect(HttpMethod.Get, expectedUrl)
                     .Respond(HttpStatusCode.OK);
 
-            IRestClient restClient = new SimpleRestClient();
+            RestSettings settings = new RestSettings();
+            settings.CustomParameters.Add("cversion", "v3");
+            settings.CustomParameters.Add("ctest", "72");
+
+            IRestClient restClient = new SimpleRestClient(settings);
             restClient.HttpClient = new HttpClient(mockHttp);
             restClient.HttpClient.BaseAddress = new Uri(hostUrl);
 
-            var restRequest = RestRequest.Get(restClient);
+            var restRequest = RestRequest.Get(restClient)
+                                         .WithUriTemplatePrefix(uriTemplatePrefix)
+                                         .WithUriTemplateSuffix(uriTemplateSuffix)
+                                         .WithUriTemplate(uriTemplate)
+                                         .WithUriVariable("version", "v2")
+                                         .WithUriVariable("test", "45");
 
-            if (baseUrl != null)
-            {
-                restRequest = restRequest.WithUriTemplatePrefix(baseUrl);
-            }
-
-            var httpResponse = await restRequest.WithUriTemplate(relativeUrl)
-                                                .ReadAsHttpResponseMessageAsync();
+            var httpResponse = await restRequest.ReadAsHttpResponseMessageAsync();
 
             httpResponse.RequestMessage
                         .RequestUri

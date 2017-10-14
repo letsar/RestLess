@@ -7,9 +7,9 @@ namespace DoLess.Rest.Tests
 {
     internal class SimpleRestClient : RestClientBase
     {
-        public SimpleRestClient()
+        public SimpleRestClient(RestSettings settings = null)
         {
-            ((IRestClient)this).Settings = new RestSettings();
+            ((IRestClient)this).Settings = settings ?? new RestSettings();
         }
     }
 }
