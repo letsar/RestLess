@@ -16,6 +16,7 @@ namespace DoLess.Rest.Tasks
         private readonly List<ArgumentSyntax[]> withHeaderArguments;
         private readonly List<ArgumentSyntax[]> withUriVariableArguments;
         private readonly List<ContentArgument> withContentArguments;
+        private readonly Dictionary<string, ArgumentSyntax[]> withFormatters;
 
         private MethodDeclarationSyntax methodDeclaration;
         private ParameterSyntax parameter;
@@ -33,6 +34,7 @@ namespace DoLess.Rest.Tasks
             this.withHeaderArguments = new List<ArgumentSyntax[]>(requestInfo.withHeaderArguments);
             this.withUriVariableArguments = new List<ArgumentSyntax[]>();
             this.withContentArguments = new List<ContentArgument>();
+            this.withFormatters = new Dictionary<string, ArgumentSyntax[]>();
 
             this.UriTemplatePrefix = requestInfo.UriTemplatePrefix;
             this.UriTemplateSuffix = requestInfo.UriTemplateSuffix;
@@ -52,6 +54,8 @@ namespace DoLess.Rest.Tasks
         public IReadOnlyList<ArgumentSyntax[]> WithUriVariableArguments => this.withUriVariableArguments;
 
         public IReadOnlyList<ContentArgument> WithContentArguments => this.withContentArguments;
+
+        public IReadOnlyDictionary<string, ArgumentSyntax[]> WithFormatters => this.withFormatters;
 
         public MethodDeclarationSyntax MethodDeclaration => this.methodDeclaration;
 
@@ -140,6 +144,9 @@ namespace DoLess.Rest.Tasks
                 case RequestAttributeType.HttpMethod:
                     this.ParseHttpMethodAttribute(attribute);
                     break;
+                case RequestAttributeType.Formatter:
+                    this.ParseFormatterAttribute(attribute);
+                    break;
                 case RequestAttributeType.Name:
                     this.ParseNameAttribute(attribute);
                     break;
@@ -220,6 +227,11 @@ namespace DoLess.Rest.Tasks
         {
             this.HttpMethod = attribute.ClassName;
             this.UriTemplate = attribute.GetArgument(0);
+        }
+
+        private void ParseFormatterAttribute(RequestAttribute attribute)
+        {
+            this.withFormatters[attribute.ClassName] = attribute.Arguments;
         }
 
         private void ThrowIfMethodDoesNotContainsSingleHttpAttribute(IEnumerable<RequestAttribute> requestAttributes)

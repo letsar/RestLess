@@ -10,12 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DoLess.Rest" Version="0.1.0-build20171013-2246" />
-    <PackageReference Include="DoLess.Rest.Newtonsoft.Json" Version="0.1.0-build20171013-2246" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="TheMovieDb\Entities\" />
+    <PackageReference Include="DoLess.Rest" Version="0.1.0-build20171015-1133" />
+    <PackageReference Include="DoLess.Rest.Newtonsoft.Json" Version="0.1.0-build20171015-1133" />
   </ItemGroup>
 
 </Project>

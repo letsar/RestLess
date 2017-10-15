@@ -21,7 +21,16 @@ namespace DoLess.Rest
                 nameof(PutAttribute),
                 nameof(TraceAttribute)
             }
-            .ToAttributeNamesHashSet();        
+            .ToAttributeNamesHashSet();
+
+        private static readonly HashSet<string> FormatterAttributeNames =
+            new[]
+            {
+                        nameof(MediaTypeFormatterAttribute),
+                        nameof(UrlParameterFormatterAttribute),
+                        nameof(FormFormatterAttribute),
+            }
+            .ToAttributeNamesHashSet();
 
         private static readonly HashSet<string> OtherRestAttributeNames =
             new[]
@@ -32,7 +41,7 @@ namespace DoLess.Rest
                 nameof(HeaderAttribute),
                 nameof(HeaderValueAttribute),
                 nameof(ContentAttribute),
-                nameof(FormUrlEncodedContentAttribute)
+                nameof(FormUrlEncodedContentAttribute),
             }
             .ToAttributeNamesHashSet();
 
@@ -42,7 +51,7 @@ namespace DoLess.Rest
         {
             return self.Members
                        .All(x => x.IsRestMethodDeclaration());
-        }  
+        }
 
         public static string GetClassName(this AttributeSyntax self)
         {
@@ -87,7 +96,7 @@ namespace DoLess.Rest
         {
             return self.SelectMany(x => x.Attributes)
                        .Select(x => x.ToRequesAttribute());
-        }       
+        }
 
         public static RequestAttributeType GetRequestAttributeType(this AttributeSyntax self)
         {
@@ -95,6 +104,10 @@ namespace DoLess.Rest
             if (self.IsInAttributeSet(HttpMethodAttributeNames))
             {
                 return RequestAttributeType.HttpMethod;
+            }
+            else if (self.IsInAttributeSet(FormatterAttributeNames))
+            {
+                return RequestAttributeType.Formatter;
             }
             else
             {

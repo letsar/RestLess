@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http;
-using DoLess.Rest.ConsoleSample;
-using DoLess.Rest.ConsoleSample.TheMovieDb;
+using DoLess.Rest.ConsoleSample.GitHub.V3;
 using DoLess.Rest.Generated;
 
 namespace DoLess.Rest
@@ -54,7 +53,6 @@ namespace DoLess.Rest
         private static void InitializeRestClient()
         {
             RestClientFactory.SetRestClient<IGitHubApi, RestClientForIGitHubApi>();
-            RestClientFactory.SetRestClient<ITheMovieDbApi, RestClientForITheMovieDbApi>();
         }
     }
 }

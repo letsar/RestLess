@@ -20,5 +20,15 @@ namespace DoLess.Rest.Generated
                               .WithUriTemplate("api/posts")
                               .ReadAsHttpResponseMessageAsync(cancellationToken);
         }
+
+        public Task<HttpResponseMessage> GetWithFormatters()
+        {
+            return RestRequest.Get(this)
+                              .WithUriTemplate("api/posts")
+                              .WithMediaTypeFormatter("MediaTypeJsonFormatter")
+                              .WithUrlParameterFormatter("UrlParameterJsonFormatter")
+                              .WithFormFormatter("FormFormatterJsonFormatter")
+                              .ReadAsHttpResponseMessageAsync();
+        }
     }
 }

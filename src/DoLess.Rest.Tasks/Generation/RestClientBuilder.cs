@@ -163,6 +163,7 @@ namespace DoLess.Rest.Tasks
 
             result = this.ChainWithRequestUrlBuilding(result);
             result = this.ChainWithHeaders(result);
+            result = this.ChainWithFormatters(result);
             result = this.ChainWithContent(result);
             result = this.ChainWithSendMethod(result);
 
@@ -210,6 +211,18 @@ namespace DoLess.Rest.Tasks
         private InvocationExpressionSyntax ChainWithHeaders(InvocationExpressionSyntax invocationExpression)
         {
             return this.ChainWithArguments(invocationExpression, this.methodRequestInfo.WithHeaderArguments, nameof(IRestRequest.WithHeader));
+        }
+
+        private InvocationExpressionSyntax ChainWithFormatters(InvocationExpressionSyntax invocationExpression)
+        {
+            this.methodRequestInfo
+                .WithFormatters
+                .ForEach(x =>
+                {
+                    invocationExpression = invocationExpression.ChainWith($"With{x.Key}").WithArgs(x.Value);
+                });
+
+            return invocationExpression;
         }
 
         private InvocationExpressionSyntax ChainWithUriParameters(InvocationExpressionSyntax invocationExpression)

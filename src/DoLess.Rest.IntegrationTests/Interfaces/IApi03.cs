@@ -11,5 +11,11 @@ namespace DoLess.Rest.IntegrationTests.Interfaces
     {
         [Get("api/posts")]
         Task<HttpResponseMessage> GetCancellableAsync(CancellationToken cancellationToken = default);
+
+        [Get("api/posts")]
+        [MediaTypeFormatter("MediaTypeJsonFormatter")]
+        [UrlParameterFormatter("UrlParameterJsonFormatter")]
+        [FormFormatter("FormFormatterJsonFormatter")]
+        Task<HttpResponseMessage> GetWithFormatters();
     }
 }
