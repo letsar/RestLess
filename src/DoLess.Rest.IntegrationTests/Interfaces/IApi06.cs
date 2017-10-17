@@ -6,6 +6,7 @@ namespace DoLess.Rest.IntegrationTests.Interfaces
 {
     [Header("X-DoLess", "Rest")]
     [Header("X-DoLess-Scope", "Interface")]
+    [Header("X-DoLess-ApiKey", "apiKey", true)]
     public interface IApi06
     {
         [Get("api/posts")]

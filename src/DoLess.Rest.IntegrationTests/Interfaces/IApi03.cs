@@ -14,8 +14,8 @@ namespace DoLess.Rest.IntegrationTests.Interfaces
 
         [Get("api/posts")]
         [MediaTypeFormatter("MediaTypeJsonFormatter")]
-        [UrlParameterFormatter("UrlParameterJsonFormatter")]
-        [FormFormatter("FormFormatterJsonFormatter")]
+        [UrlParameterFormatter("UrlParameterFormatter")]
+        [FormFormatter("FormFormatter")]
         Task<HttpResponseMessage> GetWithFormatters();
     }
 }

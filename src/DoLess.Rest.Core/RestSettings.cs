@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DoLess.Rest.Helpers;
 using DoLess.UriTemplates;
 
@@ -17,7 +18,7 @@ namespace DoLess.Rest
             this.MediaTypeFormatters = new RestSettingStore<IMediaTypeFormatter>(nameof(this.MediaTypeFormatters), new DefaultMediaFormatter());
             this.UrlParameterFormatters = new RestSettingStore<IValueFormatter>(nameof(this.UrlParameterFormatters), new DefaultValueFormatter());
             this.FormFormatters = new RestSettingStore<IFormFormatter>(nameof(this.FormFormatters), new DefaultFormFormatter());
-            this.CustomParameters = new Dictionary<string, string>();
+            this.CustomParameters = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>

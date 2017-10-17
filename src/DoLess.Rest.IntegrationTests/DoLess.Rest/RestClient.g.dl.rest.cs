@@ -63,6 +63,7 @@ namespace DoLess.Rest
             RestClientFactory.SetRestClient<IApi05, RestClientForIApi05>();
             RestClientFactory.SetRestClient<IApi06, RestClientForIApi06>();
             RestClientFactory.SetRestClient<IApi07, RestClientForIApi07>();
+            RestClientFactory.SetRestClient<IApi08, RestClientForIApi08>();
         }
     }
 }

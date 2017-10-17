@@ -12,6 +12,8 @@ namespace DoLess.Rest.IntegrationTests.Tests
     [TestFixture]
     public class Api06Tests
     {
+        private const string ApiKey = "dflksghrenfdf";
+
         [Test]
         [TestCaseSource(nameof(ShouldHaveHeaderTestCases))]
         public async Task ShouldBeHttpMethod(string headerValue, Func<IApi06, Task<HttpResponseMessage>> sendRequestAsync)
@@ -26,6 +28,7 @@ namespace DoLess.Rest.IntegrationTests.Tests
             {
                 HttpMessageHandlerFactory = () => mockHttp
             };
+            settings.CustomParameters.Add("apiKey", ApiKey);
 
             IApi06 restClient = RestClient.For<IApi06>(url, settings);
 
@@ -40,6 +43,12 @@ namespace DoLess.Rest.IntegrationTests.Tests
                         .GetValues("X-DoLess-Scope")
                         .Should()
                         .Contain(headerValue);
+
+            httpResponse.RequestMessage
+                        .Headers
+                        .GetValues("X-DoLess-ApiKey")
+                        .Should()
+                        .Contain(ApiKey);
 
             mockHttp.VerifyNoOutstandingExpectation();
         }
