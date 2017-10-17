@@ -17,6 +17,7 @@ namespace DoLess.Rest.Generated
                               .WithUriTemplate("api/posts")
                               .WithHeader("X-DoLess", "Rest")
                               .WithHeader("X-DoLess-Scope", "Interface")
+                              .WithHeader("X-DoLess-ApiKey", "apiKey", true)
                               .ReadAsHttpResponseMessageAsync();
         }
 
@@ -26,6 +27,7 @@ namespace DoLess.Rest.Generated
                               .WithUriTemplate("api/posts")
                               .WithHeader("X-DoLess", "Rest")
                               .WithHeader("X-DoLess-Scope", "Interface")
+                              .WithHeader("X-DoLess-ApiKey", "apiKey", true)
                               .WithHeader("X-DoLess-Scope", "Method")
                               .ReadAsHttpResponseMessageAsync();
         }
@@ -36,6 +38,7 @@ namespace DoLess.Rest.Generated
                               .WithUriTemplate("api/posts")
                               .WithHeader("X-DoLess", "Rest")
                               .WithHeader("X-DoLess-Scope", "Interface")
+                              .WithHeader("X-DoLess-ApiKey", "apiKey", true)
                               .WithHeader("X-DoLess-Scope", "Method")
                               .WithHeader("X-DoLess-Scope", header)
                               .ReadAsHttpResponseMessageAsync();

@@ -26,8 +26,8 @@ namespace DoLess.Rest.Generated
             return RestRequest.Get(this)
                               .WithUriTemplate("api/posts")
                               .WithMediaTypeFormatter("MediaTypeJsonFormatter")
-                              .WithUrlParameterFormatter("UrlParameterJsonFormatter")
-                              .WithFormFormatter("FormFormatterJsonFormatter")
+                              .WithUrlParameterFormatter("UrlParameterFormatter")
+                              .WithFormFormatter("FormFormatter")
                               .ReadAsHttpResponseMessageAsync();
         }
     }

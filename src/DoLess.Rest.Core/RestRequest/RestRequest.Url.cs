@@ -8,7 +8,7 @@ namespace DoLess.Rest.Generated
         public IRestRequest WithUriTemplate(string uriTemplate)
         {
             uriTemplate = this.uriTemplatePrefix + uriTemplate + this.uriTemplateSuffix;
-            this.uriTemplate = UriTemplate.For(uriTemplate, true);
+            this.uriTemplate = UriTemplate.For(uriTemplate, false);
             return this;
         }
 

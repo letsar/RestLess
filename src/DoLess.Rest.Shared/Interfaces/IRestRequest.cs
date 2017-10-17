@@ -129,6 +129,13 @@ namespace DoLess.Rest
         IRestRequest WithFormUrlEncodedContent<T>(T content);
 
         /// <summary>
+        /// Adds the specified content to the <see cref="HttpRequestMessage"/> as a form url encoded content.
+        /// </summary>
+        /// <param name="content">The content.</param>
+        /// <returns></returns>
+        IRestRequest WithFormUrlEncodedContent(IEnumerable<KeyValuePair<string, string>> content);
+
+        /// <summary>
         /// Adds the specified header.
         /// </summary>
         /// <param name="name">The header name.</param>

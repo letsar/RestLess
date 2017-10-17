@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using DoLess.Rest.Http;
 
@@ -61,6 +62,16 @@ namespace DoLess.Rest.Generated
             if (content != null)
             {
                 this.contentParts.Add(new ContentPart(new StreamContent(content.OpenRead()), name, fileName ?? content.Name, contentType, true));
+            }
+
+            return this;
+        }
+
+        public IRestRequest WithFormUrlEncodedContent(IEnumerable<KeyValuePair<string, string>> content)
+        {
+            if (content != null)
+            {
+                this.contentParts.Add(new ContentPart(new FormUrlEncodedContent(content), null, null, null));
             }
 
             return this;

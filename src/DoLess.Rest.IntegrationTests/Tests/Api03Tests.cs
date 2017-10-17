@@ -24,7 +24,7 @@ namespace DoLess.Rest.IntegrationTests.Tests
             {
                 HttpMessageHandlerFactory = () => mockHttp
             };
-
+            
             IApi03 restClient = RestClient.For<IApi03>(url, settings);
 
             CancellationToken cancellationToken = new CancellationToken(true);
