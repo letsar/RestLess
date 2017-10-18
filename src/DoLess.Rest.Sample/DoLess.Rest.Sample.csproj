@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DoLess.Rest" Version="0.1.0-build20171017-1907" />
+    <PackageReference Include="DoLess.Rest" Version="0.1.0-build20171018-2249" />
   </ItemGroup> 
   
 </Project>

@@ -63,7 +63,7 @@ namespace DoLess.Rest.Helpers
 
         private IEnumerable<PropertyInfo> GetProperties(Type type)
         {
-            return type.GetProperties()
+            return type.GetRuntimeProperties()
                        .Where(x => this.CanRead(x));
         }
 

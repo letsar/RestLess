@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using DoLess.Rest.Generated;
 using DoLess.Rest.Tasks.Helpers;
@@ -26,7 +27,7 @@ namespace DoLess.Rest.Tasks
 
         public RestClientFactoryBuilder Build()
         {
-            string restClientFactoryFilePath = Path.Combine(Path.GetDirectoryName(typeof(RestClientFactoryBuilder).Assembly.Location), $"{Constants.RestClientFactoryName}.cs");
+            string restClientFactoryFilePath = Path.Combine(Path.GetDirectoryName(typeof(RestClientFactoryBuilder).GetTypeInfo().Assembly.Location), $"{Constants.RestClientFactoryName}.cs");
             var compilationUnit = CSharpSyntaxTree.ParseText(File.ReadAllText(restClientFactoryFilePath, Encoding.UTF8))
                                             .GetCompilationUnitRoot()
                                             .WithUsings(List(this.BuildUsings()));
