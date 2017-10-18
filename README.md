@@ -20,9 +20,9 @@ During the project compilation, all REST clients will be generated.
 
 Available on NuGet.
 
-Install DoLess.Rest
+Install *DoLess.Rest*
 
-Install DoLess.Rest.Newtonsoft.Json (if you want to serialize/deserialize using Json.Net)
+Install *DoLess.Rest.Newtonsoft.Json* (if you want to serialize/deserialize using Json.Net)
 
 ## Quick start
 
@@ -269,9 +269,28 @@ john
 
 All the REST client methods must return a ```Task```.
 
-Similarly to how the request content changes via the parameter type, the return type will determine the content returned.
+You can set a generic parameter type to the ```Task```, the valid ones are:
 
-//TODO
+* ```HttpResponseMessage```
+* ```Stream```
+* ```string```
+* ```bool```     => This will return if the response has a success code without throwing an error
+* ```byte[]```
+* ```object```   => This will use the specified *MediaTypeFormatter* (or the default one if not set)
+
+## Differences with Refit
+
+Unlike Refit, the core of **DoLess.Rest** does not use reflection at runtime (For MediaFormatters it depends of the implementation). All the REST methods are generated during compile-time.
+
+The *DoLess.Rest* package does not have any dependencies to another third-party library (except *DoLess.UriTemplates*). In order to read/write Json, you need to reference *DoLess.Rest.Newtonsoft.Json* for example, but you can also write your own formatting strategies.
+
+**DoLess.Rest** supports:
+
+* Generic methods
+* Method polymorphism
+* The use of constants inside the attributes
+* UriTemplates: see the [Spec](http://tools.ietf.org/html/rfc6570)
+* Method specific formatters
 
 ## Not supported features
 
