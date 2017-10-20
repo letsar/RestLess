@@ -1,7 +1,7 @@
-$nugetCoreProject = ".\src\DoLess.Rest.Core\DoLess.Rest.Core.csproj"
-$nugetTaskProject = ".\src\DoLess.Rest.Tasks\DoLess.Rest.Tasks.csproj"
-$nugetRestProject = ".\src\DoLess.Rest\DoLess.Rest.csproj"
-$nugetJsonProject = ".\src\DoLess.Rest.Newtonsoft.Json\DoLess.Rest.Newtonsoft.Json.csproj"
+$nugetCoreProject = ".\src\RestLess.Core\RestLess.Core.csproj"
+$nugetTaskProject = ".\src\RestLess.Tasks\RestLess.Tasks.csproj"
+$nugetRestProject = ".\src\RestLess\RestLess.csproj"
+$nugetJsonProject = ".\src\RestLess.Newtonsoft.Json\RestLess.Newtonsoft.Json.csproj"
 $buildNumber = "0.1.0-build$([System.DateTime]::Now.ToString('yyyyMMdd-HHmm'))"
 
 dotnet clean $nugetCoreProject -c Debug

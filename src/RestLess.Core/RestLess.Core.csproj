@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.3</TargetFramework>
+    <RootNamespace>RestLess</RootNamespace>
+    <Product>RestLess.Core</Product>
+		<AssemblyName>RestLess.Core</AssemblyName>
+		<GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
+		<DebugType>embedded</DebugType>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <Import Project="..\RestLess.Shared\RestLess.Shared.projitems" Label="Shared" />
+
+  <ItemGroup>
+    <PackageReference Include="DoLess.UriTemplates" Version="1.3.2" />
+  </ItemGroup>
+
+</Project>
