@@ -1,4 +1,5 @@
 ﻿using System;
+using DoLess.Rest.Helpers;
 using DoLess.UriTemplates;
 
 namespace DoLess.Rest.Generated
@@ -7,7 +8,7 @@ namespace DoLess.Rest.Generated
     {
         public IRestRequest WithUriTemplate(string uriTemplate)
         {
-            uriTemplate = this.uriTemplatePrefix + uriTemplate + this.uriTemplateSuffix;
+            uriTemplate = UriTemplateHelper.AppendUriTemplateSuffix(this.uriTemplatePrefix + uriTemplate, this.uriTemplateSuffix);
             this.uriTemplate = UriTemplate.For(uriTemplate, false);
             return this;
         }
