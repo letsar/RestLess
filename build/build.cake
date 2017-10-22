@@ -180,7 +180,7 @@ Task("Tests")
         var projects = new[] {"RestLess.Core.Tests", "RestLess.Tasks.Tests", "RestLess.Tests"};
         if(!local)
         {
-            var projects = new[] {"RestLess.Core.Tests", "RestLess.Tasks.Tests"};
+            projects = new[] {"RestLess.Core.Tests", "RestLess.Tasks.Tests"};
         }        
 
         foreach(var project in projects)     
