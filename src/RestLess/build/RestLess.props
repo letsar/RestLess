@@ -1,0 +1,18 @@
+<Project TreatAsLocalProperty="TaskFolder;TaskAssembly">
+  <PropertyGroup>
+    <CoreCompileDependsOn>
+      $(CoreCompileDependsOn);
+      GenerateRestClients;
+    </CoreCompileDependsOn>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <RestLessPropsImported>true</RestLessPropsImported>
+    <TaskFolder Condition="'$(MSBuildRuntimeType)' == 'Core'">netstandard1.5</TaskFolder>
+    <TaskFolder Condition="'$(MSBuildRuntimeType)' != 'Core'">net46</TaskFolder>
+    <TaskAssembly>$(MSBuildThisFileDirectory)..\tasks\$(TaskFolder)\RestLess.Tasks.dll</TaskAssembly>
+  </PropertyGroup>
+  
+  <UsingTask TaskName="RestLess.Tasks.BuildRestClientsTask" AssemblyFile="$(TaskAssembly)" />
+
+</Project>

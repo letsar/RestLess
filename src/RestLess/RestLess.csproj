@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>netstandard1.3</TargetFramework>
+		<Product>RestLess</Product>
+		<RootNamespace>RestLess</RootNamespace>
+		<AssemblyName>RestLess</AssemblyName>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<!-- Suppresses the warnings about the package not having assemblies in lib/*/.dll. -->
+		<NoPackageAnalysis>true</NoPackageAnalysis>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+	</PropertyGroup>	
+
+	<ItemGroup>
+	  <ProjectReference Include="..\RestLess.Core\RestLess.Core.csproj" />	  
+	</ItemGroup>
+
+	<ItemGroup>
+    <Content Include="build\*" PackagePath="build\" />		
+    <Content Include="buildMultiTargeting\*" PackagePath="buildMultiTargeting\" />
+
+		<None Include="..\RestLess.Tasks\bin\$(Configuration)\netstandard1.5\*.dll" LinkBase="nuget\tasks\netstandard1.5" PackagePath="tasks\netstandard1.5" Pack="true" />
+		<None Include="..\RestLess.Tasks\bin\$(Configuration)\net46\*.dll" LinkBase="nuget\tasks\net46" PackagePath="tasks\net46" Pack="true" />
+		<None Include="..\RestLess.Tasks\RestClient.cs" LinkBase="nuget\tasks\netstandard1.5" PackagePath="tasks\netstandard1.5" Pack="true" />
+    <None Include="..\RestLess.Tasks\RestClient.cs" LinkBase="nuget\tasks\net46" PackagePath="tasks\net46" Pack="true" />
+  </ItemGroup>
+</Project>

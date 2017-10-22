@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>09087514-c3bc-4b3d-98b4-02fc0d8659af</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>RestLess</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\Formatters\FormFormatterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\Formatters\UrlParameterFormatterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\Formatters\MediaTypeFormatterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\UriTemplateSuffixAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\UriTemplatePrefixAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\ContentAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\FormUrlEncodedContentAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HeaderAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HeaderValueAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\DeleteAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\GetAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\HeadAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\OptionsAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\PatchAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\PostAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\PutAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\HttpMethods\TraceAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\NameAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Attributes\NameIgnoreAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\IEnumerableExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\Check.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\DefaultFormFormatter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IFormFormatter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IMediaTypeFormatter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRestClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRestRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestClientBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestClientFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestSettings.Shared.cs" />
+  </ItemGroup>
+</Project>
