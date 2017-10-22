@@ -35,6 +35,7 @@ var isMasterBranch = false;
 Setup((ctx) =>
 {
     CreateDirectory(artifactDirectory);
+    Information("Will be published on {0}", nugetSource);
 });
 
 // Tasks
@@ -56,7 +57,7 @@ Task("GitVersion")
         }
 
         Information("Building version {0} of {1}. Nuget version {2}. Assembly version {3}", informationalVersion, product, nugetVersion, assemblySemVer);
-        Information("Branch {0}", branchName);
+        Information("Branch {0}", branchName);        
     }); 
 
 Task("CheckIfTagged")
