@@ -154,8 +154,15 @@ Task("UpdateRestLessPackage")
             }
             catch{}
 
+            // RestorePackages, otherwise it fails on VSTS.
+            MSBuild(projectPath, new MSBuildSettings() { ToolPath= msBuildPath}
+                .WithTarget("restore")                
+                .SetConfiguration(configuration)          
+                .SetVerbosity(Verbosity.Minimal)
+                .SetNodeReuse(false));  
+
             // Add new package.   
-            var arguments = "package RestLess -n -v "+ nugetVersion + " -s \""+ source + "\"";
+            var arguments = "package RestLess -v "+ nugetVersion + " -s \""+ source + "\"";
             Information("dotnet add " + projectPath + " " + arguments);
             DotNetCoreTool(projectPath, "add", arguments);
 
