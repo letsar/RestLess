@@ -165,10 +165,9 @@ Task("UpdateRestLessPackage")
             }
             catch{}
             
-            // RestorePackages, otherwise it fails on VSTS.
             // Build.
             MSBuild(projectPath, new MSBuildSettings() { ToolPath= msBuildPath}
-                .WithTarget("restore;build")                
+                .WithTarget("build")                
                 .SetConfiguration(configuration)          
                 .SetVerbosity(Verbosity.Minimal)
                 .SetNodeReuse(false));        
