@@ -6,16 +6,10 @@ namespace RestLess.Tasks
 {
     public class CodeBuilder
     {
-        public CodeBuilder(string originalFilePath)
-        {
-            this.OriginalFilePath = originalFilePath;
-            this.GeneratedFilePath = GetGeneratedFilePath(originalFilePath);
-        }
-
         public CodeBuilder(string originalFilePath, string outputDirectory)
         {
             this.OriginalFilePath = originalFilePath;
-            this.GeneratedFilePath = Path.Combine(outputDirectory, GetGeneratedFileName(originalFilePath));
+            this.GeneratedFilePath = Path.Combine(outputDirectory, Constants.ProductName, GetGeneratedFilePath(originalFilePath));
         }
 
         public string OriginalFilePath { get; }

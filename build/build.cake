@@ -49,6 +49,12 @@ Task("GitVersion")
         assemblySemVer = gitVersion.AssemblySemVer;
         branchName = gitVersion.BranchName ;
         isMasterBranch = branchName == "master";
+
+        if(local)
+        {
+            nugetVersion = nugetVersion + "-build"+ System.DateTime.Now.ToString("yyyyMMdd-HHmm");
+        }
+
         Information("Building version {0} of {1}. Nuget version {2}. Assembly version {3}", informationalVersion, product, nugetVersion, assemblySemVer);
         Information("Branch {0}", branchName);
     }); 
@@ -164,6 +170,16 @@ Task("UpdateRestLessPackage")
             }
             catch{}
             
+            try
+            {
+                MSBuild(projectPath, new MSBuildSettings() { ToolPath= msBuildPath}
+                    .WithTarget("restore")                
+                    .SetConfiguration(configuration)          
+                    .SetVerbosity(Verbosity.Minimal)
+                    .SetNodeReuse(false));
+            }
+            catch{}
+
             // Build.
             MSBuild(projectPath, new MSBuildSettings() { ToolPath= msBuildPath}
                 .WithTarget("build")                

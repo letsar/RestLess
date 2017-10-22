@@ -26,8 +26,8 @@ namespace RestLess.Tasks
         private RequestInfo interfaceRequestInfo;
         private RequestInfo methodRequestInfo;
 
-        public RestClientBuilder(string originalFilePath)
-            : base(originalFilePath)
+        public RestClientBuilder(string originalFilePath, string outputDir)
+            : base(originalFilePath, outputDir)
         {
             this.originalFilePath = originalFilePath;
         }

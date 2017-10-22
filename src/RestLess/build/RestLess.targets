@@ -4,12 +4,14 @@
   <Import Project="RestLess.props" Condition="'$(RestLessPropsImported)' == '' "/>  
   
   <Target Name="GenerateRestClients" BeforeTargets="CoreCompile">
-    <BuildRestClientsTask SourceFiles="@(Compile)"/>
+    <RemoveDir Directories="$(IntermediateOutputPath)\RestLess" />
+    
+    <BuildRestClientsTask SourceFiles="@(Compile)" OutputDirectory="$(IntermediateOutputPath)"/>
+    
     <Message Text="Processed RestLess Stubs" />
-  </Target>
-  
-  <ItemGroup>
-    <Compile Update="**\*.g.rl.cs" DependentUpon="$([System.String]::Copy('%(Filename)').Replace('.g.rl', ''))%(Extension)" SubType="Code"/>
-  </ItemGroup>
-  
+
+    <ItemGroup>
+      <Compile Include="$(IntermediateOutputPath)\RestLess\**\*.g.rl.cs" />
+    </ItemGroup>
+  </Target>  
 </Project>

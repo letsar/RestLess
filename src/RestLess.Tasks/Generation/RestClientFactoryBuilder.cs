@@ -19,8 +19,8 @@ namespace RestLess.Tasks
         private const string RestClientFactoryName = "RestClientFactory";
         private readonly IReadOnlyList<RestClientBuilder> restClientBuilders;
 
-        public RestClientFactoryBuilder(IReadOnlyList<RestClientBuilder> restClientBuilders)
-            : base($"{Constants.RestClientFactoryName}.cs", Constants.ProductName)
+        public RestClientFactoryBuilder(IReadOnlyList<RestClientBuilder> restClientBuilders, string outputDir)
+            : base($"{Constants.RestClientFactoryName}.cs", outputDir)
         {
             this.restClientBuilders = restClientBuilders;
         }

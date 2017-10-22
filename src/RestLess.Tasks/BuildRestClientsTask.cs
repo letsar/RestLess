@@ -15,19 +15,24 @@ namespace RestLess.Tasks
         [Required]
         public ITaskItem[] SourceFiles { get; set; }
 
+        [Required]
+        public ITaskItem OutputDirectory { get; set; }             
+
         public override bool Execute()
         {
             try
             {
                 var sourceFiles = (this.SourceFiles ?? Array.Empty<ITaskItem>()).Select(x => x.ItemSpec)
                                                                                 .Distinct();
+
+                var outputDirectory = this.OutputDirectory.ItemSpec;
                 var restClients = sourceFiles.Select(x => new { FilePath = x, FileName = Path.GetFileNameWithoutExtension(x) })
                                              .Where(x => !x.FileName.Contains(Constants.DoLessGeneratedFileSuffix))
-                                             .Select(x => new RestClientBuilder(x.FilePath).Build())
+                                             .Select(x => new RestClientBuilder(x.FilePath, outputDirectory).Build())
                                              .Where(x => x.HasRestInterfaces)
                                              .ToArray();
 
-                var restClientFactory = new RestClientFactoryBuilder(restClients).Build();
+                var restClientFactory = new RestClientFactoryBuilder(restClients, outputDirectory).Build();
 
                 // Save the files.                
                 for (int i = 0; i < restClients.Length; i++)
