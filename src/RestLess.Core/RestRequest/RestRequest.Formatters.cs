@@ -2,9 +2,9 @@
 using System.Net.Http;
 using RestLess.Http;
 
-namespace RestLess.Generated
+namespace RestLess.Internal
 {
-    public sealed partial class RestRequest
+    internal sealed partial class RestRequest
     {
         public IRestRequest WithMediaTypeFormatter(string mediaTypeFormatterName)
         {

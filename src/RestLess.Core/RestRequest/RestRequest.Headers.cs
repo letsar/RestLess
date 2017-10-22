@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace RestLess.Generated
+namespace RestLess.Internal
 {
-    public sealed partial class RestRequest
+    internal sealed partial class RestRequest
     {
         public IRestRequest WithHeader(string name, string value, bool isCustomParameter = false)
         {

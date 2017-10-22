@@ -38,7 +38,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRestRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestClientBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestClientFactory.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RestRequest\RestRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestSettings.Shared.cs" />
   </ItemGroup>
 </Project>

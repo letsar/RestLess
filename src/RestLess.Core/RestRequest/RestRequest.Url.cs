@@ -2,9 +2,9 @@
 using RestLess.Helpers;
 using DoLess.UriTemplates;
 
-namespace RestLess.Generated
+namespace RestLess.Internal
 {
-    public sealed partial class RestRequest
+    internal sealed partial class RestRequest
     {
         public IRestRequest WithUriTemplate(string uriTemplate)
         {

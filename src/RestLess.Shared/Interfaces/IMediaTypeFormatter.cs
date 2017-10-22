@@ -26,6 +26,7 @@ namespace RestLess
         /// </summary>
         /// <typeparam name="T">The type of the content.</typeparam>
         /// <param name="content">The content to write.</param>
+        /// <param name="writer">The writer.</param>
         /// <returns></returns>
         Task WriteAsync<T>(T content, TextWriter writer);
     }

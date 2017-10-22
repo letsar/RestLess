@@ -11,11 +11,19 @@ namespace RestLess.Generated
     {
         private readonly Dictionary<Type, Func<IRestClient>> initializers;
 
+        /// <summary>
+        /// Creates a new <see cref="RestClientFactory"/>.
+        /// </summary>
         public RestClientFactory()
         {
             this.initializers = new Dictionary<Type, Func<IRestClient>>();
         }
 
+        /// <summary>
+        /// Sets the REST client for the specified interface.
+        /// </summary>
+        /// <typeparam name="TInterface">The REST client interface.</typeparam>
+        /// <typeparam name="TImplementation">The REST client implementation.</typeparam>
         public void SetRestClient<TInterface, TImplementation>()
             where TInterface : class
             where TImplementation : TInterface, IRestClient, new()
@@ -23,6 +31,13 @@ namespace RestLess.Generated
             this.initializers[typeof(TInterface)] = () => new TImplementation();
         }
 
+        /// <summary>
+        /// Creates a REST client from a <see cref="HttpClient"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the REST client.</typeparam>
+        /// <param name="httpClient">The <see cref="HttpClient"/>.</param>
+        /// <param name="settings">The REST settings.</param>
+        /// <returns></returns>
         public T Create<T>(HttpClient httpClient, RestSettings settings)
             where T : class
         {
@@ -38,6 +53,13 @@ namespace RestLess.Generated
             return (T)restClient;
         }
 
+        /// <summary>
+        /// Creates a REST client from an <see cref="Uri"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the REST client.</typeparam>
+        /// <param name="hostUri">The <see cref="Uri"/>.</param>
+        /// <param name="settings">The REST settings.</param>
+        /// <returns></returns>
         public T Create<T>(Uri hostUri, RestSettings settings)
             where T : class
         {
@@ -45,6 +67,13 @@ namespace RestLess.Generated
             return this.Create<T>(new HttpClient(handler) { BaseAddress = hostUri }, settings);
         }
 
+        /// <summary>
+        /// Creates a REST client from a <see cref="string"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the REST client.</typeparam>
+        /// <param name="hostUrl">The <see cref="string"/> url.</param>
+        /// <param name="settings">The REST settings.</param>
+        /// <returns></returns>
         public T Create<T>(string hostUrl, RestSettings settings)
             where T : class
         {

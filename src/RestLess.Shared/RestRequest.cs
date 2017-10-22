@@ -1,6 +1,6 @@
 ﻿namespace RestLess.Generated
 {
-    public sealed partial class RestRequest
+    public static partial class RestRequest
     {
     }
 }

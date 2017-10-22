@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using DoLess.UriTemplates;
 
-namespace RestLess.Generated
+namespace RestLess.Internal
 {
     /// <summary>
     /// Contains methods to create a <see cref="IRestRequest"/>.
     /// </summary>
-    public sealed partial class RestRequest : IRestRequest
+    internal sealed partial class RestRequest : IRestRequest
     {
         private readonly HttpRequestMessage httpRequestMessage;
         private readonly IRestClient restClient;
@@ -21,7 +20,7 @@ namespace RestLess.Generated
         private IFormFormatter formFormatter;
         private IValueFormatter valueFormatter;
 
-        private RestRequest(HttpMethod httpMethod, IRestClient restClient)
+        internal RestRequest(HttpMethod httpMethod, IRestClient restClient)
         {
             this.httpRequestMessage = new HttpRequestMessage();
             this.httpRequestMessage.Method = httpMethod;

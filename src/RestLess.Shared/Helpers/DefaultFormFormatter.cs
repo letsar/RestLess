@@ -6,10 +6,19 @@ using System.Reflection;
 
 namespace RestLess.Helpers
 {
+    /// <summary>
+    /// Default FormFormatter.
+    /// </summary>
     public class DefaultFormFormatter : IFormFormatter
     {
         private static readonly Dictionary<Type, NamedPropertyInfo[]> PropertyCache = new Dictionary<Type, NamedPropertyInfo[]>();
 
+        /// <summary>
+        /// Formats the specified object into a dictionary.
+        /// </summary>
+        /// <typeparam name="T">The type of the object.</typeparam>
+        /// <param name="value">The object.</param>
+        /// <returns></returns>
         public IEnumerable<KeyValuePair<string, string>> Format<T>(T value)
         {
             if (EqualityComparer<T>.Default.Equals(value, default))
@@ -28,6 +37,11 @@ namespace RestLess.Helpers
             }
         }
 
+        /// <summary>
+        /// Gets the fallback property name.
+        /// </summary>
+        /// <param name="propertyInfo">The property info.</param>
+        /// <returns></returns>
         protected virtual string GetFallbackPropertyNameInternal(PropertyInfo propertyInfo)
         {
             return null;

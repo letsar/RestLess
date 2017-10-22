@@ -3,9 +3,9 @@ using System.IO;
 using System.Net.Http;
 using RestLess.Http;
 
-namespace RestLess.Generated
+namespace RestLess.Internal
 {    
-    public sealed partial class RestRequest
+    internal sealed partial class RestRequest
     {
         public IRestRequest WithContent(HttpContent content, string name = null, string fileName = null, string contentType = null)
         {

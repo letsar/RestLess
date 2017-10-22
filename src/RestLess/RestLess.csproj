@@ -4,7 +4,7 @@
 		<Product>RestLess</Product>
 		<RootNamespace>RestLess</RootNamespace>
 		<AssemblyName>RestLess</AssemblyName>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<!-- Suppresses the warnings about the package not having assemblies in lib/*/.dll. -->
 		<NoPackageAnalysis>true</NoPackageAnalysis>
 		<IncludeBuildOutput>false</IncludeBuildOutput>

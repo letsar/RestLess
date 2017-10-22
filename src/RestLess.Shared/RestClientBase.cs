@@ -7,6 +7,9 @@ namespace RestLess.Generated
     /// </summary>
     public abstract class RestClientBase : IRestClient
     {
+        /// <summary>
+        /// Creates a <see cref="RestClientBase"/>.
+        /// </summary>
         protected RestClientBase() { }
 
         HttpClient IRestClient.HttpClient { get; set; }

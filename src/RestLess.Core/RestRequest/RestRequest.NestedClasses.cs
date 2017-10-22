@@ -2,9 +2,9 @@
 using System.Net.Http.Headers;
 using RestLess.Helpers;
 
-namespace RestLess.Generated
+namespace RestLess.Internal
 {
-    public sealed partial class RestRequest : IRestRequest
+    internal sealed partial class RestRequest : IRestRequest
     {
         private class ContentPart
         {

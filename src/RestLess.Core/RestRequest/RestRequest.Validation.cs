@@ -3,9 +3,9 @@ using RestLess.Exceptions;
 using System.Net.Http;
 
 
-namespace RestLess.Generated
+namespace RestLess.Internal
 {
-    public sealed partial class RestRequest
+    internal sealed partial class RestRequest
     {
         private const string DoLessRestBoundary = "DoLessRestBoundary";
 

@@ -26,7 +26,7 @@ namespace RestLess
         Task<string> ReadAsStringAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Reads the content as <see cref="byte[]"/>.
+        /// Reads the content as <see cref="T:byte[]"/>.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
