@@ -8,6 +8,16 @@
 		<!-- Suppresses the warnings about the package not having assemblies in lib/*/.dll. -->
 		<NoPackageAnalysis>true</NoPackageAnalysis>
 		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<Authors>Romain Rastel</Authors>
+		<Company>Romain Rastel</Company>
+		<PackageProjectUrl>https://github.com/letsar/RestLess</PackageProjectUrl>
+		<PackageLicenseUrl>https://github.com/letsar/RestLess/blob/master/LICENSE</PackageLicenseUrl>
+		<Copyright>Romain Rastel</Copyright>
+		<RepositoryUrl>https://github.com/letsar/RestLess</RepositoryUrl>
+		<PackageTags>restless, rest, http, api, webservice, ws, webservices</PackageTags>
+		<PackageReleaseNotes>https://github.com/letsar/RestLess/releases</PackageReleaseNotes>
+		<Description>The automatic type-safe REST API client library for .Net Standard</Description>
+		<RepositoryType>git</RepositoryType>
 	</PropertyGroup>	
 
 	<ItemGroup>

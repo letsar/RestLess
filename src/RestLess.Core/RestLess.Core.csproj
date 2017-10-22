@@ -8,6 +8,16 @@
 		<GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
 		<DebugType>embedded</DebugType>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<Authors>Romain Rastel</Authors>
+		<Company>Romain Rastel</Company>
+		<Copyright>Romain Rastel</Copyright>
+		<PackageLicenseUrl>https://github.com/letsar/RestLess/blob/master/LICENSE</PackageLicenseUrl>
+		<PackageProjectUrl>https://github.com/letsar/RestLess</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/letsar/RestLess</RepositoryUrl>
+		<PackageReleaseNotes>https://github.com/letsar/RestLess/releases</PackageReleaseNotes>
+		<Description>The core of RestLess, the automatic type-safe REST API client library for .Net Standard</Description>
+		<PackageTags>restless, rest, http, api, webservice, ws, webservices</PackageTags>
+		<RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
