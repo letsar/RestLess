@@ -14,11 +14,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RestLess" Version="0.1.0" />
+    <ProjectReference Include="..\RestLess.Newtonsoft.Json\RestLess.Newtonsoft.Json.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RestLess.Newtonsoft.Json\RestLess.Newtonsoft.Json.csproj" />
+    <PackageReference Include="RestLess" Version="0.1.0" />
   </ItemGroup>
 
 </Project>

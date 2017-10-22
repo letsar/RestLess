@@ -197,6 +197,11 @@ Task("Tests")
             };
             DotNetCoreTest(projectPath, settings);    
         }
+    })
+    .ReportError(exception =>
+    {  
+        // Report the error.
+        Warning("Error when testing: {0}", exception.ToString());
     });
 
 Task("PublishPackages")
