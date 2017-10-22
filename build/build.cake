@@ -138,6 +138,7 @@ Task("PackNugetProjects")
 
 Task("UpdateRestLessPackage")
     .IsDependentOn("PackNugetProjects")
+    .WithCriteria(() => local)  // Does not work on VSTS.
     .Does(() =>
     {
         var projects = new[] {"RestLess.Tests", "RestLess.ConsoleSample", "RestLess.Sample"};
@@ -152,9 +153,7 @@ Task("UpdateRestLessPackage")
                 // Remove old package.
                 DotNetCoreTool(projectPath,"remove","package RestLess");         
             }
-            catch{}
-
- 
+            catch{} 
 
             // Add new package.   
             var arguments = "package RestLess -v "+ nugetVersion + " -s \""+ source + "\"";
@@ -179,6 +178,10 @@ Task("Tests")
     .Does(() =>
     {
         var projects = new[] {"RestLess.Core.Tests", "RestLess.Tasks.Tests", "RestLess.Tests"};
+        if(!local)
+        {
+            var projects = new[] {"RestLess.Core.Tests", "RestLess.Tasks.Tests"};
+        }        
 
         foreach(var project in projects)     
         {
