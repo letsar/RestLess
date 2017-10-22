@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RestLess" Version="0.0.1" />
+    <PackageReference Include="RestLess" Version="0.1.0" />
     <PackageReference Include="RestLess.Newtonsoft.Json" Version="0.1.0-build20171020-1908" />
   </ItemGroup>
 

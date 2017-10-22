@@ -155,7 +155,7 @@ Task("UpdateRestLessPackage")
             catch{}
 
             // Add new package.   
-            var arguments = "package RestLess -v "+ nugetVersion + " -s \""+ source + "\"";
+            var arguments = "package RestLess -n -v "+ nugetVersion + " -s \""+ source + "\"";
             Information("dotnet add " + projectPath + " " + arguments);
             DotNetCoreTool(projectPath, "add", arguments);
 
