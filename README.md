@@ -252,17 +252,17 @@ Task<HttpResponseMessage> PostMultipartContent03Async([Content]string content, [
 Will create a content like this:
 
 ```HTTP
---DoLessRestBoundary
+--RestLessBoundary
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: form-data; name=content
 
 doe
---DoLessRestBoundary
+--RestLessBoundary
 Content-Type: text/plain
 Content-Disposition: form-data; name=firstName; filename=f; filename*=utf-8''f
 
 john
---DoLessRestBoundary--
+--RestLessBoundary--
 ```
 
 ## Retrieving the response

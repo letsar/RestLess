@@ -13,11 +13,11 @@ namespace RestLess.Tasks.Helpers
         public const string DoLessGeneratedFileSuffix = ".g.rl.cs";
         public const string RestClientFactoryBuilderFileName = RestClientFactoryName + DoLessGeneratedFileSuffix;
 
-        public static readonly NamespaceDeclarationSyntax DoLessRestNamespace = NamespaceDeclaration(ParseName(ProductName));
-        public static readonly NamespaceDeclarationSyntax DoLessRestGeneratedNamespace = NamespaceDeclaration(ParseName(ProductName + ".Generated"));
-        public static readonly IReadOnlyList<UsingDirectiveSyntax> DoLessRestFactoryRequiredUsings = new[]
+        public static readonly NamespaceDeclarationSyntax RestLessNamespace = NamespaceDeclaration(ParseName(ProductName));
+        public static readonly NamespaceDeclarationSyntax RestLessGeneratedNamespace = NamespaceDeclaration(ParseName(ProductName + ".Generated"));
+        public static readonly IReadOnlyList<UsingDirectiveSyntax> RestLessFactoryRequiredUsings = new[]
         {
-            UsingDirective(DoLessRestGeneratedNamespace.Name),
+            UsingDirective(RestLessGeneratedNamespace.Name),
             UsingDirective(ParseName("System")),
             UsingDirective(ParseName("System.Net.Http"))
         };

@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="RestLess" Version="0.2.0-build20171022-1757" />
+    <PackageReference Include="RestLess" Version="0.4.1-build20171023-1817" />
   </ItemGroup>
 
 </Project>

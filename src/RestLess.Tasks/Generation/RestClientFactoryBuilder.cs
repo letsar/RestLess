@@ -44,14 +44,14 @@ namespace RestLess.Tasks
             return this.restClientBuilders
                        .SelectMany(x => x.RestClients)
                        .Select(x => x.InterfaceDeclaration?.GetDeclaringNamespace())
-                       .Union(Constants.DoLessRestFactoryRequiredUsings)
+                       .Union(Constants.RestLessFactoryRequiredUsings)
                        .Distinct(UsingDirectiveSyntaxEqualityComparer.Default)
                        .OrderBy(x => x, UsingDirectiveSyntaxComparer.Default);
         }
 
         private NamespaceDeclarationSyntax BuildNamespaceDeclaration(IEnumerable<MemberDeclarationSyntax> members)
         {
-            return Constants.DoLessRestNamespace
+            return Constants.RestLessNamespace
                             .WithMembers(SingletonList<MemberDeclarationSyntax>(this.BuildClass(members)));
         }
 

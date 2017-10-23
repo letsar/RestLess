@@ -85,12 +85,12 @@ namespace RestLess.IntegrationTests.Tests
         public async Task ShouldHaveMultipartContent01()
         {
             string url = "http://example.org";
-            string content = @"--DoLessRestBoundary
+            string content = @"--RestLessBoundary
 Content-Disposition: form-data; name=content; filename=Api07File.xml; filename*=utf-8''Api07File.xml
 
 ﻿<?xml version=""1.0"" encoding=""utf-8"" ?>
 <Project/>
---DoLessRestBoundary--
+--RestLessBoundary--
 ";
             var mockHttp = new MockHttpMessageHandler();
 
@@ -125,17 +125,17 @@ Content-Disposition: form-data; name=content; filename=Api07File.xml; filename*=
         {
             string url = "http://example.org";
 
-            string content = @"--DoLessRestBoundary
+            string content = @"--RestLessBoundary
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: form-data; name=content
 
 doe
---DoLessRestBoundary
+--RestLessBoundary
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: form-data; name=firstName
 
 john
---DoLessRestBoundary--
+--RestLessBoundary--
 ";
             var mockHttp = new MockHttpMessageHandler();
 
@@ -168,17 +168,17 @@ john
         {
             string url = "http://example.org";
 
-            string content = @"--DoLessRestBoundary
+            string content = @"--RestLessBoundary
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: form-data; name=content
 
 doe
---DoLessRestBoundary
+--RestLessBoundary
 Content-Type: text/plain
 Content-Disposition: form-data; name=firstName; filename=f; filename*=utf-8''f
 
 john
---DoLessRestBoundary--
+--RestLessBoundary--
 ";
             var mockHttp = new MockHttpMessageHandler();
 

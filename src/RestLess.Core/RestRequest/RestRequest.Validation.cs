@@ -7,7 +7,7 @@ namespace RestLess.Internal
 {
     internal sealed partial class RestRequest
     {
-        private const string DoLessRestBoundary = "DoLessRestBoundary";
+        private const string RestLessBoundary = "RestLessBoundary";
 
         private void EnsureAllIsSetBeforeSendingTheRequest()
         {
@@ -35,7 +35,7 @@ namespace RestLess.Internal
                 else
                 {
                     // Multipart.
-                    var multipartContent = new MultipartFormDataContent(DoLessRestBoundary);
+                    var multipartContent = new MultipartFormDataContent(RestLessBoundary);
                     for (int i = 0; i < parts; i++)
                     {
                         var contentPart = this.contentParts[i];

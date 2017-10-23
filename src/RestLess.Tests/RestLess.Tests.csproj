@@ -19,7 +19,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
     <PackageReference Include="NUnit" Version="3.8.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.8.0" />
-    <PackageReference Include="RestLess" Version="0.2.0-build20171022-1757" />
+    <PackageReference Include="RestLess" Version="0.4.1-build20171023-1817" />
     <PackageReference Include="RichardSzalay.MockHttp" Version="3.2.1" />
   </ItemGroup>
 

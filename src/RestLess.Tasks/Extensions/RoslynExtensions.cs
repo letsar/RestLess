@@ -11,7 +11,7 @@ namespace RestLess
 {
     internal static partial class RoslynExtensions
     {
-        private static readonly string DoLessRestNamespace = typeof(IRestClient).Namespace;
+        private static readonly string RestLessNamespace = typeof(IRestClient).Namespace;
 
         public static ParameterListSyntax WithoutAttributes(this ParameterListSyntax self)
         {
@@ -52,12 +52,12 @@ namespace RestLess
             return self.WithAttributeLists(default(SyntaxList<AttributeListSyntax>));
         }
 
-        public static bool HasReferenceToDoLessRest(this IEnumerable<SyntaxNode> self)
+        public static bool HasReferenceToRestLess(this IEnumerable<SyntaxNode> self)
         {
             return self.OfType<UsingDirectiveSyntax>()
-                       .Any(x => x.Name.ToFullString() == DoLessRestNamespace) ||
+                       .Any(x => x.Name.ToFullString() == RestLessNamespace) ||
                    self.OfType<NamespaceDeclarationSyntax>()
-                       .Any(x => x.Name.ToFullString().StartsWith(DoLessRestNamespace));
+                       .Any(x => x.Name.ToFullString().StartsWith(RestLessNamespace));
         }
 
         public static TypeSyntax GetTypeSyntax(this TypeDeclarationSyntax self)

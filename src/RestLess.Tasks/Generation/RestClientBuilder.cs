@@ -34,7 +34,7 @@ namespace RestLess.Tasks
 
         public bool HasRestInterfaces { get; private set; }
 
-        public bool HasReferenceToDoLessRest { get; private set; }
+        public bool HasReferenceToRestLess { get; private set; }
 
         public SyntaxNode OriginalRoot { get; private set; }
 
@@ -49,9 +49,9 @@ namespace RestLess.Tasks
             var nodes = this.OriginalRoot
                             .DescendantNodes()
                             .ToArray();
-            this.HasReferenceToDoLessRest = nodes.HasReferenceToDoLessRest();
+            this.HasReferenceToRestLess = nodes.HasReferenceToRestLess();
 
-            if (this.HasReferenceToDoLessRest)
+            if (this.HasReferenceToRestLess)
             {
                 var restInterfaces = nodes.OfType<InterfaceDeclarationSyntax>()
                                           .Where(x => x.IsRestInterface())
@@ -98,7 +98,7 @@ namespace RestLess.Tasks
 
         private NamespaceDeclarationSyntax BuildNamespace()
         {
-            return Constants.DoLessRestGeneratedNamespace
+            return Constants.RestLessGeneratedNamespace
                             .WithNamespaceKeyword(Token(TriviaList(Comment(HeaderComment)), SyntaxKind.NamespaceKeyword, TriviaList()))
                             .WithMembers(List(this.BuildRestClients()));
         }
