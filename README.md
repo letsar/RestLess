@@ -16,6 +16,8 @@ This file will allow you to create the Rest client from your interface without r
 As in Refit, you have to create an interface representing your REST API and use attributes to indicate what to do.
 During the project compilation, all REST clients will be generated.
 
+**Warning**: In Visual Studio for Mac, the intellisense does not detect `RestClient`, but it will compile nonetheless.
+
 ## Install
 
 Available on NuGet.
