@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace RestLess.IntegrationTests.Entities
+namespace RestLess.Tests.Entities
 {
     public class Person
     {

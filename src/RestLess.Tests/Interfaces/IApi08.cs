@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace RestLess.IntegrationTests.Interfaces
+namespace RestLess.Tests.Interfaces
 {
     public interface IApi08
     {

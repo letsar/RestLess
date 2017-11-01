@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace RestLess.IntegrationTests.Interfaces
+namespace RestLess.Tests.Interfaces
 {
     [Header("X-DoLess", "Rest")]
     [Header("X-DoLess-Scope", "Interface")]

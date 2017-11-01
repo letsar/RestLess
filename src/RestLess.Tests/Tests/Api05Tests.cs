@@ -4,13 +4,13 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using RestLess.IntegrationTests.Entities;
-using RestLess.IntegrationTests.Interfaces;
+using RestLess.Tests.Entities;
+using RestLess.Tests.Interfaces;
 using FluentAssertions;
 using NUnit.Framework;
 using RichardSzalay.MockHttp;
 
-namespace RestLess.IntegrationTests.Tests
+namespace RestLess.Tests.Tests
 {
     [TestFixture]
     public class Api05Tests

@@ -165,8 +165,8 @@ Task<HttpResponseMessage> GetUserAsync([Name("userId")] string id);
 
 ### Setting global request uri prefix or suffix
 
-If the REST api always starts with a common string, let's say a version number for example, you can put it into a ```UriTemplatePrefixAttribute```
-Alternatively you can do the same if you REST api always ends with the same string, using the ```UriTemplateSuffixAttribute```
+If the REST API always starts with a common string, let's say a version number for example, you can put it into a ```UriTemplatePrefixAttribute```
+Alternatively you can do the same if you REST API always ends with the same string, using the ```UriTemplateSuffixAttribute```
 
 ### Setting headers
 
@@ -278,6 +278,60 @@ You can set a generic parameter type to the ```Task```, the valid ones are:
 * ```byte[]```
 * ```object```   => This will use the specified *MediaTypeFormatter* (or the default one if not set)
 
+## Get response header
+
+Sometimes REST APIS return useful information in the headers of the response.
+You can get them by setting the `HeaderWriter`property of the `RestSettings`:
+
+```csharp
+public class HeaderWriter : IHeaderWriter
+{
+    public void Write(HttpResponseHeaders headers, object obj)
+    {
+        if (obj is IPagedResponse pagedResponse)
+        {
+            if (headers.TryGetValue(PaginationPage, out int page))
+            {
+                pagedResponse.Page = page;
+            }
+
+            if (headers.TryGetValue(PaginationPageCount, out int pageCount))
+            {
+                pagedResponse.PageCount = pageCount;
+            }
+        }
+    }
+}
+
+...
+
+mockHttp.Expect(HttpMethod.Get, url)
+        .Respond(x =>
+        {
+            var response = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent("[{'firstName':'A','lastName':'AA'},{'firstName':'B','lastName':'BB'}]", Encoding.UTF8, "application/json")
+            };
+
+            response.Headers.Add(PaginationPage, "1");
+            response.Headers.Add(PaginationPageCount, "2");
+
+            return response;
+        });
+
+var settings = new JsonRestSettings()
+{
+    HttpMessageHandlerFactory = () => mockHttp,
+    HeaderWriter = new HeaderWriter()
+};
+
+IApi09 restClient = RestClient.For<IApi09>(url, settings);
+var people = await restClient.GetPagedPeopleAsync();
+
+people.Page.ShouldBeEquivalentTo(1);
+people.PageCount.ShouldBeEquivalentTo(2);
+```
+
 ## Differences with Refit
 
 Unlike Refit, the core of **RestLess** does not use reflection at runtime (For MediaFormatters it depends of the implementation). All the REST methods are generated during compile-time.
@@ -291,6 +345,7 @@ The *RestLess* package does not have any dependencies to another third-party lib
 * The use of constants inside the attributes
 * UriTemplates: see the [Spec](http://tools.ietf.org/html/rfc6570)
 * Method specific formatters
+* Getting response headers in the returned object
 
 ## Not supported features
 

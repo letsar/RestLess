@@ -40,5 +40,10 @@ namespace RestLess
         /// Gets the custom parameters.
         /// </summary>
         public IDictionary<string, string> CustomParameters { get; }
+
+        /// <summary>
+        /// Gets or sets the header writer.
+        /// </summary>
+        public IHeaderWriter HeaderWriter { get; set; }
     }
 }

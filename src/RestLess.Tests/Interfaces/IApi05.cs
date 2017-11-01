@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
-using RestLess.IntegrationTests.Entities;
+using RestLess.Tests.Entities;
 
-namespace RestLess.IntegrationTests.Interfaces
+namespace RestLess.Tests.Interfaces
 {
     public interface IApi05
     {

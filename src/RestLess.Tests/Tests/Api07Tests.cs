@@ -4,12 +4,12 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using RestLess.IntegrationTests.Interfaces;
+using RestLess.Tests.Interfaces;
 using FluentAssertions;
 using NUnit.Framework;
 using RichardSzalay.MockHttp;
 
-namespace RestLess.IntegrationTests.Tests
+namespace RestLess.Tests.Tests
 {
     [TestFixture]
     public class Api07Tests

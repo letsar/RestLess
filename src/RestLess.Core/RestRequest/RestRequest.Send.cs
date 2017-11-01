@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -41,13 +43,25 @@ namespace RestLess.Internal
 
         public async Task<T> ReadAsObject<T>(CancellationToken cancellationToken = default)
         {
-            using (Stream stream = await this.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false))
-            using (StreamReader streamReader = new StreamReader(stream))
+            HttpResponseMessage response = await this.ReadAsHttpResponseMessageAsync(cancellationToken)
+                                                     .ConfigureAwait(false);
+            var httpContent = response?.Content;
+            if (httpContent != null)
             {
-                return await this.mediaTypeFormatter.ReadAsync<T>(streamReader);
+                using (Stream stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                using (StreamReader streamReader = new StreamReader(stream))
+                {
+                    T result = await this.mediaTypeFormatter.ReadAsync<T>(streamReader);
+                    this.restClient.Settings.HeaderWriter?.Write(response.Headers, result);
+                    return result;
+                }
+            }
+            else
+            {
+                return default;
             }
         }
-        
+
         public Task SendAsync(CancellationToken cancellationToken = default)
         {
             return this.ReadAsHttpResponseMessageWithoutContent(cancellationToken);
