@@ -7,10 +7,34 @@ In fact **RestLess** is built by keeping in mind that reflection is slow. When w
 
 This library fully supports the uri template defined by the [RFC6570](http://tools.ietf.org/html/rfc6570) thanks to [DoLess.UriTemplates](https://github.com/letsar/DoLess.UriTemplates).
 
+## Performance comparison
+
+The main goal of **RestLess** is to be fast. So I created a little benchmark project that can be run on Android.
+I benchmarked Refit against **RestLess** for now, on two devices (time is in ms):
+
+### Device 1
+
+[Orange Nura](https://www.gsmmachine.com/orange-nura-2485.html)
+This is an old device running under Android 4.4.
+
+![benchmark-nura](docs/images/benchmark-nura.png)
+
+### Device 2
+
+[Samsung Galaxy S8](https://www.gsmmachine.com/samsung-galaxy-s8-8439.html)
+Samsung 2017 flagship runnind under Android 7.0.
+
+![benchmark-s8](docs/images/benchmark-s8.png)
+
+### Conclusion
+
+**RestLess** is really fast, especially at startup time. On a old device, with Refit, the startup time is more than one second while **RestLess** is 9 times faster with 120ms!
+On the request time side, **RestLess** is faster thant Refit, but I don't think this is very relevant since the network will be the bottleneck.
+
 ## How it works
 
-Install the NuGet package called RestLess and one of the extra package (like RestLess.JsonNet) into your project.
-A RestLess folder with a file named RestClient.g.dl.rest.cs will be inserted in your project.
+Install the NuGet package called **RestLess** and one of the extra package (like **RestLess.JsonNet**) into your project.
+A **RestLess** folder with a file named RestClient.g.dl.rest.cs will be inserted in your project.
 This file will allow you to create the Rest client from your interface without relection.
 
 As in Refit, you have to create an interface representing your REST API and use attributes to indicate what to do.
@@ -22,9 +46,13 @@ During the project compilation, all REST clients will be generated.
 
 Available on NuGet.
 
-Install [RestLess](https://www.nuget.org/packages/RestLess/)
+Install **RestLess**
 
-Install [RestLess.JsonNet](https://www.nuget.org/packages/RestLess.JsonNet/) (if you want to serialize/deserialize using Json.Net)
+[![NuGet](https://img.shields.io/nuget/v/RestLess.svg?label=NuGet)](https://www.nuget.org/packages/RestLess/)
+
+Install **RestLess.JsonNet** if you want to serialize/deserialize using [Json.Net](https://github.com/JamesNK/Newtonsoft.Json)
+
+[![NuGet](https://img.shields.io/nuget/v/RestLess.JsonNet.svg?label=NuGet)](https://www.nuget.org/packages/RestLess.JsonNet/)
 
 ## Quick start
 
