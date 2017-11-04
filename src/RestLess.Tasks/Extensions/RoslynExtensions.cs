@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using System;
 
 namespace RestLess
 {
@@ -94,12 +95,28 @@ namespace RestLess
         {
             return self.AncestorsAndSelf()
                        .SelectMany(x => x.GetUsings())
-                       .Union(new[] { self.GetDeclaringNamespace() });
+                       .Union(self.GetAllTransientDeclaringNamespace());
         }
 
-        public static UsingDirectiveSyntax GetDeclaringNamespace(this InterfaceDeclarationSyntax self)
+        public static UsingDirectiveSyntax GetDeclaringNamespace(this InterfaceDeclarationSyntax self, string suffix = null)
         {
-            return UsingDirective(ParseName(self.Ancestors().OfType<NamespaceDeclarationSyntax>().Select(x => x.Name.ToString()).Concatenate(".")));
+            return UsingDirective(ParseName(self.Ancestors().OfType<NamespaceDeclarationSyntax>().Select(x => x.Name.ToString()).Concatenate(".", suffix)));
+        }
+
+        public static IEnumerable<UsingDirectiveSyntax> GetAllTransientDeclaringNamespace(this InterfaceDeclarationSyntax self)
+        {
+            var namespaces = self.Ancestors()
+                                 .OfType<NamespaceDeclarationSyntax>()
+                                 .SelectMany(x => x.Name.ToString().Split(new string[] { "." }, StringSplitOptions.RemoveEmptyEntries))
+                                 .ToList();
+
+            for (int i = 1; i < namespaces.Count; i++)
+            {
+                namespaces[i] = namespaces[i - 1] + "." + namespaces[i];
+            }
+
+            return namespaces.Select(x => UsingDirective(ParseName(x)))
+                             .ToList();
         }
 
         public static string GetTypeName(this TypeSyntax self)

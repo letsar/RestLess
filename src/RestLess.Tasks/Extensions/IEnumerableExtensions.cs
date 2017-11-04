@@ -4,12 +4,17 @@ using System.Linq;
 
 namespace RestLess.Tasks
 {
-    internal static partial  class IEnumerableExtensions
-    {  
-        public static string Concatenate(this IEnumerable<string> self, string separator)
+    internal static partial class IEnumerableExtensions
+    {
+        public static string Concatenate(this IEnumerable<string> self, string separator, string suffix = null)
         {
-            return string.Join(separator, self);
-        }       
+            var result = string.Join(separator, self);
+            if (!string.IsNullOrWhiteSpace(suffix))
+            {
+                result += separator + suffix;
+            }
+            return result;
+        }
 
         public static HashSet<T> ToHashSet<T>(this IEnumerable<T> self)
         {
