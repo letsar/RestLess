@@ -15,16 +15,18 @@ I benchmarked Refit against **RestLess** for now, on two devices (time is in ms)
 ### Device 1
 
 [Orange Nura](https://www.gsmmachine.com/orange-nura-2485.html)
+
 This is an old device running under Android 4.4.
 
-![benchmark-nura](docs/images/benchmark-nura.png)
+![benchmark-nura](docs/images/benchmark_nura.png)
 
 ### Device 2
 
 [Samsung Galaxy S8](https://www.gsmmachine.com/samsung-galaxy-s8-8439.html)
+
 Samsung 2017 flagship runnind under Android 7.0.
 
-![benchmark-s8](docs/images/benchmark-s8.png)
+![benchmark-s8](docs/images/benchmark_s8.png)
 
 ### Conclusion
 
