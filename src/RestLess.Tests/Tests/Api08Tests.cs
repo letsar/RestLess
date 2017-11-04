@@ -6,6 +6,7 @@ using RestLess.Tests.Interfaces;
 using FluentAssertions;
 using NUnit.Framework;
 using RichardSzalay.MockHttp;
+using DoLess.UriTemplates;
 
 namespace RestLess.Tests.Tests
 {
@@ -13,6 +14,7 @@ namespace RestLess.Tests.Tests
     public class Api08Tests
     {
         private const string ApiKey = "fe254zyty";
+        private const string AlwaysSameValue = "AlwaysSameValue";
 
         [Test]
         [TestCaseSource(nameof(ShouldBeHttpMethodTestCases))]
@@ -50,5 +52,39 @@ namespace RestLess.Tests.Tests
             new TestCaseData("customKey", (Func<IApi08, Task<HttpResponseMessage>>)((IApi08 x) => x.Get05Async())).SetName("CustomParameterNameSameCase"),
             new TestCaseData("customkey", (Func<IApi08, Task<HttpResponseMessage>>)((IApi08 x) => x.Get06Async())).SetName("CustomParameterNameDifferentCase"),
         };
+
+        [Test]
+        public async Task ShouldUseValueFormatter()
+        {
+            string url = "http://example.org";
+            var mockHttp = new MockHttpMessageHandler();
+
+            mockHttp.Expect(HttpMethod.Get, url + $"/api/posts?apiKey={AlwaysSameValue}")
+                    .Respond(HttpStatusCode.OK);
+
+            var settings = new RestSettings()
+            {
+                HttpMessageHandlerFactory = () => mockHttp
+            };
+            settings.UrlParameterFormatters.Default = new ValueFormatter();
+
+            IApi08 restClient = RestClient.For<IApi08>(url, settings);
+
+            var httpResponse = await restClient.Get07Async(new Entities.Person());
+
+            httpResponse.StatusCode
+                        .Should()
+                        .Be(HttpStatusCode.OK);
+
+            mockHttp.VerifyNoOutstandingExpectation();
+        }
+
+        private class ValueFormatter : IValueFormatter
+        {
+            public string Format(object value)
+            {
+                return AlwaysSameValue;
+            }
+        }
     }
 }

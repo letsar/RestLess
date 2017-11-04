@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
+using RestLess.Tests.Entities;
 
 namespace RestLess.Tests.Interfaces
 {
@@ -22,5 +23,8 @@ namespace RestLess.Tests.Interfaces
 
         [Get("api/posts{?customkey}")]
         Task<HttpResponseMessage> Get06Async();
+
+        [Get("api/posts{?apiKey}")]
+        Task<HttpResponseMessage> Get07Async(Person apiKey);
     }
 }

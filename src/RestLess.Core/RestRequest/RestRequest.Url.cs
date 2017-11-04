@@ -9,7 +9,8 @@ namespace RestLess.Internal
         public IRestRequest WithUriTemplate(string uriTemplate)
         {
             uriTemplate = UriTemplateHelper.AppendUriTemplateSuffix(this.uriTemplatePrefix + uriTemplate, this.uriTemplateSuffix);
-            this.uriTemplate = UriTemplate.For(uriTemplate, false);
+            this.uriTemplate = UriTemplate.For(uriTemplate, false)
+                                          .WithValueFormatter(this.valueFormatter);
             return this;
         }
 
