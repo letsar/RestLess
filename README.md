@@ -30,14 +30,14 @@ Samsung 2017 flagship runnind under Android 7.0.
 
 ### Conclusion
 
-**RestLess** is really fast, especially at startup time. On a old device, with Refit, the startup time is more than one second while **RestLess** is 9 times faster with 120ms!
+**RestLess** is really fast, especially at startup time. On an old device, with Refit, the startup time is more than one second while **RestLess** is 9 times faster with 120ms!
 On the request time side, **RestLess** is faster thant Refit, but I don't think this is very relevant since the network will be the bottleneck.
 
 ## How it works
 
 Install the NuGet package called **RestLess** and one of the extra package (like **RestLess.JsonNet**) into your project.
 A **RestLess** folder with a file named RestClient.g.dl.rest.cs will be inserted in your project.
-This file will allow you to create the Rest client from your interface without relection.
+This file will allow you to create the Rest client from your interface without reflection.
 
 As in Refit, you have to create an interface representing your REST API and use attributes to indicate what to do.
 During the project compilation, all REST clients will be generated.
