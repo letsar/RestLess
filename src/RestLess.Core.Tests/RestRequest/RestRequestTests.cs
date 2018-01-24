@@ -92,7 +92,6 @@ namespace RestLess.Tests
         [Test]
         public async Task ShouldSerializeContent()
         {
-            string expectedUrl = "http://www.mocky.io/v2/5a68c5a32e0000be27d5b580";
             string hostUrl = "http://www.mocky.io";
             string relativeUrl = "/v2/5a68c5a32e0000be27d5b580";
 
