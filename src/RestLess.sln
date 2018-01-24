@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestLess", "RestLess\RestLess.csproj", "{EA352625-5EF9-4E61-83BD-32D43841E8A6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestLess", "RestLess\RestLess.csproj", "{EA352625-5EF9-4E61-83BD-32D43841E8A6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{32AB77C6-9380-482D-A0DD-2D20D2D72037}"
 EndProject
@@ -11,31 +11,31 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tasks", "Tasks", "{64046417
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{777BE9FD-BD20-4D5A-8081-7BBCD78256A8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestLess.Tasks", "RestLess.Tasks\RestLess.Tasks.csproj", "{89A99855-1B93-46C8-80EC-E92D47D90C9B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestLess.Tasks", "RestLess.Tasks\RestLess.Tasks.csproj", "{89A99855-1B93-46C8-80EC-E92D47D90C9B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestLess.Tasks.Tests", "RestLess.Tasks.Tests\RestLess.Tasks.Tests.csproj", "{ADFEEDE2-0684-400D-B2A4-219DB8050DBE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestLess.Tasks.Tests", "RestLess.Tasks.Tests\RestLess.Tasks.Tests.csproj", "{ADFEEDE2-0684-400D-B2A4-219DB8050DBE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{C1577B55-7553-4809-9515-03BF9016BFF5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestLess.Sample", "RestLess.Sample\RestLess.Sample.csproj", "{55601750-6D0F-4927-9995-A1585F697BE7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestLess.Sample", "RestLess.Sample\RestLess.Sample.csproj", "{55601750-6D0F-4927-9995-A1585F697BE7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extras", "Extras", "{51BEE58C-F060-40B8-81BD-87B8AAFEDBE8}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "RestLess.Shared", "RestLess.Shared\RestLess.Shared.shproj", "{09087514-C3BC-4B3D-98B4-02FC0D8659AF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestLess.Tests", "RestLess.Tests\RestLess.Tests.csproj", "{D57FCE68-4F31-4D56-ACAF-F5B4BE1F1597}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestLess.Tests", "RestLess.Tests\RestLess.Tests.csproj", "{D57FCE68-4F31-4D56-ACAF-F5B4BE1F1597}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestLess.Newtonsoft.Json", "RestLess.Newtonsoft.Json\RestLess.Newtonsoft.Json.csproj", "{C38177A5-A8E8-4A58-B66E-847724C1B2BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestLess.Newtonsoft.Json", "RestLess.Newtonsoft.Json\RestLess.Newtonsoft.Json.csproj", "{C38177A5-A8E8-4A58-B66E-847724C1B2BA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestLess.Core", "RestLess.Core\RestLess.Core.csproj", "{7C55DBB6-FF3B-4819-A695-070E7D5D98D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestLess.Core", "RestLess.Core\RestLess.Core.csproj", "{7C55DBB6-FF3B-4819-A695-070E7D5D98D2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestLess.Core.Tests", "RestLess.Core.Tests\RestLess.Core.Tests.csproj", "{36341425-0827-42E3-A0B3-917DD0E0EA41}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestLess.Core.Tests", "RestLess.Core.Tests\RestLess.Core.Tests.csproj", "{36341425-0827-42E3-A0B3-917DD0E0EA41}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestLess.ConsoleSample", "RestLess.ConsoleSample\RestLess.ConsoleSample.csproj", "{7163C14E-13A0-4BE8-9104-3CD2968CD33C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestLess.ConsoleSample", "RestLess.ConsoleSample\RestLess.ConsoleSample.csproj", "{7163C14E-13A0-4BE8-9104-3CD2968CD33C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestLess.Benchmarks", "RestLess.Benchmarks\RestLess.Benchmarks.csproj", "{9BE936E5-7B59-47E8-BD17-6A8ED7109668}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestLess.Benchmarks", "RestLess.Benchmarks\RestLess.Benchmarks.csproj", "{9BE936E5-7B59-47E8-BD17-6A8ED7109668}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestLess.Benchmarks.Core", "RestLess.Benchmarks.Core\RestLess.Benchmarks.Core.csproj", "{B63BA108-E8D3-4202-8A62-73E073A92AE1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestLess.Benchmarks.Core", "RestLess.Benchmarks.Core\RestLess.Benchmarks.Core.csproj", "{B63BA108-E8D3-4202-8A62-73E073A92AE1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Benchmarking", "Benchmarking", "{86445C4C-051D-4DBA-AFF4-C371EF6BEB92}"
 EndProject

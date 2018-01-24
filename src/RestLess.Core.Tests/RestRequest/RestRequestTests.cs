@@ -8,6 +8,8 @@ using RestLess.Generated;
 using FluentAssertions;
 using NUnit.Framework;
 using RichardSzalay.MockHttp;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace RestLess.Tests
 {
@@ -87,6 +89,47 @@ namespace RestLess.Tests
             mockHttp.VerifyNoOutstandingExpectation();
         }
 
+        [Test]
+        public async Task ShouldSerializeContent()
+        {
+            string expectedUrl = "http://example.org/api/test";
+            string hostUrl = "http://example.org";
+            string relativeUrl = "/api/test";
+
+            var testObject = new TestObject()
+            {
+                Value = "test"
+            };
+            var mockHttp = new MockHttpMessageHandler();
+
+            mockHttp.Expect(HttpMethod.Post, expectedUrl)
+                    .Respond(HttpStatusCode.OK);
+
+            RestSettings settings = new RestSettings();
+            settings.MediaTypeFormatters.Default = new TestMediaFormatter(JsonSerializer.Create(new JsonSerializerSettings()));
+
+            IRestClient restClient = new SimpleRestClient(settings);
+            restClient.HttpClient = new HttpClient(mockHttp);
+            restClient.HttpClient.BaseAddress = new Uri(hostUrl);
+
+            var restRequest = RestRequest.Post(restClient)
+                                         .WithUriTemplate(relativeUrl)
+                                         .WithContent(testObject, "testObject");
+
+            var httpResponse = await restRequest.ReadAsHttpResponseMessageAsync();
+
+            httpResponse.RequestMessage
+                        .RequestUri
+                        .OriginalString
+                        .ShouldBeEquivalentTo(expectedUrl);
+
+            httpResponse.StatusCode
+                        .Should()
+                        .Be(HttpStatusCode.OK);
+
+            mockHttp.VerifyNoOutstandingExpectation();
+        }
+
         private static readonly object[] ShouldBeRightHttpMethodTestCases =
         {
             new TestCaseData(HttpMethod.Delete, (Func<IRestClient, IRestRequest>)((IRestClient x) => RestRequest.Delete(x))).SetName("RestRequestShouldBeDelete"),
@@ -98,5 +141,35 @@ namespace RestLess.Tests
             new TestCaseData(HttpMethod.Put, (Func<IRestClient, IRestRequest>)((IRestClient x) => RestRequest.Put(x))).SetName("RestRequestShouldBePut"),
             new TestCaseData(HttpMethod.Trace, (Func<IRestClient, IRestRequest>)((IRestClient x) =>RestRequest.Trace(x))).SetName("RestRequestShouldBeTrace")
         };
+
+        private class TestObject
+        {
+            public string Value { get; set; }
+        }
+
+        private class TestMediaFormatter : IMediaTypeFormatter
+        {
+            private readonly JsonSerializer jsonSerializer;
+            public TestMediaFormatter(JsonSerializer jsonSerializer)
+            {
+                this.jsonSerializer = jsonSerializer;
+            }
+
+            public string MediaType => "application/json";
+
+            public Task<T> ReadAsync<T>(TextReader reader)
+            {
+                using (JsonReader jsonReader = new JsonTextReader(reader))
+                {
+                    return Task.FromResult<T>(this.jsonSerializer.Deserialize<T>(jsonReader));
+                }
+            }
+
+            public Task WriteAsync<T>(T content, TextWriter writer)
+            {
+                this.jsonSerializer.Serialize(writer, content, typeof(T));
+                return Task.CompletedTask;
+            }
+        }
     }
 }
