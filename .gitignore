@@ -286,3 +286,5 @@ build/tools/**
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+src/RestLess\.Benchmarks\.Droid/RestLess\.Benchmarks\.Droid\.csproj\.bak

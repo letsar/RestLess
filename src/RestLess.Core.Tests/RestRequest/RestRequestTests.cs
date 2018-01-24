@@ -92,42 +92,28 @@ namespace RestLess.Tests
         [Test]
         public async Task ShouldSerializeContent()
         {
-            string expectedUrl = "http://example.org/api/test";
-            string hostUrl = "http://example.org";
-            string relativeUrl = "/api/test";
+            string expectedUrl = "http://www.mocky.io/v2/5a68c5a32e0000be27d5b580";
+            string hostUrl = "http://www.mocky.io";
+            string relativeUrl = "/v2/5a68c5a32e0000be27d5b580";
 
             var testObject = new TestObject()
             {
                 Value = "test"
-            };
-            var mockHttp = new MockHttpMessageHandler();
-
-            mockHttp.Expect(HttpMethod.Post, expectedUrl)
-                    .Respond(HttpStatusCode.OK);
+            };            
 
             RestSettings settings = new RestSettings();
             settings.MediaTypeFormatters.Default = new TestMediaFormatter(JsonSerializer.Create(new JsonSerializerSettings()));
 
             IRestClient restClient = new SimpleRestClient(settings);
-            restClient.HttpClient = new HttpClient(mockHttp);
+            restClient.HttpClient = new HttpClient();
             restClient.HttpClient.BaseAddress = new Uri(hostUrl);
 
             var restRequest = RestRequest.Post(restClient)
                                          .WithUriTemplate(relativeUrl)
                                          .WithContent(testObject, "testObject");
 
-            var httpResponse = await restRequest.ReadAsHttpResponseMessageAsync();
-
-            httpResponse.RequestMessage
-                        .RequestUri
-                        .OriginalString
-                        .ShouldBeEquivalentTo(expectedUrl);
-
-            httpResponse.StatusCode
-                        .Should()
-                        .Be(HttpStatusCode.OK);
-
-            mockHttp.VerifyNoOutstandingExpectation();
+            var response = await restRequest.ReadAsObject<TestObject>();
+            response.Value.ShouldBeEquivalentTo("success");                       
         }
 
         private static readonly object[] ShouldBeRightHttpMethodTestCases =
