@@ -22,11 +22,11 @@ namespace RestLess.Http
             this.SetMediaTypeFormatterHeaders();
         }
 
-        protected override Task SerializeToStreamAsync(Stream stream, TransportContext context)
+        protected override async Task SerializeToStreamAsync(Stream stream, TransportContext context)
         {
             using (TextWriter writer = new StreamWriter(stream))
             {
-                return this.mediaTypeFormatter.WriteAsync(content, writer);
+                await this.mediaTypeFormatter.WriteAsync(content, writer);
             }
         }
 
