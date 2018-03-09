@@ -1,10 +1,4 @@
 <Project TreatAsLocalProperty="TaskFolder;TaskAssembly">
-  <PropertyGroup>
-    <CoreCompileDependsOn>
-      $(CoreCompileDependsOn);
-      GenerateRestClients;
-    </CoreCompileDependsOn>
-  </PropertyGroup>
   
   <PropertyGroup>
     <RestLessPropsImported>true</RestLessPropsImported>
