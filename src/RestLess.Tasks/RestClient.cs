@@ -12,6 +12,19 @@ namespace RestLess
         private static readonly RestClientFactory RestClientFactory = null;
 
         /// <summary>
+        /// Creates a Rest client using the specified <paramref name="httpClientFactory"/> and <paramref name="settings"/>.
+        /// </summary>
+        /// <typeparam name="T">The interface of the Rest client.</typeparam>
+        /// <param name="httpClientFactory">The http client factory.</param>
+        /// <param name="settings">The optional settings.</param>
+        /// <returns></returns>
+        public static T For<T>(Func<HttpClient> httpClientFactory, RestSettings settings = null)
+            where T : class
+        {
+            return RestClientFactory.Create<T>(httpClientFactory, settings);
+        }
+
+        /// <summary>
         /// Creates a Rest client using the specified <paramref name="httpClient"/> and <paramref name="settings"/>.
         /// </summary>
         /// <typeparam name="T">The interface of the Rest client.</typeparam>

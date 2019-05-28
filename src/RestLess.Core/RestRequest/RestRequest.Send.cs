@@ -13,7 +13,7 @@ namespace RestLess.Internal
         public Task<HttpResponseMessage> ReadAsHttpResponseMessageAsync(CancellationToken cancellationToken = default)
         {
             this.EnsureAllIsSetBeforeSendingTheRequest();
-            return this.restClient.HttpClient.SendAsync(this.httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken);
+            return this.restClient.HttpClientFactory().SendAsync(this.httpRequestMessage, HttpCompletionOption.ResponseContentRead, cancellationToken);
         }
 
         public Task<string> ReadAsStringAsync(CancellationToken cancellationToken = default)
@@ -70,7 +70,7 @@ namespace RestLess.Internal
         private Task<HttpResponseMessage> ReadAsHttpResponseMessageWithoutContent(CancellationToken cancellationToken = default)
         {
             this.EnsureAllIsSetBeforeSendingTheRequest();
-            return this.restClient.HttpClient.SendAsync(this.httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            return this.restClient.HttpClientFactory().SendAsync(this.httpRequestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
         }
 
         private async Task<T> ReadHttpContentAsync<T>(Func<HttpContent, Task<T>> func, CancellationToken cancellationToken = default)
