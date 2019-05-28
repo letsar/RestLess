@@ -28,8 +28,7 @@ namespace RestLess.Tests
                     .Respond(HttpStatusCode.OK);
 
             IRestClient restClient = new SimpleRestClient();
-            restClient.HttpClient = new HttpClient(mockHttp);
-            restClient.HttpClient.BaseAddress = new Uri(url);
+            restClient.HttpClientFactory = () =>  new HttpClient(mockHttp) { BaseAddress = new Uri(url) };
 
             var restRequest = getRestRequest(restClient);
 
@@ -65,8 +64,8 @@ namespace RestLess.Tests
             settings.CustomParameters.Add("ctest", "72");
 
             IRestClient restClient = new SimpleRestClient(settings);
-            restClient.HttpClient = new HttpClient(mockHttp);
-            restClient.HttpClient.BaseAddress = new Uri(hostUrl);
+            restClient.HttpClientFactory = () => new HttpClient(mockHttp) { BaseAddress = new Uri(hostUrl) };
+
 
             var restRequest = RestRequest.Get(restClient)
                                          .WithUriTemplatePrefix(uriTemplatePrefix)
@@ -104,8 +103,8 @@ namespace RestLess.Tests
             settings.MediaTypeFormatters.Default = new TestMediaFormatter(JsonSerializer.Create(new JsonSerializerSettings()));
 
             IRestClient restClient = new SimpleRestClient(settings);
-            restClient.HttpClient = new HttpClient();
-            restClient.HttpClient.BaseAddress = new Uri(hostUrl);
+            restClient.HttpClientFactory = () => new HttpClient() { BaseAddress = new Uri(hostUrl) };
+
 
             var restRequest = RestRequest.Post(restClient)
                                          .WithUriTemplate(relativeUrl)
@@ -113,6 +112,43 @@ namespace RestLess.Tests
 
             var response = await restRequest.ReadAsObject<TestObject>();
             response.Value.ShouldBeEquivalentTo("success");                       
+        }
+
+        [Test]
+        public async Task ShouldInvokeFactoryForEveryRequest()
+        {
+            string url = "http://example.org";
+            string relativeUrl = "/api/posts";
+            var mockHttp = new MockHttpMessageHandler();
+
+            mockHttp.Expect(HttpMethod.Get, url + relativeUrl)
+                    .Respond(HttpStatusCode.OK);
+
+            var clientCount = 0;
+            IRestClient restClient = new SimpleRestClient();
+            restClient.HttpClientFactory = () => {
+                clientCount++;
+                return new HttpClient(mockHttp) { BaseAddress = new Uri(url) };
+            };
+
+            const int requestcount = 5;
+
+            for(var i = 0; i < requestcount; i++)
+            {
+                var restRequest = RestRequest.Get(restClient)
+                                         .WithUriTemplate("api/posts");
+
+                var httpResponse = await restRequest.WithUriTemplate(relativeUrl)
+                                                    .ReadAsHttpResponseMessageAsync();
+
+                //httpResponse.StatusCode
+                //            .Should()
+                //            .Be(HttpStatusCode.OK);
+
+                //mockHttp.VerifyNoOutstandingExpectation();
+            }
+
+            clientCount.Should().Be(requestcount);
         }
 
         private static readonly object[] ShouldBeRightHttpMethodTestCases =

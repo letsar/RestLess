@@ -31,6 +31,30 @@ namespace RestLess.Generated
             this.initializers[typeof(TInterface)] = () => new TImplementation();
         }
 
+
+        /// <summary>
+        /// Creates a REST client from a httpClientFactory.
+        /// </summary>
+        /// <typeparam name="T">The type of the REST client.</typeparam>
+        /// <param name="httpClient">The httpClientFactory.</param>
+        /// <param name="settings">The REST settings.</param>
+        /// <returns></returns>
+        public T Create<T>(Func<HttpClient> httpClientFactory, RestSettings settings)
+            where T : class
+        {
+            settings = settings ?? new RestSettings();
+            if (!this.initializers.TryGetValue(typeof(T), out Func<IRestClient> initializer))
+            {
+                throw new ArgumentException($"The type '{typeof(T).FullName}' is not a Rest interface.");
+            }
+
+            IRestClient restClient = initializer();
+            restClient.HttpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            restClient.Settings = settings;
+            return (T)restClient;
+        }
+
+
         /// <summary>
         /// Creates a REST client from a <see cref="HttpClient"/>.
         /// </summary>
@@ -41,16 +65,7 @@ namespace RestLess.Generated
         public T Create<T>(HttpClient httpClient, RestSettings settings)
             where T : class
         {
-            settings = settings ?? new RestSettings();
-            if (!this.initializers.TryGetValue(typeof(T), out Func<IRestClient> initializer))
-            {
-                throw new ArgumentException($"The type '{typeof(T).FullName}' is not a Rest interface.");
-            }
-
-            IRestClient restClient = initializer();
-            restClient.HttpClient = httpClient;
-            restClient.Settings = settings;
-            return (T)restClient;
+            return this.Create<T>(() => httpClient, settings);
         }
 
         /// <summary>

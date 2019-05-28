@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 
 namespace RestLess.Generated
 {
@@ -12,7 +13,7 @@ namespace RestLess.Generated
         /// </summary>
         protected RestClientBase() { }
 
-        HttpClient IRestClient.HttpClient { get; set; }
+        Func<HttpClient> IRestClient.HttpClientFactory { get; set; }
 
         RestSettings IRestClient.Settings { get; set; }
     }

@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 
 namespace RestLess
 {
@@ -8,9 +9,9 @@ namespace RestLess
     public interface IRestClient
     {
         /// <summary>
-        /// Gets or sets the http client.
+        /// Gets or sets the http client factory.
         /// </summary>
-        HttpClient HttpClient { get; set; }
+        Func<HttpClient> HttpClientFactory { get; set; }
 
         /// <summary>
         /// Gets or sets the REST settings.
